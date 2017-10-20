@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/jamesoeth/CLionProjects/pegasus/PegasusRun.cpp
+string
+-
+iostream
+-
+wrench/services/compute/batch/BatchJob.h
+-
+
+/Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
+
+/Users/jamesoeth/CLionProjects/pegasus/src/DagMan.cpp
+../include/DagMan.h
+/Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
+
+/Users/jamesoeth/CLionProjects/pegasus/src/HTCondor.cpp
+
+/usr/local/include/wrench/services/compute/batch/BatchJob.h
+wrench/workflow/job/StandardJob.h
+/usr/local/include/wrench/services/compute/batch/wrench/workflow/job/StandardJob.h
+
+/usr/local/include/wrench/workflow/job/StandardJob.h
+vector
+-
+map
+-
+set
+-
+vector
+-
+WorkflowJob.h
+/usr/local/include/wrench/workflow/job/WorkflowJob.h
+
+/usr/local/include/wrench/workflow/job/WorkflowJob.h
+string
+-
+stack
+-
+

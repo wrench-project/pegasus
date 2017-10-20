@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
+
+/Users/jamesoeth/CLionProjects/pegasus/src/DagMan.cpp
+../include/DagMan.h
+/Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
+
+/Users/jamesoeth/CLionProjects/pegasus/src/HTCondor.cpp
+

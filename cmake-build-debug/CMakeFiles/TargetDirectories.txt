@@ -1,0 +1,8 @@
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/list_install_components.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/install.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/install/strip.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/pegasus.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/install/local.dir
+/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles/unit_tests.dir
