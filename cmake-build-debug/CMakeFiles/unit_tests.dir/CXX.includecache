@@ -6,39 +6,45 @@
 
 #IncludeRegexTransform: 
 
+../include/DagMan.h
+wrench-dev.h
+-
+
 ../include/HTCondor.h
-wrench.h
-../include/wrench.h
+wrench-dev.h
+-
 
 /Users/jamesoeth/CLionProjects/pegasus/PegasusRun.cpp
 string
 -
 iostream
 -
-wrench.h
-/Users/jamesoeth/CLionProjects/pegasus/wrench.h
+wrench-dev.h
+-
+DagMan.h
+/Users/jamesoeth/CLionProjects/pegasus/DagMan.h
+HTCondor.h
+/Users/jamesoeth/CLionProjects/pegasus/HTCondor.h
 
 /Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
-wrench.h
-/Users/jamesoeth/CLionProjects/pegasus/include/wrench.h
+wrench-dev.h
+-
+
+/Users/jamesoeth/CLionProjects/pegasus/include/HTCondor.h
+wrench-dev.h
+-
 
 /Users/jamesoeth/CLionProjects/pegasus/src/DagMan.cpp
 ../include/DagMan.h
 /Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
+iostream
+-
 wrench-dev.h
 -
 
 /Users/jamesoeth/CLionProjects/pegasus/src/HTCondor.cpp
-HTCondor.h
-/Users/jamesoeth/CLionProjects/pegasus/src/HTCondor.h
-wrench.h
-/Users/jamesoeth/CLionProjects/pegasus/src/wrench.h
-xbt.h
--
-set
--
-wrench-dev.h
--
+../include/HTCondor.h
+/Users/jamesoeth/CLionProjects/pegasus/include/HTCondor.h
 
 /usr/local/include/boost/assert.hpp
 boost/config.hpp
@@ -1400,42 +1406,6 @@ string
 stack
 -
 
-/usr/local/include/xbt.h
-xbt/misc.h
--
-xbt/sysdep.h
--
-xbt/str.h
--
-xbt/file.h
--
-xbt/function_types.h
--
-xbt/asserts.h
--
-xbt/log.h
--
-xbt/module.h
--
-xbt/dynar.h
--
-xbt/dict.h
--
-xbt/swag.h
--
-xbt/heap.h
--
-xbt/parmap.h
--
-xbt/config.h
--
-xbt/cunit.h
--
-xbt/xbt_os_thread.h
--
-xbt/xbt_os_time.h
--
-
 /usr/local/include/xbt/Extendable.hpp
 cstddef
 -
@@ -1459,18 +1429,6 @@ stdlib.h
 -
 stdio.h
 -
-
-/usr/local/include/xbt/config.h
-stdarg.h
--
-xbt/base.h
--
-
-/usr/local/include/xbt/cunit.h
-xbt/sysdep.h
-/usr/local/include/xbt/xbt/sysdep.h
-xbt/ex.h
-/usr/local/include/xbt/xbt/ex.h
 
 /usr/local/include/xbt/dict.h
 xbt/misc.h
@@ -1503,24 +1461,6 @@ stdio.h
 -
 errno.h
 -
-
-/usr/local/include/xbt/file.h
-stdint.h
--
-stdarg.h
--
-stdio.h
--
-stdlib.h
--
-xbt/misc.h
-/usr/local/include/xbt/xbt/misc.h
-xbt/dynar.h
-/usr/local/include/xbt/xbt/dynar.h
-xbt/dict.h
-/usr/local/include/xbt/xbt/dict.h
-simgrid_config.h
-/usr/local/include/xbt/simgrid_config.h
 
 /usr/local/include/xbt/function_types.h
 xbt/base.h
@@ -1570,12 +1510,6 @@ type_traits
 utility
 -
 
-/usr/local/include/xbt/heap.h
-xbt/misc.h
-/usr/local/include/xbt/xbt/misc.h
-xbt/dynar.h
-/usr/local/include/xbt/xbt/dynar.h
-
 /usr/local/include/xbt/log.h
 xbt/misc.h
 /usr/local/include/xbt/xbt/misc.h
@@ -1594,10 +1528,6 @@ dynar.h
 stdarg.h
 -
 
-/usr/local/include/xbt/module.h
-xbt/misc.h
--
-
 /usr/local/include/xbt/parmap.h
 
 /usr/local/include/xbt/signal.hpp
@@ -1606,18 +1536,6 @@ functional
 utility
 -
 vector
--
-
-/usr/local/include/xbt/str.h
-xbt/misc.h
-/usr/local/include/xbt/xbt/misc.h
-xbt/dynar.h
-/usr/local/include/xbt/xbt/dynar.h
-xbt/dict.h
-/usr/local/include/xbt/xbt/dict.h
-stdarg.h
--
-stdio.h
 -
 
 /usr/local/include/xbt/string.hpp
@@ -1675,16 +1593,4 @@ xbt/function_types.h
 /usr/local/include/xbt/xbt/function_types.h
 xbt/dynar.h
 /usr/local/include/xbt/xbt/dynar.h
-
-/usr/local/include/xbt/xbt_os_thread.h
-xbt/base.h
-/usr/local/include/xbt/xbt/base.h
-pthread.h
--
-
-/usr/local/include/xbt/xbt_os_time.h
-xbt/misc.h
--
-stddef.h
--
 

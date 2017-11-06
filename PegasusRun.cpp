@@ -4,12 +4,15 @@
 
 #include <string>
 #include <iostream>
-#include "wrench.h"
+#include <wrench-dev.h>
+#include "DagMan.h"
+#include "HTCondor.h"
 
 
 using namespace std;
 
 int main(int argc, char **argv) {
+    /*
     //create and initialize the simulation
     wrench::Simulation simulation;
     simulation.init(&argc, argv);
@@ -97,11 +100,11 @@ int main(int argc, char **argv) {
     wrench::WMS *wms = simulation.setWMS(
             std::unique_ptr<wrench::WMS>(
                     //TODO: replace this with dagman
-                    new wrench::SimpleWMS(&workflow,
+                    new DagMan(&workflow,
                                           std::unique_ptr<wrench::Scheduler>(
 //                                                new wrench::RandomScheduler()),
                                                   //TODO: chance to htcondor!
-                                                  new wrench::CloudScheduler(cloud_service, execution_hosts,
+                                                  new HTCondor(cloud_service, execution_hosts,
                                                                              &simulation)),
                                           wms_host)));
 
@@ -141,4 +144,5 @@ int main(int argc, char **argv) {
     std::cerr << "Task in first trace entry: " << trace[0]->getContent()->getTask()->getId() << std::endl;
 
     return 0;
+     */
 }

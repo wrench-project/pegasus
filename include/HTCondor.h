@@ -7,36 +7,38 @@
 #ifndef PROJECT_HTCONDOR_H
 #define PROJECT_HTCONDOR_H
 
-#include "wrench.h"
+#include <wrench-dev.h>
 
-namespace wrench {
+
+
+using namespace wrench;
 
     /**
-     * @brief A max-min Scheduler
+     * @brief cloud scheduler for htcondor
      */
     class HTCondor : public Scheduler {
+        /**
+            * @brief A random Scheduler
+            */
+            /***********************/
+            /** \cond DEVELOPER    */
+            /***********************/
+        public:
+            void scheduleTasks(JobManager *job_manager,
+                               std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
+                               const std::set<ComputeService *> &compute_services);
+
+            void schedulePilotJobs(JobManager *job_manager,
+                               Workflow *workflow,
+                               double pilot_job_duration,
+                               const std::set<ComputeService *> &compute_services);
 
 
-    public:
 
-        /***********************/
-        /** \cond DEVELOPER    */
-        /***********************/
 
-        void scheduleTasks(JobManager *job_manager,
-                           std::map<std::string, std::vector<WorkflowTask *>> ready_tasks,
-                           const std::set<ComputeService *> &compute_services);
-
-    private:
-        struct MaxMinComparator {
-            bool operator()(std::pair<std::string, std::vector<WorkflowTask *>> &lhs,
-                            std::pair<std::string, std::vector<WorkflowTask *>> &rhs);
+            /***********************/
+            /** \endcond           */
+            /***********************/
         };
-        /***********************/
-        /** \endcond           */
-        /***********************/
-    };
 
-
-}
 #endif //PROJECT_HTCONDOR_H

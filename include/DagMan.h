@@ -7,12 +7,11 @@
 #ifndef PROJECT_DAGMAN_H
 #define PROJECT_DAGMAN_H
 
-#include "wrench.h"
+#include <wrench-dev.h>
 
+namespace wrench {
 
-using namespace wrench;
-
-    class DagMan: public  WMS{
+    class DagMan : public WMS {
 
     public:
         DagMan(Workflow *, std::unique_ptr<Scheduler>, std::string);
@@ -23,6 +22,18 @@ using namespace wrench;
         /***********************/
 
         void processEventStandardJobFailure(std::unique_ptr<WorkflowExecutionEvent>);
+
+        void processEventUnsupportedJobType(std::unique_ptr<WorkflowExecutionEvent>);
+
+        void processEventStandardJobCompletion(std::unique_ptr<WorkflowExecutionEvent>);
+
+        void processEventPilotJobStart(std::unique_ptr<WorkflowExecutionEvent>);
+
+        void processEventPilotJobExpiration(std::unique_ptr<WorkflowExecutionEvent>);
+
+        void processEventFileCopyCompletion(std::unique_ptr<WorkflowExecutionEvent>);
+
+        void processEventFileCopyFailure(std::unique_ptr<WorkflowExecutionEvent>);
 
         /***********************/
         /** \endcond           */
@@ -38,5 +49,5 @@ using namespace wrench;
 
     };
 
-
+}
 #endif //PROJECT_DAGMAN_H
