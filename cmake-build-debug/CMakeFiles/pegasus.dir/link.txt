@@ -1,2 +1,0 @@
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libpegasus.a  CMakeFiles/pegasus.dir/src/DagMan.cpp.o CMakeFiles/pegasus.dir/src/HTCondor.cpp.o
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libpegasus.a
