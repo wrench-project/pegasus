@@ -106,6 +106,11 @@ CMakeFiles/unit_tests.dir/all:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles --progress-num=4,5,6,7 "Built target unit_tests"
 .PHONY : CMakeFiles/unit_tests.dir/all
 
+# Include target in all.
+all: CMakeFiles/unit_tests.dir/all
+
+.PHONY : all
+
 # Build rule for subdir invocation for target.
 CMakeFiles/unit_tests.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jamesoeth/CLionProjects/pegasus/cmake-build-debug/CMakeFiles 4

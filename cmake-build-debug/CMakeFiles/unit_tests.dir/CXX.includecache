@@ -20,7 +20,7 @@ string
 iostream
 -
 wrench-dev.h
--
+/Users/jamesoeth/CLionProjects/pegasus/wrench-dev.h
 DagMan.h
 /Users/jamesoeth/CLionProjects/pegasus/DagMan.h
 HTCondor.h
@@ -38,8 +38,6 @@ wrench-dev.h
 ../include/DagMan.h
 /Users/jamesoeth/CLionProjects/pegasus/include/DagMan.h
 iostream
--
-wrench-dev.h
 -
 
 /Users/jamesoeth/CLionProjects/pegasus/src/HTCondor.cpp

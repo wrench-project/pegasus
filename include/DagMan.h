@@ -9,7 +9,9 @@
 
 #include <wrench-dev.h>
 
-namespace wrench {
+using namespace wrench;
+
+    class Simulation;
 
     class DagMan : public WMS {
 
@@ -49,5 +51,4 @@ namespace wrench {
 
     };
 
-}
 #endif //PROJECT_DAGMAN_H

@@ -35,10 +35,10 @@ find_library(WRENCH_LIBRARY NAMES wrench)
 
 
 add_library(pegasus STATIC ${SOURCE_FILES})
+target_link_libraries(pegasus ${WRENCH_LIBRARY})
 
 install(TARGETS pegasus DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include)
 
-add_executable(unit_tests EXCLUDE_FROM_ALL ${SOURCE_FILES} ${HEADER_FILES} ${TEST_FILES})
+add_executable(unit_tests ${SOURCE_FILES} ${HEADER_FILES} ${TEST_FILES})
 
-target_link_libraries(pegasus ${WRENCH_LIBRARY})

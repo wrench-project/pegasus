@@ -4,12 +4,10 @@
 
 #include "../include/DagMan.h"
 #include <iostream>
-#include <wrench-dev.h>
-
 
 //XBT_LOG_NEW_DEFAULT_CATEGORY(DagMan, "Log category for Simple WMS");
 
-namespace wrench {
+using namespace wrench;
 
     /**
      * @brief Create a Simple WMS with a workflow instance and a scheduler implementation
@@ -23,7 +21,7 @@ namespace wrench {
 
     DagMan::DagMan(Workflow *workflow,
                          std::unique_ptr<Scheduler> scheduler,
-                         std::string hostname) : WMS(workflow,
+                         std::string hostname) : wrench::WMS(workflow,
                                                      std::move(scheduler),
                                                      hostname,
                                                      "dagman") {}
@@ -71,4 +69,4 @@ namespace wrench {
     void DagMan::processEventFileCopyFailure(std::unique_ptr<WorkflowExecutionEvent>) {
 
     }
-}
+
