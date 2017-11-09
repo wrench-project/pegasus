@@ -29,6 +29,9 @@ using namespace wrench;
             /** \cond DEVELOPER    */
             /***********************/
         public:
+
+            HTCondor();
+
             void scheduleTasks(JobManager *job_manager,
                                std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
                                const std::set<ComputeService *> &compute_services);

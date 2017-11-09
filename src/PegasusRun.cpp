@@ -20,24 +20,25 @@ int main(int argc, char **argv) {
 
     //create and initialize the simulation
     wrench::Simulation simulation;
-    /*
+    simulation.init(&argc, argv);
        //check to make sure there are the right number of arguments
-       if (argc != 3) {
-           std::cerr << "Usage: " << argv[0] << " <xml platform file> <dax file>" << std::endl;
-           exit(1);
-       }
+//       if (argc != 3) {
+//           std::cerr << "Usage: " << argv[0] << " <xml platform file> <dax file>" << std::endl;
+//           exit(1);
+//       }
 
        //create the platform file and dax file from command line args
-       char *platform_file = argv[1];
-       char *dax_file = argv[2];
+       char *platform_file = "/Users/jamesoeth/CLionProjects/pegasus/twotasks.xml";
+       char *dax_file = "/Users/jamesoeth/CLionProjects/pegasus/onetask.dax";
 
        //making the actual workflow
        std::cerr << "Creating a bogus workflow..." << std::endl;
        wrench::Workflow workflow;
 
        //loading the workflow from the dax file
+       std::cout << "creating the dax file" << std::endl;
        wrench::WorkflowUtil::loadFromDAX(dax_file, &workflow);
-       std::cerr << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
+       std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
        std::cerr.flush();
 
 
@@ -68,28 +69,7 @@ int main(int argc, char **argv) {
        try {
 
            std::cerr << "Instantiating a MultiCore Job executor on " << executor_host << "..." << std::endl;
-   //    simulation.add(
-   //            std::unique_ptr<wrench::MultihostMulticoreComputeService>(
-   //                    new wrench::MultihostMulticoreComputeService(executor_host, true, true,
-   //                                                        storage_service,
-   //                                                        {{wrench::MultihostMulticoreComputeServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}})));
-
            simulation.add(std::unique_ptr<wrench::ComputeService>(cloud_service));
-
-   //    std::cerr << "Instantiating a  MultiCore Job executor on " << executor_host << "..." << std::endl;
-   //    simulation.add(std::unique_ptr<wrench::MultihostMulticoreComputeService>(
-   //            new wrench::MultihostMulticoreComputeService(executor_host, true, false,
-   //                                                {{wrench::MultihostMulticoreComputeService::Property::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}})));
-
-   //    std::cerr << "Instantiating a  MultiCore Job executor on " << exexutor_host << "..." << std::endl;
-   //    simulation.add(std::unique_ptr<wrench::MultihostMulticoreComputeService>(
-   //            new wrench::MultihostMulticoreComputeService(executor_host, false, true,
-   //                                                {{wrench::MultihostMulticoreComputeService::Property::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}})));
-
-   //    std::cerr << "Instantiating a  MultiCore Job executor on " << exexutor_host << "..." << std::endl;
-   //    simulation.add(std::unique_ptr<wrench::MultihostMulticoreComputeService>(
-   //            new wrench::MultihostMulticoreComputeService(executor_host, true, true,
-   //                                                {{wrench::MultihostMulticoreComputeService::Property::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}})));
 
        } catch (std::invalid_argument &e) {
 
@@ -108,8 +88,7 @@ int main(int argc, char **argv) {
                                              std::unique_ptr<wrench::Scheduler>(
    //                                                new wrench::RandomScheduler()),
                                                      //TODO: chance to htcondor!
-                                                     new HTCondor(cloud_service, execution_hosts,
-                                                                                &simulation)),
+                                                     new HTCondor()),
                                              wms_host)));
 
    //  wms->setPilotJobScheduler(std::unique_ptr<wrench::PilotJobScheduler>(new wrench::CriticalPathScheduler()));
@@ -148,5 +127,5 @@ int main(int argc, char **argv) {
        std::cerr << "Task in first trace entry: " << trace[0]->getContent()->getTask()->getId() << std::endl;
 
        return 0;
-        */
+
 }
