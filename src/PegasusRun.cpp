@@ -88,8 +88,9 @@ int main(int argc, char **argv) {
                                              std::unique_ptr<wrench::Scheduler>(
    //                                                new wrench::RandomScheduler()),
                                                      //TODO: chance to htcondor!
-                                                     new HTCondor()),
-                                             wms_host)));
+                                                     new HTCondor(cloud_service, execution_hosts,
+                                                                                &simulation)),
+                                  wms_host)));
 
    //  wms->setPilotJobScheduler(std::unique_ptr<wrench::PilotJobScheduler>(new wrench::CriticalPathScheduler()));
 

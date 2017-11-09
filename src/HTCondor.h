@@ -13,40 +13,40 @@
 #define PROJECT_HTCONDOR_H
 
 #include <wrench-dev.h>
-
-
+#include "wrench/workflow/job/PilotJob.h"
+#include "string"
 
 using namespace wrench;
 
+
     /**
-     * @brief cloud scheduler for htcondor
+     * @brief A cloud Scheduler for htcondor
      */
-    class HTCondor : public Scheduler {
-        /**
-            * @brief A random Scheduler
-            */
-            /***********************/
-            /** \cond DEVELOPER    */
-            /***********************/
-        public:
+class HTCondor : public Scheduler {
 
-            HTCondor();
+public:
+    HTCondor(ComputeService *cloud_service, std::vector<std::string> &execution_hosts,
+                   wrench::Simulation *simulation);
 
-            void scheduleTasks(JobManager *job_manager,
-                               std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
-                               const std::set<ComputeService *> &compute_services);
+    /***********************/
+    /** \cond DEVELOPER    */
+    /***********************/
 
-            void schedulePilotJobs(JobManager *job_manager,
-                               Workflow *workflow,
-                               double pilot_job_duration,
-                               const std::set<ComputeService *> &compute_services);
+    void scheduleTasks(JobManager *job_manager,
+                       std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
+                       const std::set<ComputeService *> &compute_services) override;
 
+    /***********************/
+    /** \endcond           */
+    /***********************/
 
+private:
 
-
-            /***********************/
-            /** \endcond           */
-            /***********************/
-        };
+    std::string choosePMHostname();
+    ComputeService *cloud_service;
+    std::vector<std::string> execution_hosts;
+    std::map<std::string, std::vector<std::string>> vm_list;
+    wrench::Simulation *simulation;
+};
 
 #endif //PROJECT_HTCONDOR_H

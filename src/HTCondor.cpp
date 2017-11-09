@@ -14,125 +14,88 @@ XBT_LOG_NEW_DEFAULT_CATEGORY(HTCondor, "Log category for HTCondor Scheduler");
 
 using namespace wrench;
 
+static unsigned long VM_ID = 1;
 
 void HTCondor::scheduleTasks(JobManager *job_manager,
                                     std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
-                                    const std::set<ComputeService *> &compute_services) {
+                                    const std::set<wrench::ComputeService *> &compute_services) {
+    if (compute_services.find(cloud_service) == compute_services.end()) {
+        throw std::runtime_error("The default cloud service is not listed as a compute service.");
+    }
+    auto *cs = (CloudService *) this->cloud_service;
+
     WRENCH_INFO("There are %ld ready tasks to schedule", ready_tasks.size());
+    long scheduled = 0;
+
     for (auto itc : ready_tasks) {
-        bool successfully_scheduled = false;
+        //TODO add support to pilot jobs
 
-        // First: attempt to run the task on a running pilot job
-        WRENCH_INFO("Trying to submit task '%s' to a pilot job...", itc.first.c_str());
+        long num_idle_cores = 0;
 
-        double total_flops = getTotalFlops((*ready_tasks.begin()).second);
+        // Check that it can run it right now in terms of idle cores
+        try {
+            num_idle_cores = cs->getNumIdleCores();
+        } catch (WorkflowExecutionException &e) {
+            // The service has some problem, forget it
+            throw std::runtime_error("Unable to get the number of idle cores.");
+        }
 
-//        std::set<PilotJob *> running_pilot_jobs = job_manager->getRunningPilotJobs();
-//        for (auto pj : running_pilot_jobs) {
-//            ComputeService *cs = pj->getComputeService();
-//
-//            // Check that the pilot job could in principle run this job
-//            if ((not cs->isUp()) || (not cs->supportsStandardJobs())) {
-//                continue;
-//            }
-//
-//            // Check that it can run it right now in terms of idle cores
-//            try {
-//                unsigned long num_idle_cores = cs->getNumIdleCores();
-////            WRENCH_INFO("The compute service says it has %ld idle cores", num_idle_cores);
-//                if (num_idle_cores <= 0) {
-//                    continue;
-//                }
-//            } catch (WorkflowExecutionException &e) {
-//                // The service has some problem, forget it
-//                continue;
-//            }
-//
-//            // Check that it can run it right now in terms of TTL
-//            try {
-//                // Check that the TTL is ok (does a communication with the daemons)
-//                double ttl = cs->getTTL();
-//                // TODO: This duration is really hard to compute because we don't know
-//                // how many cores will be available, we don't know how the core schedule
-//                // will work out, etc. So right now, if the service couldn't run the job
-//                // sequentially, we say it can't run it at all. Something to fix at some point.
-//                // One option is to ask the user to provide the maximum amount of flop that will
-//                // be required on ONE core assuming min_num_cores cores are available?
-//                double duration = (total_flops / cs->getCoreFlopRate());
-//                if ((ttl > 0) && (ttl < duration)) {
-//                    continue;
-//                }
-//            } catch (WorkflowExecutionException &e) {
-//                // Problem with the service, give up
-//                continue;
-//            }
-//
-//            // We can submit!
-//            WRENCH_INFO("Submitting task %s for execution to a pilot job", itc.first.c_str());
-//            WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
-//            job_manager->submitJob(job, cs);
-//            successfully_scheduled = true;
-//            break;
-//        }
-//
-//        if (successfully_scheduled) {
-//            continue;
-//        } else {
-//            WRENCH_INFO("no dice!");
-//        }
-
-        // Second: attempt to run the task on a compute resource
-        WRENCH_INFO("Trying to submit task '%s' to a standard compute service...", itc.first.c_str());
-
-        for (auto cs : compute_services) {
-            WRENCH_INFO("Asking compute service %s if it can run this standard job...", cs->getName().c_str());
-
-            // Check that the compute service could in principle run this job
-            if ((not cs->isUp()) || (not cs->supportsStandardJobs())) {
-                continue;
-            }
-
-            // Get the number of idle cores
-            unsigned long num_idle_cores;
-
-            // Check that it can run it right now in terms of idle cores
+        // Decision making
+        WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
+        if (num_idle_cores - scheduled <= 0) {
             try {
-                num_idle_cores = cs->getNumIdleCores();
+                std::string pm_host = choosePMHostname();
+                std::string vm_host = "vm" + std::to_string(VM_ID++) + "_" + pm_host;
+
+                if (cs->createVM(pm_host, vm_host, ((StandardJob *) (job))->getMinimumRequiredNumCores())) {
+                    this->vm_list[pm_host].push_back(vm_host);
+                }
+
             } catch (WorkflowExecutionException &e) {
-                // The service has some problem, forget it
-                continue;
+                // unable to create a new VM, tasks won't be scheduled in this iteration.
+                return;
             }
-
-            // Decision making
-            if (num_idle_cores <= 0) {
-                continue;
-            }
-
-            // We can submit!
-            WRENCH_INFO("Submitting task %s for execution as a standard job", itc.first.c_str());
-            WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
-            job_manager->submitJob(job, cs);
-            successfully_scheduled = true;
-            break;
         }
-
-        if (not successfully_scheduled) {
-            WRENCH_INFO("no dice");
-            break;
-        }
-
+        job_manager->submitJob(job, cs);
+        scheduled++;
     }
     WRENCH_INFO("Done with scheduling tasks as standard jobs");
 }
 
-void HTCondor::schedulePilotJobs(JobManager *job_manager,
-                       Workflow *workflow,
-                       double pilot_job_duration,
-                       const std::set<ComputeService *> &compute_services){
 
+
+HTCondor::HTCondor(ComputeService *cloud_service, std::vector<std::string> &execution_hosts,
+        Simulation *simulation){
+    if (typeid(cloud_service) == typeid(CloudService)) {
+        throw std::runtime_error("The provided cloud service is not a CloudService object.");
+    }
+    if (execution_hosts.empty()) {
+        throw std::runtime_error("At least one execution host should be provided");
+    }
+    this->execution_hosts = execution_hosts;
+    this->cloud_service = cloud_service;
 }
 
+/**
+    * @brief Select a physical host (PM) with the least number of VMs.
+    *
+    * @return a physical hostname
+    */
+std::string HTCondor::choosePMHostname() {
 
-HTCondor::HTCondor() {
-    std::cout << "created htcondor" << std::endl;
+    std::pair<std::string, unsigned long> min_pm("", ULONG_MAX);
+
+    for (auto &host : this->execution_hosts) {
+        auto entry = this->vm_list.find(host);
+
+        if (entry == this->vm_list.end()) {
+            return host;
+        }
+        if (entry->second.size() < min_pm.second) {
+            min_pm.first = entry->first;
+            min_pm.second = entry->second.size();
+        }
+    }
+
+    return min_pm.first;
 }
