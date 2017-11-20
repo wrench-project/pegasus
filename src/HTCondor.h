@@ -15,18 +15,20 @@
 #include <wrench-dev.h>
 #include "wrench/workflow/job/PilotJob.h"
 #include "string"
+#include <vector>
+
 
 using namespace wrench;
 
 
-    /**
-     * @brief A cloud Scheduler for htcondor
-     */
+/**
+ * @brief A cloud Scheduler for htcondor
+ */
 class HTCondor : public Scheduler {
 
 public:
-    HTCondor(ComputeService *cloud_service, std::vector<std::string> &execution_hosts,
-                   wrench::Simulation *simulation);
+    HTCondor(std::vector<ComputeService *> computeService, std::vector<std::string> &execution_hosts,
+             wrench::Simulation *simulation);
 
     /***********************/
     /** \cond DEVELOPER    */
@@ -43,7 +45,8 @@ public:
 private:
 
     std::string choosePMHostname();
-    ComputeService *cloud_service;
+
+    //no run through the resources to check to see if you can schedule on any of these resources
     std::vector<std::string> execution_hosts;
     std::map<std::string, std::vector<std::string>> vm_list;
     wrench::Simulation *simulation;

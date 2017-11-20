@@ -17,63 +17,60 @@ using namespace wrench;
 static unsigned long VM_ID = 1;
 
 void HTCondor::scheduleTasks(JobManager *job_manager,
-                                    std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
-                                    const std::set<wrench::ComputeService *> &compute_services) {
-    if (compute_services.find(cloud_service) == compute_services.end()) {
-        throw std::runtime_error("The default cloud service is not listed as a compute service.");
-    }
-    auto *cs = (CloudService *) this->cloud_service;
+                             std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
+                             const std::set<wrench::ComputeService *> &compute_services) {
+    for (std::set<wrench::ComputeService *>::iterator it = compute_services.begin();
+         it != compute_services.end(); it++) {
+        WRENCH_INFO("There are %ld ready tasks to schedule", ready_tasks.size());
+        long scheduled = 0;
+        ComputeService *cs = *it;
+        for (auto itc : ready_tasks) {
+            //TODO add support to pilot jobs
 
-    WRENCH_INFO("There are %ld ready tasks to schedule", ready_tasks.size());
-    long scheduled = 0;
+            long num_idle_cores = 0;
 
-    for (auto itc : ready_tasks) {
-        //TODO add support to pilot jobs
-
-        long num_idle_cores = 0;
-
-        // Check that it can run it right now in terms of idle cores
-        try {
-            num_idle_cores = cs->getNumIdleCores();
-        } catch (WorkflowExecutionException &e) {
-            // The service has some problem, forget it
-            throw std::runtime_error("Unable to get the number of idle cores.");
-        }
-
-        // Decision making
-        WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
-        if (num_idle_cores - scheduled <= 0) {
+            // Check that it can run it right now in terms of idle cores
             try {
-                std::string pm_host = choosePMHostname();
-                std::string vm_host = "vm" + std::to_string(VM_ID++) + "_" + pm_host;
-
-                if (cs->createVM(pm_host, vm_host, ((StandardJob *) (job))->getMinimumRequiredNumCores())) {
-                    this->vm_list[pm_host].push_back(vm_host);
-                }
-
+                num_idle_cores = cs->getNumIdleCores();
             } catch (WorkflowExecutionException &e) {
-                // unable to create a new VM, tasks won't be scheduled in this iteration.
-                return;
+                // The service has some problem, forget it
+                throw std::runtime_error("Unable to get the number of idle cores.");
             }
+
+            // Decision making
+            WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
+            if (num_idle_cores - scheduled <= 0) {
+                try {
+                    std::string pm_host = choosePMHostname();
+                    std::string vm_host = "vm" + std::to_string(VM_ID++) + "_" + pm_host;
+
+                    if (cs->createVM(pm_host, vm_host, ((StandardJob *) (job))->getMinimumRequiredNumCores())) {
+                        this->vm_list[pm_host].push_back(vm_host);
+                    }
+
+                } catch (WorkflowExecutionException &e) {
+                    // unable to create a new VM, tasks won't be scheduled in this iteration.
+                    return;
+                }
+            }
+            job_manager->submitJob(job, cs);
+            scheduled++;
         }
-        job_manager->submitJob(job, cs);
-        scheduled++;
     }
     WRENCH_INFO("Done with scheduling tasks as standard jobs");
 }
 
 
-
-HTCondor::HTCondor(ComputeService *cloud_service, std::vector<std::string> &execution_hosts,
-        Simulation *simulation){
-    if (typeid(cloud_service) == typeid(CloudService)) {
-        throw std::runtime_error("The provided cloud service is not a CloudService object.");
-    }
+HTCondor::HTCondor(std::vector<std::string> &execution_hosts,
+                   wrench::Simulation *simulation) {
+    //TODO: figure out how to check new service
     if (execution_hosts.empty()) {
         throw std::runtime_error("At least one execution host should be provided");
     }
+    //TODO: check to make sure simulations is correct
+    this->simulation = simulation;
     this->execution_hosts = execution_hosts;
-    this->cloud_service = cloud_service;
+
 }
 
 /**

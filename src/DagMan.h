@@ -16,44 +16,44 @@
 
 using namespace wrench;
 
-    class Simulation;
+class Simulation;
 
-    class DagMan : public WMS {
+class DagMan : public WMS {
 
-    public:
-        DagMan(Workflow *, std::unique_ptr<Scheduler>, std::string);
+public:
+    DagMan(Workflow *, std::unique_ptr<Scheduler>, std::string);
 
-    protected:
-        /***********************/
-        /** \cond DEVELOPER    */
-        /***********************/
+protected:
+    /***********************/
+    /** \cond DEVELOPER    */
+    /***********************/
 
-        void processEventStandardJobFailure(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventStandardJobFailure(std::unique_ptr<WorkflowExecutionEvent>);
 
-        void processEventUnsupportedJobType(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventUnsupportedJobType(std::unique_ptr<WorkflowExecutionEvent>);
 
-        void processEventStandardJobCompletion(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventStandardJobCompletion(std::unique_ptr<WorkflowExecutionEvent>);
 
-        void processEventPilotJobStart(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventPilotJobStart(std::unique_ptr<WorkflowExecutionEvent>);
 
-        void processEventPilotJobExpiration(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventPilotJobExpiration(std::unique_ptr<WorkflowExecutionEvent>);
 
-        void processEventFileCopyCompletion(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventFileCopyCompletion(std::unique_ptr<WorkflowExecutionEvent>);
 
-        void processEventFileCopyFailure(std::unique_ptr<WorkflowExecutionEvent>);
+    void processEventFileCopyFailure(std::unique_ptr<WorkflowExecutionEvent>);
 
-        /***********************/
-        /** \endcond           */
-        /***********************/
+    /***********************/
+    /** \endcond           */
+    /***********************/
 
-    private:
-        int main();
+private:
+    int main();
 
-        /** @brief The job manager */
-        std::unique_ptr<JobManager> job_manager;
-        /** @brief Whether the workflow execution should be aborted */
-        bool abort = false;
+    /** @brief The job manager */
+    std::unique_ptr<JobManager> job_manager;
+    /** @brief Whether the workflow execution should be aborted */
+    bool abort = false;
 
-    };
+};
 
 #endif //PROJECT_DAGMAN_H

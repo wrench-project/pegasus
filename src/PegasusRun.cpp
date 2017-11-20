@@ -9,6 +9,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include "wrench-dev.h"
 #include "DagMan.h"
 #include "HTCondor.h"
@@ -21,112 +22,132 @@ int main(int argc, char **argv) {
     //create and initialize the simulation
     wrench::Simulation simulation;
     simulation.init(&argc, argv);
-       //check to make sure there are the right number of arguments
+    //check to make sure there are the right number of arguments
 //       if (argc != 3) {
 //           std::cerr << "Usage: " << argv[0] << " <xml platform file> <dax file>" << std::endl;
 //           exit(1);
 //       }
 
-       //create the platform file and dax file from command line args
-       char *platform_file = "/Users/jamesoeth/CLionProjects/pegasus/twotasks.xml";
-       char *dax_file = "/Users/jamesoeth/CLionProjects/pegasus/onetask.dax";
+    //create the platform file and dax file from command line args
+    char *platform_file = "/Users/jamesoeth/CLionProjects/pegasus/twotasks.xml";
+    char *dax_file = "/Users/jamesoeth/CLionProjects/pegasus/onetask.dax";
 
-       //making the actual workflow
-       std::cerr << "Creating a bogus workflow..." << std::endl;
-       wrench::Workflow workflow;
+    //making the actual workflow
+    std::cerr << "Creating a bogus workflow..." << std::endl;
+    wrench::Workflow workflow;
 
-       //loading the workflow from the dax file
-       std::cout << "creating the dax file" << std::endl;
-       wrench::WorkflowUtil::loadFromDAX(dax_file, &workflow);
-       std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
-       std::cerr.flush();
-
-
-       std::cerr << "Instantiating SimGrid platform..." << std::endl;
-       simulation.instantiatePlatform(platform_file);
-
-       std::vector<std::string> hostname_list = simulation.getHostnameList();
-
-       std::string storage_host = hostname_list[(hostname_list.size() > 3) ? 2 : 1];
-
-       std::cerr << "Instantiating a SimpleStorageService on " << storage_host << "..." << std::endl;
-
-       wrench::StorageService *storage_service = simulation.add(std::unique_ptr<wrench::SimpleStorageService>(
-               new wrench::SimpleStorageService(storage_host, 10000000000000.0)));
+    //loading the workflow from the dax file
+    std::cout << "creating the dax file" << std::endl;
+    wrench::WorkflowUtil::loadFromDAX(dax_file, &workflow);
+    std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
+    std::cerr.flush();
 
 
-       std::string wms_host = hostname_list[0];
+    std::cerr << "Instantiating SimGrid platform..." << std::endl;
+    simulation.instantiatePlatform(platform_file);
+
+    std::vector<std::string> hostname_list = simulation.getHostnameList();
+
+    std::string storage_host = hostname_list[(hostname_list.size() > 3) ? 2 : 1];
+
+    std::cerr << "Instantiating a SimpleStorageService on " << storage_host << "..." << std::endl;
+
+    wrench::StorageService *storage_service = simulation.add(std::unique_ptr<wrench::SimpleStorageService>(
+            new wrench::SimpleStorageService(storage_host, 10000000000000.0)));
 
 
-       std::string executor_host = hostname_list[(hostname_list.size() > 1) ? 1 : 0];
+    std::string wms_host = hostname_list[0];
 
-       //TODO: change this to htcondor maybe??f
-       wrench::ComputeService *cloud_service = new wrench::CloudService(
-               wms_host, true, true, storage_service,
-               {{wrench::CloudServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}});
-       std::vector<std::string> execution_hosts = {executor_host};
 
-       try {
+    std::string executor_host = hostname_list[(hostname_list.size() > 1) ? 1 : 0];
 
-           std::cerr << "Instantiating a MultiCore Job executor on " << executor_host << "..." << std::endl;
-           simulation.add(std::unique_ptr<wrench::ComputeService>(cloud_service));
+    //TODO: make the batch compute service
+    //here is the cloud service
+    wrench::ComputeService *cloud_service = new wrench::CloudService(
+            wms_host, true, true, storage_service,
+            {{wrench::CloudServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}});
 
-       } catch (std::invalid_argument &e) {
+    //creating the multicore compute service
+    std::set<std::pair<std::string, unsigned long>> compute_resource;
+    wrench::ComputeService *multicore_service = new wrench::MultihostMulticoreComputeService(
+            wms_host, true, true, compute_resource, storage_service,
+            {{wrench::MultihostMulticoreComputeServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}});
 
-           std::cerr << "Error: " << e.what() << std::endl;
-           std::exit(1);
 
-       }
+    std::vector<std::string> execution_hosts = {executor_host};
 
-       std::cerr << "Instantiating a WMS on " << wms_host << "..." << std::endl;
+    try {
 
-       // WMS Configuration
-       wrench::WMS *wms = simulation.setWMS(
-               std::unique_ptr<wrench::WMS>(
-                       //TODO: replace this with dagman
-                       new DagMan(&workflow,
-                                             std::unique_ptr<wrench::Scheduler>(
-   //                                                new wrench::RandomScheduler()),
-                                                     //TODO: chance to htcondor!
-                                                     new HTCondor(cloud_service, execution_hosts,
-                                                                                &simulation)),
-                                  wms_host)));
+        std::cerr << "Instantiating a Cloub Job executor on " << executor_host << "..." << std::endl;
+        simulation.add(std::unique_ptr<wrench::ComputeService>(cloud_service));
 
-   //  wms->setPilotJobScheduler(std::unique_ptr<wrench::PilotJobScheduler>(new wrench::CriticalPathScheduler()));
+    } catch (std::invalid_argument &e) {
 
-   //  wms->addStaticOptimization(std::unique_ptr<wrench::StaticOptimization>(new wrench::SimplePipelineClustering()));
-   //  wms->addDynamicOptimization(std::unique_ptr<wrench::DynamicOptimization>(new wrench::FailureDynamicClustering()));
+        std::cerr << "Error: " << e.what() << std::endl;
+        std::exit(1);
 
-       std::string file_registry_service_host = hostname_list[(hostname_list.size() > 2) ? 1 : 0];
+    }
 
-       std::cerr << "Instantiating a FileRegistryService on " << file_registry_service_host << "..." << std::endl;
-       std::unique_ptr<wrench::FileRegistryService> file_registry_service(
-               new wrench::FileRegistryService(file_registry_service_host));
-       simulation.setFileRegistryService(std::move(file_registry_service));
+    try {
 
-       std::cerr << "Staging input files..." << std::endl;
-       std::set<wrench::WorkflowFile *> input_files = workflow.getInputFiles();
-       try {
-           simulation.stageFiles(input_files, storage_service);
-       } catch (std::runtime_error &e) {
-           std::cerr << "Exception: " << e.what() << std::endl;
-           return 0;
-       }
+        std::cerr << "Instantiating a Multicore Job executor on " << executor_host << "..." << std::endl;
+        simulation.add(std::unique_ptr<wrench::ComputeService>(multicore_service));
 
-       std::cerr << "Launching the Simulation..." << std::endl;
-       try {
-           simulation.launch();
-       } catch (std::runtime_error &e) {
-           std::cerr << "Exception: " << e.what() << std::endl;
-           return 0;
-       }
-       std::cerr << "Simulation done!" << std::endl;
+    } catch (std::invalid_argument &e) {
 
-       std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
-       trace = simulation.output.getTrace<wrench::SimulationTimestampTaskCompletion>();
-       std::cerr << "Number of entries in TaskCompletion trace: " << trace.size() << std::endl;
-       std::cerr << "Task in first trace entry: " << trace[0]->getContent()->getTask()->getId() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
+        std::exit(1);
 
-       return 0;
+    }
+
+    std::cerr << "Instantiating a WMS on " << wms_host << "..." << std::endl;
+    std::vector<wrench::ComputeService *> computeService;
+    computeService.push_back(cloud_service);
+    computeService.push_back(multicore_service);
+    // WMS Configuration
+    wrench::WMS *wms = simulation.setWMS(
+            std::unique_ptr<wrench::WMS>(
+                    new DagMan(&workflow,
+                               std::unique_ptr<wrench::Scheduler>(
+                                       new HTCondor(computeService, execution_hosts,
+                                                    &simulation)),
+                               wms_host)));
+
+    //  wms->setPilotJobScheduler(std::unique_ptr<wrench::PilotJobScheduler>(new wrench::CriticalPathScheduler()));
+
+    //  wms->addStaticOptimization(std::unique_ptr<wrench::StaticOptimization>(new wrench::SimplePipelineClustering()));
+    //  wms->addDynamicOptimization(std::unique_ptr<wrench::DynamicOptimization>(new wrench::FailureDynamicClustering()));
+
+    std::string file_registry_service_host = hostname_list[(hostname_list.size() > 2) ? 1 : 0];
+
+    std::cerr << "Instantiating a FileRegistryService on " << file_registry_service_host << "..." << std::endl;
+    std::unique_ptr<wrench::FileRegistryService> file_registry_service(
+            new wrench::FileRegistryService(file_registry_service_host));
+    simulation.setFileRegistryService(std::move(file_registry_service));
+
+    std::cerr << "Staging input files..." << std::endl;
+    std::set<wrench::WorkflowFile *> input_files = workflow.getInputFiles();
+    try {
+        simulation.stageFiles(input_files, storage_service);
+    } catch (std::runtime_error &e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+        return 0;
+    }
+
+    std::cerr << "Launching the Simulation..." << std::endl;
+    try {
+        simulation.launch();
+    } catch (std::runtime_error &e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+        return 0;
+    }
+    std::cerr << "Simulation done!" << std::endl;
+
+    std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
+    trace = simulation.output.getTrace<wrench::SimulationTimestampTaskCompletion>();
+    std::cerr << "Number of entries in TaskCompletion trace: " << trace.size() << std::endl;
+    std::cerr << "Task in first trace entry: " << trace[0]->getContent()->getTask()->getId() << std::endl;
+
+    return 0;
 
 }
