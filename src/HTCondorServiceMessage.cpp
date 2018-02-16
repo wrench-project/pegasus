@@ -3,6 +3,7 @@
 //
 
 #include "HTCondorServiceMessage.h"
+#include "wrench-dev.h"
 
 /**
      * @brief Constructor
@@ -11,7 +12,7 @@
      * @param payload: the message size in bytes
      */
 HTCondorServiceMessage::HTCondorServiceMessage(const std::string &name, double payload) :
-        ComputeServiceMessage("HTCondorServiceMessage::" + name, payload) {
+        wrench::ComputeServiceMessage("HTCondorServiceMessage::" + name, payload) {
 }
 
 /**

@@ -5,10 +5,11 @@
 #ifndef PEGASUS_HTCONDORCOMPUTESERVICE_H
 #define PEGASUS_HTCONDORCOMPUTESERVICE_H
 
+#include "wrench-dev.h"
 /**
  * @brief A Cloud Service
  */
-class HTCondorService : public ComputeService {
+class HTCondorService : public wrench::ComputeService {
 
 private:
     std::map <std::string, std::string> default_property_values =

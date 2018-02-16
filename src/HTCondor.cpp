@@ -52,6 +52,150 @@ void HTCondor::submitStandardJob(wrench::StandardJob *job, std::map<std::string,
     }
 }
 
+/**
+     * @brief Constructor that starts the daemon for the service on a host,
+     *        registering it with a WRENCH Simulation
+     *
+     * @param hostname: the name of the host
+     * @param supports_standard_jobs: true if the job executor should support standard jobs
+     * @param supports_pilot_jobs: true if the job executor should support pilot jobs
+     * @param compute_resources: compute_resources: a list of <hostname, num_cores> pairs, which represent
+     *        the compute resources available to this service
+     * @param plist: a property list
+     * @param ttl: the time-to-live, in seconds (-1: infinite time-to-live)
+     * @param pj: a containing PilotJob  (nullptr if none)
+     * @param suffix: a string to append to the process name
+     * @param default_storage_service: a storage service
+     *
+     * @throw std::invalid_argument
+     */
+HTCondor::HTCondor(
+        const std::string &hostname,
+        bool supports_standard_jobs,
+        bool supports_pilot_jobs,
+        std::set<std::pair<std::string, unsigned long>> compute_resources,
+        std::map<std::string, std::string> plist,
+        double ttl,
+        wrench::PilotJob *pj,
+        std::string suffix,
+        wrench::StorageService *default_storage_service) :
+        ComputeService(hostname,
+                       "multihost_multicore" + suffix,
+                       "multihost_multicore" + suffix,
+                       supports_standard_jobs,
+                       supports_pilot_jobs,
+                       default_storage_service) {
+
+    // Set default and specified properties
+    this->setProperties(this->default_property_values, plist);
+
+    // Check that there is at least one core per host and that hosts have enough cores
+    for (auto host : compute_resources) {
+        std::string hname = std::get<0>(host);
+        unsigned long requested_cores = std::get<1>(host);
+        unsigned long available_cores = wrench::S4U_Simulation::getNumCores(hname);
+        if (requested_cores == 0) {
+            requested_cores = available_cores;
+        }
+        if (requested_cores > available_cores) {
+            throw std::invalid_argument(
+                    "MultihostMulticoreComputeService::MultihostMulticoreComputeService(): host " + hname + "only has " +
+                    std::to_string(available_cores) + " but " +
+                    std::to_string(requested_cores) + " are requested");
+        }
+
+        this->compute_resources.insert(std::make_pair(hname, requested_cores));
+    }
+
+    // Compute the total number of cores and set initial core availabilities
+    this->total_num_cores = 0;
+    for (auto host : this->compute_resources) {
+        this->total_num_cores += std::get<1>(host);
+        this->core_availabilities.insert(std::make_pair(std::get<0>(host), std::get<1>(host)));
+//        this->core_availabilities[std::get<0>(host)] = std::get<1>(host);
+    }
+
+    this->ttl = ttl;
+    this->has_ttl = (ttl >= 0);
+    this->containing_pilot_job = pj;
+
+//      // Start the daemon on the same host
+//      try {
+//        this->start_daemon(hostname);
+//      } catch (std::invalid_argument &e) {
+//        throw;
+//      }
+}
+
+
+int HTCondor::main() {
+
+    wrench::TerminalOutput::setThisProcessLoggingColor(WRENCH_LOGGING_COLOR_RED);
+
+    WRENCH_INFO("New Multicore Job Executor starting (%s) on %ld hosts with a total of %ld cores",
+                this->mailbox_name.c_str(), this->compute_resources.size(), this->total_num_cores);
+
+    // Set an alarm for my timely death, if necessary
+    if (this->has_ttl) {
+        this->death_date = wrench::S4U_Simulation::getClock() + this->ttl;
+        WRENCH_INFO("Will be terminating at date %lf", this->death_date);
+//        std::shared_ptr<SimulationMessage> msg = std::shared_ptr<SimulationMessage>(new ServiceTTLExpiredMessage(0));
+        wrench::SimulationMessage *msg = new wrench::ServiceTTLExpiredMessage(0);
+        this->death_alarm = new wrench::Alarm(death_date, this->hostname, this->mailbox_name, msg, "service_string");
+    } else {
+        this->death_date = -1.0;
+        this->death_alarm = nullptr;
+    }
+
+    /** Main loop **/
+    while (this->processNextMessage()) {
+
+        /** Dispatch jobs **/
+        while (this->dispatchNextPendingJob());
+    }
+
+    wrench::WRENCH_INFO("Multicore Job Executor on host %s terminated!", wrench::S4U_Simulation::getHostName().c_str());
+    return 0;
+}
+
+
+
+bool HTCondor::dispatchNextPendingJob() {
+
+    if (this->pending_jobs.empty()) {
+        return false;
+    }
+
+    wrench::WorkflowJob *picked_job = nullptr;
+
+    std::string job_selection_policy =
+            this->getPropertyValueAsString(HTCondorServiceProperty::JOB_SELECTION_POLICY);
+    if (job_selection_policy == "FCFS") {
+        picked_job = this->pending_jobs.front();
+    } else {
+        throw std::runtime_error(
+                "MultihostMulticoreComputeService::dispatchNextPendingJob(): Unsupported JOB_SELECTION_POLICY '" +
+                job_selection_policy + "'");
+    }
+
+    bool dispatched = false;
+    switch (picked_job->getType()) {
+        case wrench::WorkflowJob::STANDARD: {
+            dispatched = dispatchStandardJob((wrench::StandardJob *) picked_job);
+            break;
+        }
+        case wrench::WorkflowJob::PILOT: {
+            dispatched = dispatchPilotJob((wrench::PilotJob *) picked_job);
+            break;
+        }
+    }
+
+    // If we dispatched, take the job out of the pending job list
+    if (dispatched) {
+        this->pending_jobs.pop_back();
+    }
+    return dispatched;
+}
 
 
 
@@ -78,107 +222,3 @@ void HTCondor::submitStandardJob(wrench::StandardJob *job, std::map<std::string,
 
 
 
-
-
-
-
-
-
-
-
-
-//using namespace wrench;
-//
-//static unsigned long VM_ID = 1;
-//
-//    void HTCondor::scheduleTasks(JobManager *job_manager,
-//                             std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks,
-//                                 const std::set<wrench::ComputeService *> &compute_services) {
-//        long scheduled = 0;
-//        while(scheduled < ready_tasks.size()) {
-//            for (std::set<wrench::ComputeService *>::iterator it = compute_services.begin();
-//                 it != compute_services.end(); it++) {
-//                WRENCH_INFO("There are %ld ready tasks to schedule", ready_tasks.size());
-//                ComputeService *cs = *it;
-//                std::cout << cs->process_name << std::endl;
-//                for (auto itc : ready_tasks) {
-//                    //TODO add support to pilot jobs
-//
-//                    long num_idle_cores = 0;
-//
-//                    // Check that it can run it right now in terms of idle cores
-//                    try {
-//                        num_idle_cores = cs->getNumIdleCores();
-//                    } catch (WorkflowExecutionException &e) {
-//                        // The service has some problem, forget it
-//                        throw std::runtime_error("Unable to get the number of idle cores.");
-//                    }
-//
-//                    // Decision making
-//                    WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
-//                    //if there are no cores make more??
-//                    if (num_idle_cores - scheduled <= 0) {
-//                        //there are no cores do not schedule job
-//                        std::cout<<"there are no cores left!!" << std::endl;
-//                        if(cs->process_name == "cloud_service") {
-//                            try {
-//                                std::string pm_host = choosePMHostname();
-//                                std::string vm_host = "vm" + std::to_string(VM_ID++) + "_" + pm_host;
-//                                CloudService *cloudService = (CloudService *) (cs);
-//                                if (cloudService->createVM(pm_host, vm_host,
-//                                                           ((StandardJob *) (job))->getMinimumRequiredNumCores())) {
-//                                    this->vm_list[pm_host].push_back(vm_host);
-//                                }
-//
-//                            } catch (WorkflowExecutionException &e) {
-//                                // unable to create a new VM, tasks won't be scheduled in this iteration.
-//                                return;
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        job_manager->submitJob(job, cs);
-//                        scheduled++;
-//                    }
-//                }
-//            }
-//        }
-//    WRENCH_INFO("Done with scheduling tasks as standard jobs");
-//    }
-//
-//
-//HTCondor::HTCondor(std::vector<ComputeService *> cs, std::vector<std::string> &execution_hosts,
-//                   wrench::Simulation *simulation) {
-//    //TODO: figure out how to check new service
-//    if (execution_hosts.empty()) {
-//        throw std::runtime_error("At least one execution host should be provided");
-//    }
-//    //TODO: check to make sure simulations is correct
-//    this->simulation = simulation;
-//    this->execution_hosts = execution_hosts;
-//    this->computeService = cs;
-//}
-//
-///**
-//    * @brief Select a physical host (PM) with the least number of VMs.
-//    *
-//    * @return a physical hostname
-//    */
-//std::string HTCondor::choosePMHostname() {
-//
-//    std::pair<std::string, unsigned long> min_pm("", ULONG_MAX);
-//
-//    for (auto &host : this->execution_hosts) {
-//        auto entry = this->vm_list.find(host);
-//
-//        if (entry == this->vm_list.end()) {
-//            return host;
-//        }
-//        if (entry->second.size() < min_pm.second) {
-//            min_pm.first = entry->first;
-//            min_pm.second = entry->second.size();
-//        }
-//    }
-//
-//    return min_pm.first;
-//}
