@@ -28,6 +28,7 @@ protected:
     /** \cond DEVELOPER    */
     /***********************/
 
+
     void processEventStandardJobFailure(std::unique_ptr<WorkflowExecutionEvent>);
 
     void processEventUnsupportedJobType(std::unique_ptr<WorkflowExecutionEvent>);

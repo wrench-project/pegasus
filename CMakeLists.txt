@@ -19,6 +19,12 @@ set(SOURCE_FILES
         src/HTCondor.h
         src/HTCondor.cpp
         src/PegasusRun.cpp
+        src/HTCondorComputeService.h
+        src/HTCondorComputeService.cpp
+        src/HTCondorServiceMessage.h
+        src/HTCondorServiceMessage.cpp
+        src/HTCondorServiceProperty.h
+        src/HTCondorServiceProperty.cpp
         )
 
 set(TEST_FILES
