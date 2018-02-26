@@ -74,9 +74,9 @@ public:
 
 
     // Getting information
-    double getTTL();
+   // double getTTL();
 
-    double getCoreFlopRate();
+    //double getCoreFlopRate();
 
 
     ~HTCondor();
@@ -94,9 +94,9 @@ private:
 
     bool processNextMessage();
 
-    void processGetNumCores(const std::string &answer_mailbox);
+    //void processGetNumCores(const std::string &answer_mailbox);
 
-    void processGetNumIdleCores(const std::string &answer_mailbox);
+    //void processGetNumIdleCores(const std::string &answer_mailbox);
 
     void processCreateVM(const std::string &answer_mailbox,
                          const std::string &pm_hostname,
@@ -161,7 +161,6 @@ private:
     std::set<std::pair<std::string, unsigned long>> computeResourceAllocation(wrench::StandardJob *job);
 
     std::set<std::pair<std::string, unsigned long>> computeResourceAllocationAggressive(wrench::StandardJob *job);
-
 
 //        void createWorkForNewlyDispatchedJob(StandardJob *job);
 
