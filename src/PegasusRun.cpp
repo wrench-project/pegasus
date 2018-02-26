@@ -13,7 +13,6 @@
 #include "wrench-dev.h"
 #include "DagMan.h"
 #include "HTCondor.h"
-#include "HTCondorComputeService.h"
 
 
 using namespace std;
@@ -42,7 +41,7 @@ int main(int argc, char **argv) {
 
     //loading the workflow from the dax file
     std::cout << "creating the dax file" << std::endl;
-    wrench::WorkflowUtil::loadFromDAX(dax_file, &workflow);
+    workflow.loadFromDAX(dax_file);
     std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
     std::cerr.flush();
 
@@ -74,9 +73,8 @@ int main(int argc, char **argv) {
 //            {{HTCondorServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD, "666"}});
 //
     //create a cloud service
-    std::string wms_host = hostname_list[0];
     wrench::CloudService *cloud_service = new wrench::CloudService(
-            wms_host, true, true, storage_service,
+            wms_host, true, true, execution_hosts, storage_service,
             {{wrench::CloudServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD, "1024"}});
 
     try {
@@ -91,30 +89,17 @@ int main(int argc, char **argv) {
 
     }
 
-    try {
-
-        std::cerr << "Instantiating a Multicore Job executor on " << executor_host << "..." << std::endl;
-        simulation.add(std::unique_ptr<wrench::ComputeService>(multicore_service));
-
-    } catch (std::invalid_argument &e) {
-
-        std::cerr << "Error: " << e.what() << std::endl;
-        std::exit(1);
-
-    }
-
     std::cerr << "Instantiating a WMS on " << wms_host << "..." << std::endl;
     std::vector<wrench::ComputeService *> computeService;
     computeService.push_back(cloud_service);
-    computeService.push_back(multicore_service);
     // WMS Configuration
-    wrench::WMS *wms = simulation.setWMS(
-            std::unique_ptr<wrench::WMS>(
-                    new DagMan(&workflow,
-                               std::unique_ptr<wrench::Scheduler>(
-                                       //new HTCondor(computeService, execution_hosts,
-                                         //           &simulation)),
-                               wms_host)));
+//    wrench::WMS *wms = simulation.add(
+//            std::unique_ptr<wrench::WMS>(
+//                    new DagMan(&workflow,
+//                               std::unique_ptr<wrench::Scheduler>(
+//                                       //new HTCondor(computeService, execution_hosts,
+//                                         //           &simulation)),
+//                               wms_host)));
 
     //  wms->setPilotJobScheduler(std::unique_ptr<wrench::PilotJobScheduler>(new wrench::CriticalPathScheduler()));
 

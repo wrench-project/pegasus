@@ -74,15 +74,15 @@ public:
 
 
     // Getting information
-    double getTTL() override;
+    double getTTL();
 
-    double getCoreFlopRate() override;
+    double getCoreFlopRate();
 
 
-    ~MultihostMulticoreComputeService();
+    ~HTCondor();
 
 private:
-    friend class Simulation;
+    friend class wrench::Simulation;
 
     HTCondor(const std::string &hostname, bool supports_standard_jobs, bool supports_pilot_jobs,
              std::set<std::pair<std::string, unsigned long>> compute_resources,
@@ -94,9 +94,9 @@ private:
 
     bool processNextMessage();
 
-    void processGetNumCores(const std::string &answer_mailbox) override;
+    void processGetNumCores(const std::string &answer_mailbox);
 
-    void processGetNumIdleCores(const std::string &answer_mailbox) override;
+    void processGetNumIdleCores(const std::string &answer_mailbox);
 
     void processCreateVM(const std::string &answer_mailbox,
                          const std::string &pm_hostname,
@@ -131,9 +131,6 @@ private:
 
     // Queue of pending jobs (standard or pilot) that haven't begun executing
     std::deque<wrench::WorkflowJob *> pending_jobs;
-
-
-    int main() override;
 
     // Helper functions to make main() a bit more palatable
 

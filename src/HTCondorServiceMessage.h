@@ -6,9 +6,6 @@
 #define PEGASUS_HTCONDORSERVICEMESSAGE_H
 
 #include "wrench-dev.h"
-
-class wrench::ComputeService;
-
 /***********************/
 /** \cond INTERNAL     */
 /***********************/
@@ -26,7 +23,7 @@ protected:
  */
 class HTCondorServiceGetExecutionHostsRequestMessage : public HTCondorServiceMessage {
 public:
-    wrench::CloudServiceGetExecutionHostsRequestMessage(const std::string &answer_mailbox, double payload);
+    HTCondorServiceGetExecutionHostsRequestMessage(const std::string &answer_mailbox, double payload);
 
     std::string answer_mailbox;
 };

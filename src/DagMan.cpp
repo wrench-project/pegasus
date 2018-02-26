@@ -25,9 +25,11 @@ using namespace wrench;
 
 
 DagMan::DagMan(Workflow *workflow,
+               std::set<ComputeService*> compute_services,
                std::unique_ptr<Scheduler> scheduler,
                std::string hostname) : wrench::WMS(workflow,
                                                    std::move(scheduler),
+                                                   compute_services,
                                                    hostname,
                                                    "dagman") {}
 
@@ -63,7 +65,7 @@ int DagMan::main() {
         std::map<std::string, std::vector<wrench::WorkflowTask *>> ready_tasks = this->workflow->getReadyTasks();
 
         // Get the available compute services
-        std::set<ComputeService *> compute_services = this->simulation->getRunningComputeServices();
+        std::set<ComputeService *> compute_services = this->getRunningComputeServices();
 
         if (compute_services.size() == 0) {
             WRENCH_INFO("Aborting - No compute services available!");
@@ -74,7 +76,7 @@ int DagMan::main() {
         if (this->pilot_job_scheduler) {
             WRENCH_INFO("Scheduling pilot jobs...");
             this->pilot_job_scheduler.get()->schedule(this->scheduler.get(), this->workflow, this->job_manager.get(),
-                                                      this->simulation->getRunningComputeServices());
+                                                      this->getRunningComputeServices());
         }
 
         // Perform dynamic optimizations
@@ -84,7 +86,7 @@ int DagMan::main() {
         WRENCH_INFO("Scheduling tasks...");
         this->scheduler->scheduleTasks(this->job_manager.get(),
                                        ready_tasks,
-                                       this->simulation->getRunningComputeServices());
+                                       this->getRunningComputeServices());
 
         // Wait for a workflow execution event, and process it
         try {
@@ -112,14 +114,7 @@ int DagMan::main() {
 //      simgrid::s4u::Actor::killAll();
 //      return 0;
 
-    WRENCH_INFO("Simple WMS Daemon is shutting down all Compute Services");
-    this->simulation->shutdownAllComputeServices();
-
-    WRENCH_INFO("Simple WMS Daemon is shutting down all Data Services");
-    this->simulation->shutdownAllStorageServices();
-
-    WRENCH_INFO("Simple WMS Daemon is shutting down the File Registry Service");
-    this->simulation->getFileRegistryService()->stop();
+    this->shutdownAllServices();
 
     /***
      *** NO NEED TO stop/kill the Managers (will soon be out of scope, and

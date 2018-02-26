@@ -21,7 +21,7 @@ class Simulation;
 class DagMan : public WMS {
 
 public:
-    DagMan(Workflow *, std::unique_ptr<Scheduler>, std::string);
+    DagMan(Workflow *, std::set<ComputeService*> compute_services, std::unique_ptr<Scheduler>, std::string);
 
 protected:
     /***********************/

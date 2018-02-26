@@ -6,7 +6,6 @@
 #define PEGASUS_HTCONDORSERVICEPROPERTY_H
 
 #include "wrench-dev.h"
-#include "wrench/services/compute/ComputeServiceProperty.h"
 
 /**
      * @brief Properties for a CloudService

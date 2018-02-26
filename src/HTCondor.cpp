@@ -8,7 +8,6 @@
  */
 
 #include "HTCondor.h"
-#include "wrench/simgrid_S4U_util/"
 #include "wrench-dev.h"
 
 
@@ -154,7 +153,7 @@ int HTCondor::main() {
         while (this->dispatchNextPendingJob());
     }
 
-    wrench::WRENCH_INFO("Multicore Job Executor on host %s terminated!", wrench::S4U_Simulation::getHostName().c_str());
+    WRENCH_INFO("Multicore Job Executor on host %s terminated!", wrench::S4U_Simulation::getHostName().c_str());
     return 0;
 }
 
