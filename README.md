@@ -1,3 +1,5 @@
+[![Build Status][travis-badge]][travis-link]
+
 # WRENCH-Pegasus Implementation
 
 <img src="https://raw.githubusercontent.com/wrench-project/wrench/master/doc/images/logo-vertical.png" width="100" />
@@ -40,3 +42,8 @@ The main channel to reach the WRENCH-Pegasus team is via the support email:
 
 **Bug Report / Feature Request:** our preferred channel to report a bug or request a feature is via  
 WRENCH-Pegasus' [Github Issues Track](https://github.com/wrench-project/pegasus/issues).
+
+
+[travis-badge]:             https://travis-ci.org/wrench-project/pegasus.svg?branch=master
+[travis-link]:              https://travis-ci.org/wrench-project/pegasus
+
