@@ -130,6 +130,7 @@ namespace wrench {
           Service::start();
 
           for (auto &&cs : this->compute_resources) {
+            cs->setSimulation(this->simulation);
             cs->start();
           }
         }
@@ -271,12 +272,79 @@ namespace wrench {
             }
             return false;
 
+          } else if (auto *msg = dynamic_cast<ComputeServiceResourceInformationRequestMessage *>(message.get())) {
+            processGetResourceInformation(msg->answer_mailbox);
+            return true;
+
           } else if (auto *msg = dynamic_cast<ComputeServiceSubmitStandardJobRequestMessage *>(message.get())) {
             processSubmitStandardJob(msg->answer_mailbox, msg->job, msg->service_specific_args);
             return true;
 
           } else {
             throw std::runtime_error("Unexpected [" + message->getName() + "] message");
+          }
+        }
+
+        /**
+         * @brief Process a "get resource information message"
+         *
+         * @param answer_mailbox: the mailbox to which the description message should be sent
+         */
+        void HTCondorService::processGetResourceInformation(const std::string &answer_mailbox) {
+
+          // Build a dictionary
+          std::map<std::string, std::vector<double>> dict;
+
+          // Num hosts
+          std::vector<double> num_hosts;
+          num_hosts.push_back((double) this->compute_resources.size());
+          dict.insert(std::make_pair("num_hosts", num_hosts));
+
+          std::vector<double> num_cores;
+          std::vector<double> num_idle_cores;
+          std::vector<double> flop_rates;
+          std::vector<double> ram_capacities;
+          std::vector<double> ram_availabilities;
+
+          for (auto &&cs : this->compute_resources) {
+            // Num cores per compute resource
+            std::vector<unsigned long> ncores = cs->getNumCores();
+            num_cores.push_back(std::accumulate(ncores.begin(), ncores.end(), 0));
+
+            // Num idle cores per compute resource
+            std::vector<unsigned long> nicores = cs->getNumIdleCores();
+            num_idle_cores.push_back(std::accumulate(nicores.begin(), nicores.end(), 0));
+
+            // Flop rate per compute resource
+            flop_rates.push_back(S4U_Simulation::getFlopRate(cs->getHostname()));
+
+            // RAM capacity per host
+            ram_capacities.push_back(S4U_Simulation::getHostMemoryCapacity(cs->getHostname()));
+
+            // RAM availability per host
+            ram_availabilities.push_back(
+                    ComputeService::ALL_RAM);  // TODO FOR RAFAEL : What about VM memory availabilities???
+          }
+
+          dict.insert(std::make_pair("num_cores", num_cores));
+          dict.insert(std::make_pair("num_idle_cores", num_idle_cores));
+          dict.insert(std::make_pair("flop_rates", flop_rates));
+          dict.insert(std::make_pair("ram_capacities", ram_capacities));
+          dict.insert(std::make_pair("ram_availabilities", ram_availabilities));
+
+          std::vector<double> ttl;
+          ttl.push_back(ComputeService::ALL_RAM);
+          dict.insert(std::make_pair("ttl", ttl));
+
+          // Send the reply
+          ComputeServiceResourceInformationAnswerMessage *answer_message = new ComputeServiceResourceInformationAnswerMessage(
+                  dict,
+                  this->getPropertyValueAsDouble(
+                          ComputeServiceProperty::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD));
+          try {
+            S4U_Mailbox::dputMessage(answer_mailbox, answer_message);
+          } catch (std::shared_ptr<NetworkError> &cause) {
+            return;
           }
         }
 

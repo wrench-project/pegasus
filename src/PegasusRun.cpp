@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
 
   // create the HTCondor services
   wrench::pegasus::HTCondorService *htcondor_service = new wrench::pegasus::HTCondorService(
-          wms_host, "local", true, false, execution_hosts, nullptr);
+          wms_host, "local", true, false, execution_hosts, storage_service);
 
   /* Add the cloud service to the simulation, catching a possible exception */
   try {
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 
   // create the DAGMan wms
   wrench::WMS *dagman = simulation.add(std::unique_ptr<wrench::WMS>(new wrench::pegasus::DAGMan(
-          wms_host, {htcondor_service}, {})));
+          wms_host, {htcondor_service}, {storage_service})));
 
   dagman->addWorkflow(&workflow);
 

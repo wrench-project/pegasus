@@ -88,6 +88,8 @@ namespace wrench {
 
             bool processNextMessage();
 
+            void processGetResourceInformation(const std::string &answer_mailbox);
+
             void processSubmitStandardJob(const std::string &answer_mailbox, StandardJob *job,
                                           std::map<std::string, std::string> &service_specific_args);
 
