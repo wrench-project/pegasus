@@ -7,9 +7,10 @@
  * (at your option) any later version.
  */
 
-#include "HTCondorService.h"
-#include "wrench-dev.h"
+#include <numeric>
+#include <wrench-dev.h>
 
+#include "HTCondorService.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(HTCondor, "Log category for HTCondorService Scheduler");
 
@@ -134,7 +135,7 @@ namespace wrench {
         }
 
         /**
-         * @brief Submit a standard job to the cloud service
+         * @brief Submit a standard job to the HTCondor service
          *
          * @param job: a standard job
          * @param service_specific_args: service specific arguments
@@ -144,7 +145,40 @@ namespace wrench {
          */
         void HTCondorService::submitStandardJob(StandardJob *job,
                                                 std::map<std::string, std::string> &service_specific_args) {
-          throw std::runtime_error("CloudService::terminateStandardJob(): Not implemented yet!");
+
+          serviceSanityCheck();
+
+          std::string answer_mailbox = S4U_Mailbox::generateUniqueMailboxName("submit_standard_job");
+
+          //  send a "run a standard job" message to the daemon's mailbox_name
+          try {
+            S4U_Mailbox::putMessage(this->mailbox_name,
+                                    new ComputeServiceSubmitStandardJobRequestMessage(
+                                            answer_mailbox, job, service_specific_args,
+                                            this->getPropertyValueAsDouble(
+                                                    ComputeServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD)));
+          } catch (std::shared_ptr<NetworkError> &cause) {
+            throw WorkflowExecutionException(cause);
+          }
+
+          // Get the answer
+          std::unique_ptr<SimulationMessage> message = nullptr;
+          try {
+            message = S4U_Mailbox::getMessage(answer_mailbox);
+          } catch (std::shared_ptr<NetworkError> &cause) {
+            throw WorkflowExecutionException(cause);
+          }
+
+          if (auto *msg = dynamic_cast<ComputeServiceSubmitStandardJobAnswerMessage *>(message.get())) {
+            // If no success, throw an exception
+            if (not msg->success) {
+              throw WorkflowExecutionException(msg->failure_cause);
+            }
+          } else {
+            throw std::runtime_error(
+                    "ComputeService::submitStandardJob(): Received an unexpected [" + message->getName() +
+                    "] message!");
+          }
         }
 
         /**
@@ -237,8 +271,72 @@ namespace wrench {
             }
             return false;
 
+          } else if (auto *msg = dynamic_cast<ComputeServiceSubmitStandardJobRequestMessage *>(message.get())) {
+            processSubmitStandardJob(msg->answer_mailbox, msg->job, msg->service_specific_args);
+            return true;
+
           } else {
             throw std::runtime_error("Unexpected [" + message->getName() + "] message");
+          }
+        }
+
+        /**
+         * @brief Process a submit standard job request
+         *
+         * @param answer_mailbox: the mailbox to which the answer message should be sent
+         * @param job: the job
+         * @param service_specific_args: service specific arguments
+         *
+         * @throw std::runtime_error
+         */
+        void HTCondorService::processSubmitStandardJob(const std::string &answer_mailbox, StandardJob *job,
+                                                       std::map<std::string, std::string> &service_specific_args) {
+
+          WRENCH_INFO("Asked to run a standard job with %ld tasks", job->getNumTasks());
+          if (not this->supportsStandardJobs()) {
+            try {
+              S4U_Mailbox::dputMessage(
+                      answer_mailbox,
+                      new ComputeServiceSubmitStandardJobAnswerMessage(
+                              job, this, false, std::shared_ptr<FailureCause>(new JobTypeNotSupported(job, this)),
+                              this->getPropertyValueAsDouble(
+                                      ComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+            } catch (std::shared_ptr<NetworkError> &cause) {
+              return;
+            }
+            return;
+          }
+
+          for (auto &&cs : this->compute_resources) {
+            unsigned long sum_num_idle_cores;
+            std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
+            sum_num_idle_cores = (unsigned long) std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0);
+
+            if (sum_num_idle_cores >= job->getMinimumRequiredNumCores()) {
+              cs->submitStandardJob(job, service_specific_args);
+              try {
+                S4U_Mailbox::dputMessage(
+                        answer_mailbox,
+                        new ComputeServiceSubmitStandardJobAnswerMessage(
+                                job, this, true, nullptr, this->getPropertyValueAsDouble(
+                                        ComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+                return;
+              } catch (std::shared_ptr<NetworkError> &cause) {
+                return;
+              }
+            }
+          }
+
+          // could not find a suitable resource
+          try {
+            S4U_Mailbox::dputMessage(
+                    answer_mailbox,
+                    new ComputeServiceSubmitStandardJobAnswerMessage(
+                            job, this, false, std::shared_ptr<FailureCause>(new NotEnoughComputeResources(job, this)),
+                            this->getPropertyValueAsDouble(
+                                    ComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+          } catch (std::shared_ptr<NetworkError> &cause) {
+            return;
           }
         }
 
