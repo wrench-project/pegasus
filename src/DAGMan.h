@@ -24,7 +24,8 @@ namespace wrench {
         public:
             DAGMan(const std::string &hostname,
                    const std::set<HTCondorService *> &htcondor_services,
-                   const std::set<StorageService *> &storage_services);
+                   const std::set<StorageService *> &storage_services,
+                   FileRegistryService *file_registry_service);
 
         protected:
             /***********************/
@@ -41,7 +42,7 @@ namespace wrench {
             int main() override;
 
             /** @brief The job manager */
-            std::unique_ptr<JobManager> job_manager;
+            std::shared_ptr<JobManager> job_manager;
             /** @brief Whether the workflow execution should be aborted */
             bool abort = false;
 

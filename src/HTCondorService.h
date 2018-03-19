@@ -48,15 +48,13 @@ namespace wrench {
                             const std::string &pool_name,
                             bool supports_standard_jobs,
                             bool supports_pilot_jobs,
-                            std::set<std::unique_ptr<ComputeService>> &compute_resources,
+                            std::set<std::shared_ptr<ComputeService>> &compute_resources,
                             StorageService *default_storage_service,
                             std::map<std::string, std::string> plist = {});
 
             /***********************/
             /** \cond DEVELOPER   **/
             /***********************/
-
-            void start() override;
 
             void submitStandardJob(StandardJob *job,
                                    std::map<std::string, std::string> &service_specific_arguments) override;
@@ -83,7 +81,7 @@ namespace wrench {
 
             void initiateInstance(const std::string &hostname,
                                   const std::string &pool_name,
-                                  std::set<std::unique_ptr<ComputeService>> &compute_resources,
+                                  std::set<std::shared_ptr<ComputeService>> &compute_resources,
                                   std::map<std::string, std::string> plist);
 
             bool processNextMessage();
@@ -96,7 +94,7 @@ namespace wrench {
             void terminate();
 
             std::string pool_name;
-            std::set<std::unique_ptr<ComputeService>> compute_resources;
+            std::set<std::shared_ptr<ComputeService>> compute_resources;
         };
     }
 }

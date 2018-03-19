@@ -40,11 +40,11 @@ namespace wrench {
                 ComputeService(hostname, "htcondor_service", "htcondor_service", supports_standard_jobs,
                                supports_pilot_jobs, default_storage_service) {
 
-          std::set<std::unique_ptr<ComputeService>> compute_resources;
+          std::set<std::shared_ptr<ComputeService>> compute_resources;
 
           for (std::string execution_host : execution_hosts) {
             this->simulation->getHostNumCores(execution_host);
-            compute_resources.insert(std::unique_ptr<ComputeService>(
+            compute_resources.insert(std::shared_ptr<ComputeService>(
                     new MultihostMulticoreComputeService(execution_host, supports_standard_jobs, supports_pilot_jobs,
                                                          {std::make_tuple(execution_host,
                                                                           this->simulation->getHostNumCores(
@@ -74,7 +74,7 @@ namespace wrench {
                                          const std::string &pool_name,
                                          bool supports_standard_jobs,
                                          bool supports_pilot_jobs,
-                                         std::set<std::unique_ptr<ComputeService>> &compute_resources,
+                                         std::set<std::shared_ptr<ComputeService>> &compute_resources,
                                          StorageService *default_storage_service,
                                          std::map<std::string, std::string> plist) :
                 ComputeService(hostname, "htcondor_service", "htcondor_service", supports_standard_jobs,
@@ -105,7 +105,7 @@ namespace wrench {
          */
         void HTCondorService::initiateInstance(const std::string &hostname,
                                                const std::string &pool_name,
-                                               std::set<std::unique_ptr<ComputeService>> &compute_resources,
+                                               std::set<std::shared_ptr<ComputeService>> &compute_resources,
                                                std::map<std::string, std::string> plist) {
 
           if (pool_name.empty()) {
@@ -115,24 +115,15 @@ namespace wrench {
             throw std::runtime_error("At least one compute service should be provided");
           }
           this->pool_name = pool_name;
-          this->compute_resources = std::move(compute_resources);
+          this->compute_resources = compute_resources;
+
+          // setting simulation object for compute resources
+          for (auto &&cs : this->compute_resources) {
+            cs->setSimulation(this->simulation);
+          }
 
           // Set default and specified properties
           this->setProperties(this->default_property_values, plist);
-        }
-
-        /**
-         * @brief Start the service
-         *
-         * @throw std::runtime_error
-         */
-        void HTCondorService::start() {
-          Service::start();
-
-          for (auto &&cs : this->compute_resources) {
-            cs->setSimulation(this->simulation);
-            cs->start();
-          }
         }
 
         /**
@@ -226,6 +217,16 @@ namespace wrench {
           TerminalOutput::setThisProcessLoggingColor(WRENCH_LOGGING_COLOR_RED);
           WRENCH_INFO("HTCondor Service starting on host %s listening on mailbox_name %s", this->hostname.c_str(),
                       this->mailbox_name.c_str());
+
+          // start the compute resource services
+          try {
+            for (auto cs : this->compute_resources) {
+              cs->setSimulation(this->simulation);
+              cs->start(cs, true); // Daemonize!
+            }
+          } catch (std::runtime_error &e) {
+            throw;
+          }
 
           /** Main loop **/
           while (this->processNextMessage()) {

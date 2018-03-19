@@ -24,9 +24,10 @@ namespace wrench {
          */
         DAGMan::DAGMan(const std::string &hostname,
                        const std::set<HTCondorService *> &htcondor_services,
-                       const std::set<StorageService *> &storage_services) :
-                WMS(nullptr, nullptr, (const std::set<ComputeService *> &) htcondor_services,
-                    storage_services, hostname, "dagman") {
+                       const std::set<StorageService *> &storage_services,
+                       FileRegistryService *file_registry_service) :
+                WMS(nullptr, nullptr, (std::set<ComputeService *> &) htcondor_services,
+                    storage_services, {}, file_registry_service, hostname, "dagman") {
 
           this->standard_job_scheduler = std::unique_ptr<StandardJobScheduler>(new HTCondorSchedd());
         }
@@ -52,16 +53,13 @@ namespace wrench {
           // Create a job manager
           this->job_manager = this->createJobManager();
 
-          // Create a data movement manager
-          std::unique_ptr<DataMovementManager> data_movement_manager = this->createDataMovementManager();
-
           while (true) {
 
             // Get the ready tasks
             std::map<std::string, std::vector<WorkflowTask *>> ready_tasks = this->workflow->getReadyTasks();
 
             // Get the available compute services
-            std::set<ComputeService *> htcondor_services = this->getRunningComputeServices();
+            std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();
 
             if (htcondor_services.empty()) {
               WRENCH_INFO("Aborting - No HTCondor services available!");
@@ -98,14 +96,6 @@ namespace wrench {
           } else {
             WRENCH_INFO("Workflow execution is incomplete!");
           }
-
-          WRENCH_INFO("DAGMan Daemon is shutting all services");
-          this->shutdownAllServices();
-
-          /***
-           *** NO NEED TO stop/kill the Managers (will soon be out of scope, and
-           *** destructor simply called kill() on their actors.
-           ***/
 
           WRENCH_INFO("DAGMan Daemon started on host %s terminating", S4U_Simulation::getHostName().c_str());
 
