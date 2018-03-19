@@ -28,11 +28,31 @@ namespace wrench {
 
           WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
 
+          std::set<ComputeService *> available_resources = compute_services;
+
           for (auto itc : tasks) {
             // TODO add support to pilot jobs
 
             WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
-            job_manager->submitJob(job, *compute_services.begin());
+
+            for (auto compute_service : available_resources) {
+              unsigned long sum_num_idle_cores = 0;
+
+              try {
+                std::vector<unsigned long> num_idle_cores = compute_service->getNumIdleCores();
+                sum_num_idle_cores = (unsigned long) std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0);
+              } catch (WorkflowExecutionException &e) {
+                // The service has some problem, forget it
+                throw std::runtime_error("Unable to get the number of idle cores.");
+              }
+
+              unsigned long mim_num_cores = ((StandardJob *) (job))->getMinimumRequiredNumCores();
+              if (sum_num_idle_cores >= mim_num_cores) {
+                job_manager->submitJob(job, compute_service);
+                available_resources.erase(compute_service);
+                break;
+              }
+            }
           }
           WRENCH_INFO("Done with scheduling tasks as standard jobs");
         }

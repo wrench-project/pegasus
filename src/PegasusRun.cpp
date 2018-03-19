@@ -33,7 +33,8 @@ int main(int argc, char **argv) {
 
   //loading the workflow from the dax file
   wrench::Workflow workflow;
-  workflow.loadFromDAX(workflow_file);
+//  workflow.loadFromDAX(workflow_file);
+  workflow.loadFromJSON(workflow_file);
   std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
   std::cerr.flush();
 
