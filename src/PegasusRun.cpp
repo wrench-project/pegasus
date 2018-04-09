@@ -26,14 +26,15 @@ int main(int argc, char **argv) {
   }
 
   //create the platform file and dax file from command line args
-  char *platform_file = argv[1];
-  char *workflow_file = argv[2];
-//  char *platform_file = "/Users/jamesoeth/CLionProjects/pegasus/twotasks.xml";
-//  char *dax_file = "/Users/jamesoeth/CLionProjects/pegasus/onetask.dax";
+//  char *platform_file = argv[1];
+//  char *workflow_file = argv[2];
+  std::string platform_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/Genome.xml";
+  std::string workflow_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/GenomeReal.json";
 
   //loading the workflow from the dax file
   wrench::Workflow workflow;
 //  workflow.loadFromDAX(workflow_file);
+  std::cout << "trying to run with ..." << workflow_file << std::endl;
   workflow.loadFromJSON(workflow_file);
   std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
   std::cerr.flush();
@@ -52,9 +53,11 @@ int main(int argc, char **argv) {
 
   std::string wms_host = hostname_list[0];
 
-  std::string executor_host = hostname_list[(hostname_list.size() > 1) ? 1 : 0];
-  std::vector<std::string> execution_hosts = {executor_host};
+  std::vector<std::string> execution_hosts = {};
 
+  for(unsigned int i =1; i<=4; i++){
+    execution_hosts.push_back(hostname_list[i]);
+  }
   // create the HTCondor services
   wrench::pegasus::HTCondorService *htcondor_service = new wrench::pegasus::HTCondorService(
           wms_host, "local", true, false, execution_hosts, storage_service);
@@ -78,7 +81,6 @@ int main(int argc, char **argv) {
                                                                    {htcondor_service},
                                                                    {storage_service},
                                                                    file_registry_service));
-
   dagman->addWorkflow(&workflow);
 
   std::cerr << "Staging input files..." << std::endl;
@@ -102,8 +104,15 @@ int main(int argc, char **argv) {
   std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
   trace = simulation.output.getTrace<wrench::SimulationTimestampTaskCompletion>();
   std::cerr << "Number of entries in TaskCompletion trace: " << trace.size() << std::endl;
-  std::cerr << "Task in first trace entry: " << trace[0]->getContent()->getTask()->getId() << std::endl;
+  int lastTime = 0;
+  int totalTime = 0;
+  for(unsigned int i = 0; i < trace.size(); i++){
+    std::cerr << "Task in trace entry: " << trace[i]->getContent()->getTask()->getId() << " with time:  " <<  trace[i]->getContent()->getTask()->getEndDate()-lastTime << std::endl;
+    lastTime = trace[i]->getContent()->getTask()->getEndDate();
+    totalTime += trace[i]->getContent()->getTask()->getEndDate();
+  }
 
+  std::cerr << "Total Time: " << totalTime << std::endl;
   return 0;
 
 }
