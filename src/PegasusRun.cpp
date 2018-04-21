@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
   wrench::Workflow workflow;
 //  workflow.loadFromDAX(workflow_file);
   std::cout << "trying to run with ..." << workflow_file << std::endl;
-  workflow.loadFromJSON(workflow_file);
+  workflow.loadFromJSON(workflow_file, "1f");
   std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
   std::cerr.flush();
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 
   std::vector<std::string> execution_hosts = {};
 
-  for(unsigned int i =1; i<=4; i++){
+  for (unsigned int i = 1; i <= 4; i++) {
     execution_hosts.push_back(hostname_list[i]);
   }
   // create the HTCondor services
@@ -104,14 +104,16 @@ int main(int argc, char **argv) {
   std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
   trace = simulation.output.getTrace<wrench::SimulationTimestampTaskCompletion>();
   std::cerr << "Number of entries in TaskCompletion trace: " << trace.size() << std::endl;
-  int lastTime = 0;
-  int totalTime = 0;
-  for(unsigned int i = 0; i < trace.size(); i++){
-    std::cerr << "Task in trace entry: " << trace[i]->getContent()->getTask()->getId() << " with time:  " <<  trace[i]->getContent()->getTask()->getEndDate()-lastTime << std::endl;
-    lastTime = trace[i]->getContent()->getTask()->getEndDate();
-    totalTime += trace[i]->getContent()->getTask()->getEndDate();
+  double lastTime = 0;
+  double totalTime = 0;
+  for (auto &task : trace) {
+    std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getId() << " with time:  "
+              << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()<< std::endl;
+    lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());
+    totalTime += task->getContent()->getTask()->getEndDate();
   }
 
+  std::cerr << "Total Time: " << lastTime << std::endl;
   std::cerr << "Total Time: " << totalTime << std::endl;
   return 0;
 

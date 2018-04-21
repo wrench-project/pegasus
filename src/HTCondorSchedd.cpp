@@ -33,7 +33,7 @@ namespace wrench {
           for (auto itc : tasks) {
             // TODO add support to pilot jobs
 
-            WorkflowJob *job = (WorkflowJob *) job_manager->createStandardJob(itc.second, {});
+            WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(itc.second, {});
 
             for (auto compute_service : available_resources) {
               unsigned long sum_num_idle_cores = 0;
@@ -48,7 +48,7 @@ namespace wrench {
 
               unsigned long mim_num_cores = ((StandardJob *) (job))->getMinimumRequiredNumCores();
               if (sum_num_idle_cores >= mim_num_cores) {
-                job_manager->submitJob(job, compute_service);
+                this->getJobManager()->submitJob(job, compute_service);
                 available_resources.erase(compute_service);
                 break;
               }

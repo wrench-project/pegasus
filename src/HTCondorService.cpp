@@ -119,7 +119,7 @@ namespace wrench {
 
           // setting simulation object for compute resources
           for (auto &&cs : this->compute_resources) {
-            cs->setSimulation(this->simulation);
+            cs->simulation = this->simulation;
           }
 
           // Set default and specified properties
@@ -221,7 +221,7 @@ namespace wrench {
           // start the compute resource services
           try {
             for (auto cs : this->compute_resources) {
-              cs->setSimulation(this->simulation);
+              cs->simulation = this->simulation;
               cs->start(cs, true); // Daemonize!
             }
           } catch (std::runtime_error &e) {
