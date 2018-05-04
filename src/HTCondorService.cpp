@@ -43,8 +43,10 @@ namespace wrench {
           std::set<std::shared_ptr<ComputeService>> compute_resources;
 
           for (std::string execution_host : execution_hosts) {
+              std::cout << "in the Service" << std::endl;
             this->simulation->getHostNumCores(execution_host);
-            compute_resources.insert(std::shared_ptr<ComputeService>(
+              std::cout << "in the Service sim  "  << this->simulation->getHostNumCores(execution_host) << std::endl;
+              compute_resources.insert(std::shared_ptr<ComputeService>(
                     new MultihostMulticoreComputeService(execution_host, supports_standard_jobs, supports_pilot_jobs,
                                                          {std::make_tuple(execution_host,
                                                                           this->simulation->getHostNumCores(

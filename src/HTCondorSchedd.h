@@ -29,6 +29,7 @@ namespace wrench {
             void scheduleTasks(const std::set<wrench::ComputeService *> &compute_services,
                                const std::map<std::string, std::vector<wrench::WorkflowTask *>> &tasks) override;
 
+            int getJobNums(std::vector<unsigned long> num );
             /***********************/
             /** \endcond           */
             /***********************/
