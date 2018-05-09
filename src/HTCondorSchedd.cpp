@@ -25,11 +25,20 @@ namespace wrench {
          */
 
         int HTCondorSchedd::getJobNums(std::vector<unsigned long> num ){
+            for(int i = 0; i < num.size(); i++){
+                if(num[i] > 0){
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        int HTCondorSchedd::getNumAvailiableCores(std::vector<unsigned long> num ){
             int count = 0;
             for(int i = 0; i < num.size(); i++){
                 count += num[i];
             }
-            return count-1;
+            return count;
         }
 
 
@@ -37,33 +46,37 @@ namespace wrench {
                                            const std::map<std::string, std::vector<WorkflowTask *>> &tasks) {
 
           WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
-
+            int computeNum = 0;
           std::set<ComputeService *> available_resources = compute_services;
-            for(unsigned int i = 0; i < available_resources.size(); i++){
-                std::cout << "here we are   " << std::endl;
-            }
-            std::cout << "there are tasks" << tasks.size() << std::endl;
             std::vector<WorkflowTask *> jobTasks;
             for (auto itc : tasks) {
                 //vector to hold the workflow tasks to make the job
                 std::set<ComputeService *>::iterator numCores = compute_services.begin();
                 std::vector<unsigned long> num = (*numCores)->getNumIdleCores();
-                unsigned long numHosts = (*numCores)->getNumHosts();
-                int count = getJobNums(num);
-                for(auto it : itc.second){
-                    if(jobTasks.size() <= count){
-                        jobTasks.push_back(it);
-                    }
-                    else{
-                        //send the job to be done!!
-                        WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(jobTasks, {});
-                        std::cout << "sending job to be done" << tasks.size() << std::endl;
-                        this->getJobManager()->submitJob(job, (*compute_services.begin()));
-                        jobTasks.clear();
-                        jobTasks.push_back(it);
+                int aComp = getJobNums(num);
+                int count = num[aComp]-1;
+                std::cout << "there are " << getNumAvailiableCores(num) << " availiable cores" << std::endl;
+                if(getNumAvailiableCores(num) !=0){
+                    for(auto it : itc.second) {
+                        if (jobTasks.size() <= count) {
+                            std::cout << "adding job to task vector" << std::endl;
+                            jobTasks.push_back(it);
+                        } else {
+                            //send the job to be done!!
+                            std::cout << "sending job to be done" << tasks.size() << std::endl;
+                            WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(jobTasks, {});
+                            this->getJobManager()->submitJob(job, (*compute_services.begin()));
+                            jobTasks.clear();
+                            jobTasks.push_back(it);
+                        }
                     }
                 }
-
+            }
+            if(jobTasks.size() == tasks.size() and jobTasks.size() != 0){
+                std::cout << jobTasks.size() << "  jobs task " << tasks.size() << "  tasks size " << std::endl;
+                std::cout << "sending jobbb to be done" << jobTasks.size() << std::endl;
+                WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(jobTasks, {});
+                this->getJobManager()->submitJob(job, (*compute_services.begin()));
             }
 //
 //                for(unsigned int i = 0; i < num.size(); i++){

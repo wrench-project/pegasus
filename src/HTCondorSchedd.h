@@ -30,7 +30,9 @@ namespace wrench {
                                const std::map<std::string, std::vector<wrench::WorkflowTask *>> &tasks) override;
 
             int getJobNums(std::vector<unsigned long> num );
-            /***********************/
+            int getNumAvailiableCores(std::vector<unsigned long> num );
+
+                /***********************/
             /** \endcond           */
             /***********************/
         };
