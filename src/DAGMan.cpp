@@ -40,7 +40,7 @@ namespace wrench {
          * @throw std::runtime_error
          */
         int DAGMan::main() {
-          TerminalOutput::setThisProcessLoggingColor(WRENCH_LOGGING_COLOR_GREEN);
+          TerminalOutput::setThisProcessLoggingColor(COLOR_GREEN);
 
           // Check whether the DAGMan has a deferred start time
           checkDeferredStart();
@@ -56,7 +56,7 @@ namespace wrench {
           while (true) {
 
             // Get the ready tasks
-            std::map<std::string, std::vector<WorkflowTask *>> ready_tasks = this->workflow->getReadyTasks();
+            std::vector<WorkflowTask *> ready_tasks = this->workflow->getReadyTasks();
 
             // Get the available compute services
             std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();

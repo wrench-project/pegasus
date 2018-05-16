@@ -26,10 +26,10 @@ int main(int argc, char **argv) {
   }
 
   //create the platform file and dax file from command line args
-//  char *platform_file = argv[1];
-//  char *workflow_file = argv[2];
-  std::string platform_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/Genome.xml";
-  std::string workflow_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/GenomeReal.json";
+  char *platform_file = argv[1];
+  char *workflow_file = argv[2];
+//  std::string platform_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/Genome.xml";
+//  std::string workflow_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/GenomeReal.json";
 
   //loading the workflow from the dax file
   wrench::Workflow workflow;
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
   std::string file_registry_service_host = hostname_list[(hostname_list.size() > 2) ? 1 : 0];
   std::cerr << "Instantiating a FileRegistryService on " << file_registry_service_host << "..." << std::endl;
   wrench::FileRegistryService *file_registry_service = new wrench::FileRegistryService(file_registry_service_host);
-  simulation.setFileRegistryService(file_registry_service);
+  simulation.add(file_registry_service);
 
   // create the DAGMan wms
   wrench::WMS *dagman = simulation.add(new wrench::pegasus::DAGMan(wms_host,
@@ -108,7 +108,8 @@ int main(int argc, char **argv) {
   double totalTime = 0;
   for (auto &task : trace) {
     std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getId() << " with time:  "
-              << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()<< std::endl;
+              << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()
+              << std::endl;
     lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());
     totalTime += task->getContent()->getTask()->getEndDate();
   }
