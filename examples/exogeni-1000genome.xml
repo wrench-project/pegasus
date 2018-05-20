@@ -3,6 +3,7 @@
 <platform version="4.1">
     <zone id="AS0" routing="Full">
         <host id="master" speed="1f" core="4"/>
+        <host id="data" speed="1f" core="1"/>
         <host id="workers1-2" speed="1f" core="4"/>
         <host id="workers1-0" speed="1f" core="4"/>
         <host id="workers1-3" speed="1f" core="4"/>
@@ -14,27 +15,42 @@
         <link id="5" bandwidth="125MBps" latency="100us"/>
         <link id="6" bandwidth="125MBps" latency="100us"/>
         <link id="7" bandwidth="125MBps" latency="100us"/>
+        <link id="8" bandwidth="125MBps" latency="100us"/>
         <route src="master" dst="workers1-2">
             <link_ctn id="1"/>
         </route>
         <route src="master" dst="workers1-0">
-            <link_ctn id="2"/>
+            <link_ctn id="1"/>
         </route>
         <route src="master" dst="workers1-3">
-            <link_ctn id="3"/>
+            <link_ctn id="1"/>
         </route>
         <route src="master" dst="workers1-1">
-            <link_ctn id="4"/>
+            <link_ctn id="1"/>
         </route>
         <route src="workers1-3" dst="workers1-1">
-            <link_ctn id="5"/>
+            <link_ctn id="1"/>
         </route>
         <route src="workers1-0" dst="workers1-1">
-            <link_ctn id="6"/>
+            <link_ctn id="1"/>
         </route>
         <route src="workers1-2" dst="workers1-1">
-            <link_ctn id="7"/>
+            <link_ctn id="1"/>
         </route>
-
+        <route src="data" dst="master">
+            <link_ctn id="1"/>
+        </route>
+        <route src="data" dst="workers1-0">
+            <link_ctn id="1"/>
+        </route>
+        <route src="data" dst="workers1-1">
+            <link_ctn id="1"/>
+        </route>
+        <route src="data" dst="workers1-2">
+            <link_ctn id="1"/>
+        </route>
+        <route src="data" dst="workers1-3">
+            <link_ctn id="1"/>
+        </route>
     </zone>
 </platform>

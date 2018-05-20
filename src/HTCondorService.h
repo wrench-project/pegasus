@@ -41,16 +41,7 @@ namespace wrench {
                             const std::string &pool_name,
                             bool supports_standard_jobs,
                             bool supports_pilot_jobs,
-                            std::vector<std::string> &execution_hosts,
-                            StorageService *default_storage_service,
-                            std::map<std::string, std::string> plist = {});
-
-            HTCondorService(const std::string &hostname,
-                            const std::string &pool_name,
-                            bool supports_standard_jobs,
-                            bool supports_pilot_jobs,
                             std::set<std::shared_ptr<ComputeService>> &compute_resources,
-                            StorageService *default_storage_service,
                             std::map<std::string, std::string> plist = {});
 
             /***********************/
@@ -79,11 +70,6 @@ namespace wrench {
         private:
 
             int main() override;
-
-            void initiateInstance(const std::string &hostname,
-                                  const std::string &pool_name,
-                                  std::set<std::shared_ptr<ComputeService>> &compute_resources,
-                                  std::map<std::string, std::string> plist);
 
             bool processNextMessage();
 

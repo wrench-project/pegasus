@@ -24,50 +24,7 @@ namespace wrench {
          * @param pool_name: HTCondor pool name
          * @param supports_standard_jobs: true if the HTCondor service should support standard jobs
          * @param supports_pilot_jobs: true if the HTCondor service should support pilot jobs
-         * @param execution_hosts: a list of execution hosts available to create the HTCondor pool
-         * @param default_storage_service: a storage service (or nullptr)
-         * @param plist: a property list ({} means "use all defaults")
-         *
-         * @throw std::runtime_error
-         */
-        HTCondorService::HTCondorService(const std::string &hostname,
-                                         const std::string &pool_name,
-                                         bool supports_standard_jobs,
-                                         bool supports_pilot_jobs,
-                                         std::vector<std::string> &execution_hosts,
-                                         StorageService *default_storage_service,
-                                         std::map<std::string, std::string> plist) :
-                ComputeService(hostname, "htcondor_service", "htcondor_service", supports_standard_jobs,
-                               supports_pilot_jobs, default_storage_service) {
-
-          std::set<std::shared_ptr<ComputeService>> compute_resources;
-
-          for (std::string execution_host : execution_hosts) {
-              std::cout << "in the Service" << std::endl;
-            this->simulation->getHostNumCores(execution_host);
-              std::cout << "in the Service sim  "  << this->simulation->getHostNumCores(execution_host) << std::endl;
-              compute_resources.insert(std::shared_ptr<ComputeService>(
-                    new MultihostMulticoreComputeService(execution_host, supports_standard_jobs, supports_pilot_jobs,
-                                                         {std::make_tuple(execution_host,
-                                                                          this->simulation->getHostNumCores(
-                                                                                  execution_host),
-                                                                          this->simulation->getHostMemoryCapacity(
-                                                                                  execution_host))},
-                                                         default_storage_service, plist)));
-          }
-
-          initiateInstance(hostname, pool_name, compute_resources, plist);
-        }
-
-        /**
-         * @brief Constructor
-         *
-         * @param hostname: the hostname on which to start the service
-         * @param pool_name: HTCondor pool name
-         * @param supports_standard_jobs: true if the HTCondor service should support standard jobs
-         * @param supports_pilot_jobs: true if the HTCondor service should support pilot jobs
          * @param compute_resources: a set of compute resources available via the HTCondor pool
-         * @param default_storage_service: a storage service (or nullptr)
          * @param plist: a property list ({} means "use all defaults")
          *
          * @throw std::runtime_error
@@ -77,38 +34,9 @@ namespace wrench {
                                          bool supports_standard_jobs,
                                          bool supports_pilot_jobs,
                                          std::set<std::shared_ptr<ComputeService>> &compute_resources,
-                                         StorageService *default_storage_service,
                                          std::map<std::string, std::string> plist) :
                 ComputeService(hostname, "htcondor_service", "htcondor_service", supports_standard_jobs,
-                               supports_pilot_jobs, default_storage_service) {
-
-          initiateInstance(hostname, pool_name, compute_resources, plist);
-        }
-
-        /**
-         * @brief Destructor
-         */
-        HTCondorService::~HTCondorService() {
-          this->default_property_values.clear();
-        }
-
-        /**
-         * @brief Instantiate the HTCondor service
-         *
-         * @param hostname: the hostname on which to start the service
-         * @param pool_name: HTCondor pool name
-         * @param supports_standard_jobs: true if the HTCondor service should support standard jobs
-         * @param supports_pilot_jobs: true if the HTCondor service should support pilot jobs
-         * @param compute_resources: a set of compute resources available via the HTCondor pool
-         * @param default_storage_service: a storage service (or nullptr)
-         * @param plist: a property list ({} means "use all defaults")
-         *
-         * @throw std::runtime_error
-         */
-        void HTCondorService::initiateInstance(const std::string &hostname,
-                                               const std::string &pool_name,
-                                               std::set<std::shared_ptr<ComputeService>> &compute_resources,
-                                               std::map<std::string, std::string> plist) {
+                               supports_pilot_jobs, nullptr) {
 
           if (pool_name.empty()) {
             throw std::runtime_error("A pool name for the HTCondor service should be provided.");
@@ -126,6 +54,13 @@ namespace wrench {
 
           // Set default and specified properties
           this->setProperties(this->default_property_values, plist);
+        }
+
+        /**
+         * @brief Destructor
+         */
+        HTCondorService::~HTCondorService() {
+          this->default_property_values.clear();
         }
 
         /**

@@ -1,0 +1,21 @@
+{
+  "submit_host": "master",
+  "file_registry_host": "master",
+  "storage_hosts": [
+    {
+      "hostname": "data",
+      "capacity": 10000000000000.0
+    }
+  ],
+  "compute_services": [
+    {
+      "type": "multicore",
+      "compute_hosts": [
+        "workers1-0",
+        "workers1-1",
+        "workers1-2",
+        "workers1-3"
+      ]
+    }
+  ]
+}

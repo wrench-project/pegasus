@@ -38,7 +38,7 @@ set(SOURCE_FILES
         src/HTCondorServiceMessage.cpp
         src/HTCondorServiceProperty.h
         src/HTCondorServiceProperty.cpp
-        )
+        src/SimulationConfig.h src/SimulationConfig.cpp)
 
 set(TEST_FILES
         )

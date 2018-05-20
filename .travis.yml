@@ -28,9 +28,9 @@ script:
       docker exec -w /home/wrench/pegasus/build -it wrench make all;
     fi
 
-#notifications:
-#  email:
-#    recipients:
-#      - wrench@mailman.isi.edu
-#    on_success: change
-#    on_failure: always
+notifications:
+  email:
+    recipients:
+      - wrench@mailman.isi.edu
+    on_success: change
+    on_failure: always

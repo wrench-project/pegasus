@@ -12,55 +12,46 @@
 #include <wrench-dev.h>
 
 #include "DAGMan.h"
+#include "SimulationConfig.h"
+
+XBT_LOG_NEW_DEFAULT_CATEGORY(PegasusRun, "Log category for PegasusRun");
 
 int main(int argc, char **argv) {
 
-  //create and initialize the simulation
+  // create and initialize the simulation
   wrench::Simulation simulation;
   simulation.init(&argc, argv);
 
-  //check to make sure there are the right number of arguments
-  if (argc != 3) {
-    std::cerr << "Usage: " << argv[0] << " <xml platform file> <dax file>" << std::endl;
+  // check to make sure there are the right number of arguments
+  if (argc != 4) {
+    std::cerr << "WRENCH Pegasus WMS Simulator" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <xml platform file> <JSON workflow file> <JSON simulation config file>"
+              << std::endl;
     exit(1);
   }
 
   //create the platform file and dax file from command line args
   char *platform_file = argv[1];
   char *workflow_file = argv[2];
-//  std::string platform_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/Genome.xml";
-//  std::string workflow_file = "/Users/jamesoeth/CLionProjects/pegasus/examples/GenomeReal.json";
+  char *properties_file = argv[3];
 
-  //loading the workflow from the dax file
-  wrench::Workflow workflow;
-//  workflow.loadFromDAX(workflow_file);
-  std::cout << "trying to run with ..." << workflow_file << std::endl;
-  workflow.loadFromJSON(workflow_file, "1f");
-  std::cout << "The workflow has " << workflow.getNumberOfTasks() << " tasks " << std::endl;
-  std::cerr.flush();
-
-  std::cerr << "Instantiating SimGrid platform..." << std::endl;
+  // instantiating SimGrid platform
+  WRENCH_INFO("Instantiating SimGrid platform from: %s", platform_file);
   simulation.instantiatePlatform(platform_file);
 
-  std::vector<std::string> hostname_list = simulation.getHostnameList();
+  // loading config file
+  WRENCH_INFO("Loading simulation config from: %s", properties_file);
+  wrench::pegasus::SimulationConfig config;
+  config.loadProperties(&simulation, properties_file);
 
-  std::string storage_host = hostname_list[(hostname_list.size() > 3) ? 2 : 1];
+  // loading the workflow from the JSON file
+  WRENCH_INFO("Loading workflow from: %s", workflow_file);
+  wrench::Workflow workflow;
+  workflow.loadFromJSON(workflow_file, "1f");
+  WRENCH_INFO("The workflow has %ld tasks", workflow.getNumberOfTasks());
 
-  std::cerr << "Instantiating a SimpleStorageService on " << storage_host << "..." << std::endl;
-
-  wrench::StorageService *storage_service = simulation.add(
-          new wrench::SimpleStorageService(storage_host, 10000000000000.0));
-
-  std::string wms_host = hostname_list[0];
-
-  std::vector<std::string> execution_hosts = {};
-
-  for (unsigned int i = 1; i <= 4; i++) {
-    execution_hosts.push_back(hostname_list[i]);
-  }
   // create the HTCondor services
-  wrench::pegasus::HTCondorService *htcondor_service = new wrench::pegasus::HTCondorService(
-          wms_host, "local", true, false, execution_hosts, storage_service);
+  wrench::pegasus::HTCondorService *htcondor_service = config.getHTCondorService();
 
   /* Add the cloud service to the simulation, catching a possible exception */
   try {
@@ -71,39 +62,47 @@ int main(int argc, char **argv) {
     std::exit(1);
   }
 
-  std::string file_registry_service_host = hostname_list[(hostname_list.size() > 2) ? 1 : 0];
-  std::cerr << "Instantiating a FileRegistryService on " << file_registry_service_host << "..." << std::endl;
-  wrench::FileRegistryService *file_registry_service = new wrench::FileRegistryService(file_registry_service_host);
+  // file registry service
+  WRENCH_INFO("Instantiating a FileRegistryService on: %s", config.getFileRegistryHostname().c_str());
+  wrench::FileRegistryService *file_registry_service = new wrench::FileRegistryService(
+          config.getFileRegistryHostname());
   simulation.add(file_registry_service);
 
   // create the DAGMan wms
-  wrench::WMS *dagman = simulation.add(new wrench::pegasus::DAGMan(wms_host,
+  wrench::WMS *dagman = simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
                                                                    {htcondor_service},
-                                                                   {storage_service},
+                                                                   config.getStorageServices(),
                                                                    file_registry_service));
   dagman->addWorkflow(&workflow);
 
-  std::cerr << "Staging input files..." << std::endl;
+  WRENCH_INFO("Staging workflow input files to external Storage Service...");
   std::map<std::string, wrench::WorkflowFile *> input_files = workflow.getInputFiles();
+
+  auto storage_service_it = config.getStorageServices().begin();
+
   try {
-    simulation.stageFiles(input_files, storage_service);
+    // TODO: improve stage in data
+    simulation.stageFiles(input_files, *storage_service_it);
   } catch (std::runtime_error &e) {
     std::cerr << "Exception: " << e.what() << std::endl;
     return 0;
   }
 
-  std::cerr << "Launching the Simulation..." << std::endl;
+  // simulation execution
+  WRENCH_INFO("Launching the Simulation...");
   try {
     simulation.launch();
   } catch (std::runtime_error &e) {
     std::cerr << "Exception: " << e.what() << std::endl;
     return 0;
   }
-  std::cerr << "Simulation done!" << std::endl;
+  WRENCH_INFO("Simulation done!");
 
+  // statistics
   std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
   trace = simulation.output.getTrace<wrench::SimulationTimestampTaskCompletion>();
-  std::cerr << "Number of entries in TaskCompletion trace: " << trace.size() << std::endl;
+  WRENCH_INFO("Number of entries in TaskCompletion trace: %ld", trace.size());
+
   double lastTime = 0;
   double totalTime = 0;
   for (auto &task : trace) {
