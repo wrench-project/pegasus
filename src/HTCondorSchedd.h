@@ -31,7 +31,7 @@ namespace wrench {
 
             int getJobNums(std::vector<unsigned long> num);
 
-            int getNumAvailiableCores(std::vector<unsigned long> num);
+            int getNumAvailableCores(std::vector<unsigned long> num);
 
             /***********************/
             /** \endcond           */

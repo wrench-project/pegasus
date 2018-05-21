@@ -2762,7 +2762,7 @@
       },
       {
         "name": "cleanup_1000genome-20180208T172637Z_0_local",
-        "type": "compute",
+        "type": "auxiliary",
         "runtime": 0,
         "parents": [
           "stage_out_local_local_2_2",

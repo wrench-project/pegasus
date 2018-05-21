@@ -47,8 +47,8 @@ namespace wrench {
           for (auto &storage : storage_resources) {
             std::string storage_host = getPropertyValue<std::string>("hostname", storage);
             WRENCH_INFO("Instantiating a SimpleStorageService on: %s", storage_host.c_str());
-            this->storage_services.insert(
-                    new SimpleStorageService(storage_host, getPropertyValue<double>("capacity", storage)));
+            this->storage_services.insert(simulation->add(
+                    new SimpleStorageService(storage_host, getPropertyValue<double>("capacity", storage))));
           }
 
           // compute resources
@@ -117,10 +117,6 @@ namespace wrench {
           std::map<std::string, std::string> properties_list = {};
 
           for (auto &hostname : hosts) {
-            // TODO: temporary storage service (will be removed once scratch space is implemented)
-            wrench::StorageService *scratch_storage_service = simulation->add(
-                    new wrench::SimpleStorageService(hostname, 10000000000000.0));
-
             this->compute_services.insert(std::shared_ptr<ComputeService>(
                     new MultihostMulticoreComputeService(
                             hostname, true, false,
@@ -128,7 +124,7 @@ namespace wrench {
                                     hostname,
                                     wrench::Simulation::getHostNumCores(hostname),
                                     wrench::Simulation::getHostMemoryCapacity(hostname))},
-                            scratch_storage_service, properties_list)));
+                            properties_list, 1000000000.0)));
           }
         }
     };

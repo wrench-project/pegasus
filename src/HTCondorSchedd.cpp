@@ -31,15 +31,26 @@ namespace wrench {
           return 0;
         }
 
-        int HTCondorSchedd::getNumAvailiableCores(std::vector<unsigned long> num) {
+        /**
+         * @brief
+         *
+         * @param num
+         * @return
+         */
+        int HTCondorSchedd::getNumAvailableCores(std::vector<unsigned long> num) {
           int count = 0;
-          for (int i = 0; i < num.size(); i++) {
+          for (auto i = 0; i < num.size(); i++) {
             count += num[i];
           }
           return count;
         }
 
-
+        /**
+         * @brief
+         *
+         * @param compute_services
+         * @param tasks
+         */
         void HTCondorSchedd::scheduleTasks(const std::set<ComputeService *> &compute_services,
                                            const std::vector<WorkflowTask *> &tasks) {
 
@@ -53,8 +64,8 @@ namespace wrench {
             std::vector<unsigned long> num = (*numCores)->getNumIdleCores();
             int aComp = getJobNums(num);
             unsigned long count = num[aComp] - 1;
-            std::cout << "there are " << getNumAvailiableCores(num) << " availiable cores" << std::endl;
-            if (getNumAvailiableCores(num) != 0) {
+            std::cout << "there are " << getNumAvailableCores(num) << " availiable cores" << std::endl;
+            if (getNumAvailableCores(num) != 0) {
               for (auto task : tasks) {
                 if (jobTasks.size() <= count) {
                   std::cout << "adding job to task vector" << std::endl;
