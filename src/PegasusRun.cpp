@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
   // loading config file
   WRENCH_INFO("Loading simulation config from: %s", properties_file);
   wrench::pegasus::SimulationConfig config;
-  config.loadProperties(&simulation, properties_file);
+  config.loadProperties(simulation, properties_file);
 
   // loading the workflow from the JSON file
   WRENCH_INFO("Loading workflow from: %s", workflow_file);
@@ -53,20 +53,10 @@ int main(int argc, char **argv) {
   // create the HTCondor services
   wrench::pegasus::HTCondorService *htcondor_service = config.getHTCondorService();
 
-  /* Add the cloud service to the simulation, catching a possible exception */
-  try {
-    simulation.add(htcondor_service);
-
-  } catch (std::invalid_argument &e) {
-    std::cerr << "Error: " << e.what() << std::endl;
-    std::exit(1);
-  }
-
   // file registry service
   WRENCH_INFO("Instantiating a FileRegistryService on: %s", config.getFileRegistryHostname().c_str());
-  wrench::FileRegistryService *file_registry_service = new wrench::FileRegistryService(
-          config.getFileRegistryHostname());
-  simulation.add(file_registry_service);
+  wrench::FileRegistryService *file_registry_service = simulation.add(
+          new wrench::FileRegistryService(config.getFileRegistryHostname()));
 
   // create the DAGMan wms
   wrench::WMS *dagman = simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),

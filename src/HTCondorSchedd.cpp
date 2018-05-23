@@ -15,6 +15,16 @@ namespace wrench {
     namespace pegasus {
 
         /**
+         * @brief Constructor
+         *
+         * @param file_registry_service: a pointer to the file registry service
+         * @param default_storage_service: a pointer to a storage services used for storing intermediate data
+         */
+        HTCondorSchedd::HTCondorSchedd(wrench::FileRegistryService *file_registry_service,
+                                       StorageService *default_storage_service)
+                : file_registry_service(file_registry_service), default_storage_service(default_storage_service) {}
+
+        /**
          * @brief Schedule and run a set of ready tasks on available HTCondor resources
          *
          * @param compute_services: a set of compute services available to run jobs
@@ -22,111 +32,43 @@ namespace wrench {
          *
          * @throw std::runtime_error
          */
-        int HTCondorSchedd::getJobNums(std::vector<unsigned long> num) {
-          for (int i = 0; i < num.size(); i++) {
-            if (num[i] > 0) {
-              return i;
-            }
-          }
-          return 0;
-        }
-
-        /**
-         * @brief
-         *
-         * @param num
-         * @return
-         */
-        int HTCondorSchedd::getNumAvailableCores(std::vector<unsigned long> num) {
-          int count = 0;
-          for (auto i = 0; i < num.size(); i++) {
-            count += num[i];
-          }
-          return count;
-        }
-
-        /**
-         * @brief
-         *
-         * @param compute_services
-         * @param tasks
-         */
         void HTCondorSchedd::scheduleTasks(const std::set<ComputeService *> &compute_services,
                                            const std::vector<WorkflowTask *> &tasks) {
 
           WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
-          int computeNum = 0;
-          auto available_resources = compute_services;
-          std::vector<WorkflowTask *> jobTasks;
-          for (auto itc : tasks) {
-            //vector to hold the workflow tasks to make the job
-            auto numCores = compute_services.begin();
-            std::vector<unsigned long> num = (*numCores)->getNumIdleCores();
-            int aComp = getJobNums(num);
-            unsigned long count = num[aComp] - 1;
-            std::cout << "there are " << getNumAvailableCores(num) << " availiable cores" << std::endl;
-            if (getNumAvailableCores(num) != 0) {
-              for (auto task : tasks) {
-                if (jobTasks.size() <= count) {
-                  std::cout << "adding job to task vector" << std::endl;
-                  jobTasks.push_back(task);
-                } else {
-                  //send the job to be done!!
-                  std::cout << "sending job to be done" << tasks.size() << std::endl;
-                  WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(jobTasks, {});
-                  this->getJobManager()->submitJob(job, (*compute_services.begin()));
-                  jobTasks.clear();
-                  jobTasks.push_back(task);
+
+          // TODO: select htcondor service based on condor queue name
+          auto htcondor_service = *(compute_services.begin());
+
+          unsigned long scheduled_tasks = 0;
+          std::vector<unsigned long> idle_cores = htcondor_service->getNumIdleCores();
+
+          for (auto task : tasks) {
+            for (unsigned long &idle_core : idle_cores) {
+              if (task->getMinNumCores() <= idle_core) {
+
+                // input/output files
+                std::map<WorkflowFile *, StorageService *> file_locations;
+                for (auto f : task->getInputFiles()) {
+                  file_locations.insert(std::make_pair(f, default_storage_service));
                 }
+                for (auto f : task->getOutputFiles()) {
+                  file_locations.insert(std::make_pair(f, default_storage_service));
+                }
+
+                // creating job for execution
+                WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
+                this->getJobManager()->submitJob(job, htcondor_service);
+
+                scheduled_tasks++;
+                idle_core -= task->getMinNumCores();
+                break;
               }
             }
           }
-          if (jobTasks.size() == tasks.size() and !jobTasks.empty()) {
-            std::cout << jobTasks.size() << "  jobs task " << tasks.size() << "  tasks size " << std::endl;
-            std::cout << "sending jobbb to be done" << jobTasks.size() << std::endl;
-            WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(jobTasks, {});
-            this->getJobManager()->submitJob(job, (*compute_services.begin()));
-          }
-//
-//                for(unsigned int i = 0; i < num.size(); i++){
-//                for(unsigned int j = 0; j < num[i]; j++){
-//                    if(it != tasks.end()){
-//                        jobTasks.push_back (itc->second);
-//                    }
-//
-//                    WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(itc.second, {});
-//
-//                }
-        }
 
-//          for (auto itc : tasks) {
-//            // TODO add support to pilot jobs
-//
-//
-//              WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(itc.second, {});
-//
-//
-//
-//              for (auto compute_service : available_resources) {
-//              unsigned long sum_num_idle_cores = 0;
-//
-//              try {
-//                std::vector<unsigned long> num_idle_cores = compute_service->getNumIdleCores();
-//                sum_num_idle_cores = (unsigned long) std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0);
-//              } catch (WorkflowExecutionException &e) {
-//                // The service has some problem, forget it
-//                throw std::runtime_error("Unable to get the number of idle cores.");
-//              }
-//
-//              unsigned long mim_num_cores = ((StandardJob *) (job))->getMinimumRequiredNumCores();
-//              if (sum_num_idle_cores >= mim_num_cores) {
-//                this->getJobManager()->submitJob(job, compute_service);
-//                available_resources.erase(compute_service);
-//                break;
-//              }
-//            }
-//          }
-//          WRENCH_INFO("Done with scheduling tasks as standard jobs");
-//        }
+          WRENCH_INFO("Done with scheduling tasks as standard jobs: %ld tasks scheduled out of %ld", scheduled_tasks,
+                      tasks.size());
+        }
     }
 }

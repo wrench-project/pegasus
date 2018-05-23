@@ -30,8 +30,8 @@ namespace wrench {
                     {HTCondorServiceProperty::DAEMON_STOPPED_MESSAGE_PAYLOAD,               "1024"},
                     {HTCondorServiceProperty::RESOURCE_DESCRIPTION_REQUEST_MESSAGE_PAYLOAD, "1024"},
                     {HTCondorServiceProperty::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD,  "1024"},
-                    {HTCondorServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD,  "10024000000"},
-                    {HTCondorServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,   "10024000000"},
+                    {HTCondorServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD,  "1024"},
+                    {HTCondorServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,   "1024"},
                     {HTCondorServiceProperty::SUBMIT_PILOT_JOB_REQUEST_MESSAGE_PAYLOAD,     "1024"},
                     {HTCondorServiceProperty::SUBMIT_PILOT_JOB_ANSWER_MESSAGE_PAYLOAD,      "1024"}
             };
@@ -41,7 +41,7 @@ namespace wrench {
                             const std::string &pool_name,
                             bool supports_standard_jobs,
                             bool supports_pilot_jobs,
-                            std::set<std::shared_ptr<ComputeService>> &compute_resources,
+                            std::set<std::shared_ptr<ComputeService>> compute_resources,
                             std::map<std::string, std::string> plist = {});
 
             /***********************/

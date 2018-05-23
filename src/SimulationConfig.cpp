@@ -25,7 +25,7 @@ namespace wrench {
          *
          * @throw std::invalid_argument
          */
-        void SimulationConfig::loadProperties(wrench::Simulation *simulation, const std::string &filename) {
+        void SimulationConfig::loadProperties(wrench::Simulation &simulation, const std::string &filename) {
 
           std::ifstream file;
           nlohmann::json json_data;
@@ -47,7 +47,7 @@ namespace wrench {
           for (auto &storage : storage_resources) {
             std::string storage_host = getPropertyValue<std::string>("hostname", storage);
             WRENCH_INFO("Instantiating a SimpleStorageService on: %s", storage_host.c_str());
-            this->storage_services.insert(simulation->add(
+            this->storage_services.insert(simulation.add(
                     new SimpleStorageService(storage_host, getPropertyValue<double>("capacity", storage))));
           }
 
@@ -57,7 +57,7 @@ namespace wrench {
             std::string type = getPropertyValue<std::string>("type", resource);
 
             if (type == "multicore") {
-              instantiateMultihostMulticore(simulation, resource.at("compute_hosts"));
+              instantiateMultihostMulticore(resource.at("compute_hosts"));
             } else if (type == "cloud") {
               // TODO: to be implemented
             } else if (type == "batch") {
@@ -68,8 +68,9 @@ namespace wrench {
           }
 
           // build the HTCondorService
-          this->htcondor_service = new HTCondorService(this->submit_hostname, "local", true, false,
-                                                       this->compute_services);
+          this->htcondor_service = (HTCondorService *) simulation.add(
+                  new HTCondorService(this->submit_hostname, "local", true, false,
+                                      std::move(this->compute_services)));
         }
 
         /**
@@ -107,11 +108,9 @@ namespace wrench {
         /**
          * @brief Instantiate wrench::MultihostMulticoreComputeService
          *
-         * @param simulation: pointer to the simulation object
          * @param hosts: vector of hosts to be instantiated
          */
-        void SimulationConfig::instantiateMultihostMulticore(wrench::Simulation *simulation,
-                                                             std::vector<std::string> hosts) {
+        void SimulationConfig::instantiateMultihostMulticore(std::vector<std::string> hosts) {
 
           // TODO: setup map of properties for simulation calibration
           std::map<std::string, std::string> properties_list = {};

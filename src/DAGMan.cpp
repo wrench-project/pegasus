@@ -29,7 +29,8 @@ namespace wrench {
                 WMS(nullptr, nullptr, (std::set<ComputeService *> &) htcondor_services,
                     storage_services, {}, file_registry_service, hostname, "dagman") {
 
-          this->standard_job_scheduler = std::unique_ptr<StandardJobScheduler>(new HTCondorSchedd());
+          this->standard_job_scheduler = std::unique_ptr<StandardJobScheduler>(
+                  new HTCondorSchedd(file_registry_service, *storage_services.begin()));
         }
 
         /**
@@ -58,23 +59,25 @@ namespace wrench {
             // Get the ready tasks
             std::vector<WorkflowTask *> ready_tasks = this->workflow->getReadyTasks();
 
-            // Get the available compute services
-            std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();
+            if (not ready_tasks.empty()) {
+              // Get the available compute services
+              std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();
 
-            if (htcondor_services.empty()) {
-              WRENCH_INFO("Aborting - No HTCondor services available!");
-              break;
+              if (htcondor_services.empty()) {
+                WRENCH_INFO("Aborting - No HTCondor services available!");
+                break;
+              }
+
+              // Submit pilot jobs
+              if (this->pilot_job_scheduler) {
+                WRENCH_INFO("Scheduling pilot jobs...");
+                this->pilot_job_scheduler->schedulePilotJobs(htcondor_services);
+              }
+
+              // Run ready tasks with defined scheduler implementation
+              WRENCH_INFO("Scheduling tasks...");
+              this->standard_job_scheduler->scheduleTasks(htcondor_services, ready_tasks);
             }
-
-            // Submit pilot jobs
-            if (this->pilot_job_scheduler) {
-              WRENCH_INFO("Scheduling pilot jobs...");
-              this->pilot_job_scheduler->schedulePilotJobs(htcondor_services);
-            }
-
-            // Run ready tasks with defined scheduler implementation
-            WRENCH_INFO("Scheduling tasks...");
-            this->standard_job_scheduler->scheduleTasks(htcondor_services, ready_tasks);
 
             // Wait for a workflow execution event, and process it
             try {

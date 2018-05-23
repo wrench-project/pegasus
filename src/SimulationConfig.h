@@ -21,7 +21,7 @@ namespace wrench {
         class SimulationConfig {
 
         public:
-            void loadProperties(wrench::Simulation *simulation, const std::string &filename);
+            void loadProperties(wrench::Simulation &simulation, const std::string &filename);
 
             std::string getSubmitHostname();
 
@@ -32,7 +32,7 @@ namespace wrench {
             std::set<StorageService*> getStorageServices();
 
         private:
-            void instantiateMultihostMulticore(wrench::Simulation *simulation, std::vector<std::string> hosts);
+            void instantiateMultihostMulticore(std::vector<std::string> hosts);
 
             /**
              * @brief Get the value for a key from the JSON properties file

@@ -33,7 +33,7 @@ namespace wrench {
                                          const std::string &pool_name,
                                          bool supports_standard_jobs,
                                          bool supports_pilot_jobs,
-                                         std::set<std::shared_ptr<ComputeService>> &compute_resources,
+                                         std::set<std::shared_ptr<ComputeService>> compute_resources,
                                          std::map<std::string, std::string> plist) :
                 ComputeService(hostname, "htcondor_service", "htcondor_service", supports_standard_jobs,
                                supports_pilot_jobs, nullptr) {
@@ -157,7 +157,7 @@ namespace wrench {
 
           // start the compute resource services
           try {
-            for (auto cs : this->compute_resources) {
+            for (auto &cs : this->compute_resources) {
               cs->simulation = this->simulation;
               cs->start(cs, true); // Daemonize!
             }
@@ -316,7 +316,7 @@ namespace wrench {
           for (auto &&cs : this->compute_resources) {
             unsigned long sum_num_idle_cores;
             std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
-            sum_num_idle_cores = (unsigned long) std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0);
+            sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
 
             if (sum_num_idle_cores >= job->getMinimumRequiredNumCores()) {
               cs->submitStandardJob(job, service_specific_args);

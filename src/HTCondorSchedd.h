@@ -22,6 +22,9 @@ namespace wrench {
         class HTCondorSchedd : public StandardJobScheduler {
 
         public:
+            explicit HTCondorSchedd(FileRegistryService *file_registry_service,
+                                    StorageService *default_storage_service);
+
             /***********************/
             /** \cond DEVELOPER    */
             /***********************/
@@ -29,13 +32,15 @@ namespace wrench {
             void scheduleTasks(const std::set<wrench::ComputeService *> &compute_services,
                                const std::vector<wrench::WorkflowTask *> &tasks) override;
 
-            int getJobNums(std::vector<unsigned long> num);
-
-            int getNumAvailableCores(std::vector<unsigned long> num);
-
             /***********************/
             /** \endcond           */
             /***********************/
+
+        private:
+            /** @brief The file registry service */
+            FileRegistryService *file_registry_service;
+            /** @brief A storage service for intermediate data */
+            StorageService *default_storage_service;
         };
 
     }
