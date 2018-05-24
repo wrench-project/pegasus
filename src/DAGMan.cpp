@@ -21,6 +21,7 @@ namespace wrench {
          * @param hostname: the name of the host on which to start the WMS
          * @param htcondor_services: a set of HTCondor services available to run jobs
          * @param storage_services: a set of storage services available to the WMS
+         * @param file_registry_service:
          */
         DAGMan::DAGMan(const std::string &hostname,
                        const std::set<HTCondorService *> &htcondor_services,
@@ -30,7 +31,7 @@ namespace wrench {
                     storage_services, {}, file_registry_service, hostname, "dagman") {
 
           this->standard_job_scheduler = std::unique_ptr<StandardJobScheduler>(
-                  new HTCondorSchedd(file_registry_service, *storage_services.begin()));
+                  new HTCondorSchedd(file_registry_service, storage_services));
         }
 
         /**
@@ -46,16 +47,16 @@ namespace wrench {
           // Check whether the DAGMan has a deferred start time
           checkDeferredStart();
 
-          WRENCH_INFO("Starting DAGMan on host %s listening on mailbox_name %s",
-                      S4U_Simulation::getHostName().c_str(),
+          WRENCH_INFO("Starting DAGMan on host %s listening on mailbox_name %s", S4U_Simulation::getHostName().c_str(),
                       this->mailbox_name.c_str());
           WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks", this->workflow->getNumberOfTasks());
 
           // Create a job manager
           this->job_manager = this->createJobManager();
+          auto data_movement_manager = this->createDataMovementManager();
+          this->standard_job_scheduler->setDataMovementManager(data_movement_manager.get());
 
           while (true) {
-
             // Get the ready tasks
             std::vector<WorkflowTask *> ready_tasks = this->workflow->getReadyTasks();
 
@@ -105,6 +106,11 @@ namespace wrench {
           this->job_manager.reset();
 
           return 0;
+        }
+
+        void DAGMan::processEventStandardJobCompletion(std::unique_ptr<StandardJobCompletedEvent> event) {
+          auto standard_job = event->standard_job;
+          WRENCH_INFO("Notified that a %ld-task job has completed", standard_job->getNumTasks());
         }
 
         /**

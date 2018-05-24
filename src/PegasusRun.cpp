@@ -94,17 +94,14 @@ int main(int argc, char **argv) {
   WRENCH_INFO("Number of entries in TaskCompletion trace: %ld", trace.size());
 
   double lastTime = 0;
-  double totalTime = 0;
   for (auto &task : trace) {
     std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getId() << " with time:  "
               << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()
               << std::endl;
     lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());
-    totalTime += task->getContent()->getTask()->getEndDate();
   }
 
   std::cerr << "Total Time: " << lastTime << std::endl;
-  std::cerr << "Total Time: " << totalTime << std::endl;
   return 0;
 
 }

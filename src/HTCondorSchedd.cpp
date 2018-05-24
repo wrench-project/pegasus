@@ -8,6 +8,7 @@
  */
 
 #include "HTCondorSchedd.h"
+#include "HTCondorService.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(HTCondorSchedd, "Log category for HTCondor Scheduler Daemon");
 
@@ -18,11 +19,11 @@ namespace wrench {
          * @brief Constructor
          *
          * @param file_registry_service: a pointer to the file registry service
-         * @param default_storage_service: a pointer to a storage services used for storing intermediate data
+         * @param storage_services:
          */
-        HTCondorSchedd::HTCondorSchedd(wrench::FileRegistryService *file_registry_service,
-                                       StorageService *default_storage_service)
-                : file_registry_service(file_registry_service), default_storage_service(default_storage_service) {}
+        HTCondorSchedd::HTCondorSchedd(FileRegistryService *file_registry_service,
+                                       const std::set<StorageService *> &storage_services)
+                : file_registry_service(file_registry_service), storage_services(storage_services) {}
 
         /**
          * @brief Schedule and run a set of ready tasks on available HTCondor resources
@@ -38,32 +39,87 @@ namespace wrench {
           WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
 
           // TODO: select htcondor service based on condor queue name
-          auto htcondor_service = *(compute_services.begin());
+          auto htcondor_service = (HTCondorService *) *(compute_services.begin());
 
           unsigned long scheduled_tasks = 0;
           std::vector<unsigned long> idle_cores = htcondor_service->getNumIdleCores();
 
+          std::set<StandardJob *> transfer_jobs;
+
           for (auto task : tasks) {
-            for (unsigned long &idle_core : idle_cores) {
-              if (task->getMinNumCores() <= idle_core) {
 
-                // input/output files
-                std::map<WorkflowFile *, StorageService *> file_locations;
-                for (auto f : task->getInputFiles()) {
-                  file_locations.insert(std::make_pair(f, default_storage_service));
+            if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER_IN) {
+
+              // data stage-in
+              for (auto input_file : task->getInputFiles()) {
+                // finding storage service
+                auto src_dest = (*task->getFileTransfers().find(input_file)).second;
+
+                StorageService *src =
+                        src_dest.first == "local" ? htcondor_service->getLocalStorageService() : nullptr;
+                StorageService *dest =
+                        src_dest.second == "local" ? htcondor_service->getLocalStorageService() : nullptr;
+
+                for (auto storage_service : this->storage_services) {
+                  if (!src && storage_service->getHostname() == src_dest.first) {
+                    src = storage_service;
+                  } else if (!dest && storage_service->getHostname() == src_dest.second) {
+                    dest = storage_service;
+                  }
                 }
-                for (auto f : task->getOutputFiles()) {
-                  file_locations.insert(std::make_pair(f, default_storage_service));
+
+                if (src != dest) {
+                  this->getDataMovementManager()->doSynchronousFileCopy(
+                          input_file, src, dest, file_registry_service);
                 }
 
-                // creating job for execution
-                WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
-                this->getJobManager()->submitJob(job, htcondor_service);
-
-                scheduled_tasks++;
-                idle_core -= task->getMinNumCores();
-                break;
               }
+              task->setState(WorkflowTask::State::PENDING);
+              transfer_jobs.insert(this->getJobManager()->createStandardJob(task, {}));
+              scheduled_tasks++;
+
+            } else if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER_OUT) {
+              // data stage-out
+              std::cerr << "TASK STAGE OUT: " << task->getTaskType() << std::endl;
+
+            } else {
+              for (unsigned long &idle_core : idle_cores) {
+                if (task->getMinNumCores() <= idle_core) {
+
+                  // input/output files
+                  std::map<WorkflowFile *, StorageService *> file_locations;
+                  for (auto f : task->getInputFiles()) {
+                    file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
+                  }
+                  for (auto f : task->getOutputFiles()) {
+                    file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
+                  }
+
+                  // creating job for execution
+                  WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
+                  this->getJobManager()->submitJob(job, htcondor_service);
+
+                  scheduled_tasks++;
+                  idle_core -= task->getMinNumCores();
+                  break;
+                }
+              }
+            }
+          }
+
+          // sending completion notification for transfer jobs
+          for (auto job : transfer_jobs) {
+            for (auto task : job->getTasks()) {
+              task->setInternalState(WorkflowTask::InternalState::TASK_COMPLETED);
+              for (auto child : task->getWorkflow()->getTaskChildren(task)) {
+                child->setInternalState(WorkflowTask::InternalState::TASK_READY);
+              }
+            }
+            try {
+              S4U_Mailbox::dputMessage(this->getJobManager()->mailbox_name,
+                                       new ComputeServiceStandardJobDoneMessage(job, htcondor_service, 0.0));
+            } catch (std::shared_ptr<NetworkError> &cause) {
+              // ignore
             }
           }
 

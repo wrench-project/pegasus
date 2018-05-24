@@ -16,8 +16,6 @@
 namespace wrench {
     namespace pegasus {
 
-        class Simulation;
-
         /**
          * @brief A multicore Scheduler for schedd
          *
@@ -53,6 +51,10 @@ namespace wrench {
 
             void submitPilotJob(PilotJob *job, std::map<std::string, std::string> &service_specific_arguments) override;
 
+            StorageService *getLocalStorageService() const;
+
+            void setLocalStorageService(StorageService *local_storage_service);
+
             /***********************/
             /** \cond INTERNAL    */
             /***********************/
@@ -82,6 +84,7 @@ namespace wrench {
 
             std::string pool_name;
             std::set<std::shared_ptr<ComputeService>> compute_resources;
+            StorageService *local_storage_service;
         };
     }
 }

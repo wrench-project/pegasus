@@ -22,8 +22,8 @@ namespace wrench {
         class HTCondorSchedd : public StandardJobScheduler {
 
         public:
-            explicit HTCondorSchedd(FileRegistryService *file_registry_service,
-                                    StorageService *default_storage_service);
+            HTCondorSchedd(FileRegistryService *file_registry_service,
+                           const std::set<StorageService *> &storage_services);
 
             /***********************/
             /** \cond DEVELOPER    */
@@ -39,8 +39,7 @@ namespace wrench {
         private:
             /** @brief The file registry service */
             FileRegistryService *file_registry_service;
-            /** @brief A storage service for intermediate data */
-            StorageService *default_storage_service;
+            std::set<StorageService *> storage_services;
         };
 
     }

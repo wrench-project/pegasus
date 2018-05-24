@@ -9,13 +9,7 @@
         <host id="workers1-3" speed="1f" core="4"/>
         <host id="workers1-1" speed="1f" core="4"/>
         <link id="1" bandwidth="125MBps" latency="100us"/>
-        <link id="2" bandwidth="125MBps" latency="100us"/>
-        <link id="3" bandwidth="125MBps" latency="100us"/>
-        <link id="4" bandwidth="125MBps" latency="100us"/>
-        <link id="5" bandwidth="125MBps" latency="100us"/>
-        <link id="6" bandwidth="125MBps" latency="100us"/>
-        <link id="7" bandwidth="125MBps" latency="100us"/>
-        <link id="8" bandwidth="125MBps" latency="100us"/>
+        <link id="2" bandwidth="5MBps" latency="100us"/>
         <route src="master" dst="workers1-2">
             <link_ctn id="1"/>
         </route>
@@ -38,7 +32,7 @@
             <link_ctn id="1"/>
         </route>
         <route src="data" dst="master">
-            <link_ctn id="1"/>
+            <link_ctn id="2"/>
         </route>
         <route src="data" dst="workers1-0">
             <link_ctn id="1"/>

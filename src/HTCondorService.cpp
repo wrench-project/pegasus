@@ -52,7 +52,7 @@ namespace wrench {
             cs->simulation = this->simulation;
           }
 
-          // Set default and specified properties
+          // set default and specified properties
           this->setProperties(this->default_property_values, plist);
         }
 
@@ -61,6 +61,10 @@ namespace wrench {
          */
         HTCondorService::~HTCondorService() {
           this->default_property_values.clear();
+          for (auto &cs : this->compute_resources) {
+            cs->stop();
+          }
+          this->compute_resources.clear();
         }
 
         /**
@@ -142,6 +146,18 @@ namespace wrench {
          */
         void HTCondorService::terminatePilotJob(PilotJob *job) {
           throw std::runtime_error("HTCondorService::terminatePilotJob(): Not implemented yet!");
+        }
+
+        /**
+         * Get a pointer to the service local StorageService object
+         * @return a pointer to the service local StorageService object
+         */
+        StorageService *HTCondorService::getLocalStorageService() const {
+          return this->local_storage_service;
+        }
+
+        void HTCondorService::setLocalStorageService(wrench::StorageService *local_storage_service) {
+          this->local_storage_service = local_storage_service;
         }
 
         /**
@@ -353,7 +369,7 @@ namespace wrench {
           this->setStateToDown();
 
           WRENCH_INFO("Stopping Compute Services");
-          for (auto &&cs : this->compute_resources) {
+          for (auto &cs : this->compute_resources) {
             cs->stop();
           }
         }

@@ -11,74 +11,80 @@
 #define PEGASUS_HTCONDORSERVICEMESSAGE_H
 
 #include "wrench-dev.h"
-/***********************/
-/** \cond INTERNAL     */
-/***********************/
 
-/**
- * @brief Top-level CloudServiceMessage class
- */
-class HTCondorServiceMessage : public wrench::ComputeServiceMessage {
-protected:
-    HTCondorServiceMessage(const std::string &name, double payload);
-};
+namespace wrench {
+    namespace pegasus {
 
-/**
- * @brief CloudServiceGetExecutionHostsRequestMessage class
- */
-class HTCondorServiceGetExecutionHostsRequestMessage : public HTCondorServiceMessage {
-public:
-    HTCondorServiceGetExecutionHostsRequestMessage(const std::string &answer_mailbox, double payload);
+        /***********************/
+        /** \cond INTERNAL     */
+        /***********************/
 
-    std::string answer_mailbox;
-};
+        /**
+         * @brief Top-level CloudServiceMessage class
+         */
+        class HTCondorServiceMessage : public wrench::ComputeServiceMessage {
+        protected:
+            HTCondorServiceMessage(const std::string &name, double payload);
+        };
 
-/**
- * @brief CloudServiceGetExecutionHostsAnswerMessage class
- */
-class HTCondorServiceGetExecutionHostsAnswerMessage : public HTCondorServiceMessage {
-public:
-    HTCondorServiceGetExecutionHostsAnswerMessage(std::vector<std::string> &execution_hosts, double payload);
+        /**
+         * @brief CloudServiceGetExecutionHostsRequestMessage class
+         */
+        class HTCondorServiceGetExecutionHostsRequestMessage : public HTCondorServiceMessage {
+        public:
+            HTCondorServiceGetExecutionHostsRequestMessage(const std::string &answer_mailbox, double payload);
 
-    std::vector<std::string> execution_hosts;
-};
+            std::string answer_mailbox;
+        };
 
-/**
- * @brief CloudServiceCreateVMRequestMessage class
- */
-class HTCondorServiceCreateVMRequestMessage : public HTCondorServiceMessage {
-public:
-    HTCondorServiceCreateVMRequestMessage(const std::string &answer_mailbox,
-                                       const std::string &pm_hostname,
-                                       const std::string &vm_hostname,
-                                       int num_cores,
-                                       bool supports_standard_jobs,
-                                       bool supports_pilot_jobs,
-                                       std::map<std::string, std::string> &plist,
-                                       double payload);
+        /**
+         * @brief CloudServiceGetExecutionHostsAnswerMessage class
+         */
+        class HTCondorServiceGetExecutionHostsAnswerMessage : public HTCondorServiceMessage {
+        public:
+            HTCondorServiceGetExecutionHostsAnswerMessage(std::vector<std::string> &execution_hosts, double payload);
 
-    std::string pm_hostname;
-    std::string vm_hostname;
-    int num_cores;
-    bool supports_standard_jobs;
-    bool supports_pilot_jobs;
-    std::map<std::string, std::string> plist;
-    std::string answer_mailbox;
-};
+            std::vector<std::string> execution_hosts;
+        };
 
-/**
- * @brief CloudServiceCreateVMAnswerMessage class
- */
-class HTCondorServiceCreateVMAnswerMessage : public HTCondorServiceMessage {
-public:
-    HTCondorServiceCreateVMAnswerMessage(bool success, double payload);
+        /**
+         * @brief CloudServiceCreateVMRequestMessage class
+         */
+        class HTCondorServiceCreateVMRequestMessage : public HTCondorServiceMessage {
+        public:
+            HTCondorServiceCreateVMRequestMessage(const std::string &answer_mailbox,
+                                                  const std::string &pm_hostname,
+                                                  const std::string &vm_hostname,
+                                                  int num_cores,
+                                                  bool supports_standard_jobs,
+                                                  bool supports_pilot_jobs,
+                                                  std::map<std::string, std::string> &plist,
+                                                  double payload);
 
-    bool success;
-};
+            std::string pm_hostname;
+            std::string vm_hostname;
+            int num_cores;
+            bool supports_standard_jobs;
+            bool supports_pilot_jobs;
+            std::map<std::string, std::string> plist;
+            std::string answer_mailbox;
+        };
 
-/***********************/
-/** \endcond           */
-/***********************/
+        /**
+         * @brief CloudServiceCreateVMAnswerMessage class
+         */
+        class HTCondorServiceCreateVMAnswerMessage : public HTCondorServiceMessage {
+        public:
+            HTCondorServiceCreateVMAnswerMessage(bool success, double payload);
 
+            bool success;
+        };
+
+        /***********************/
+        /** \endcond           */
+        /***********************/
+
+    }
+}
 
 #endif //PEGASUS_HTCONDORSERVICEMESSAGE_H

@@ -71,6 +71,10 @@ namespace wrench {
           this->htcondor_service = (HTCondorService *) simulation.add(
                   new HTCondorService(this->submit_hostname, "local", true, false,
                                       std::move(this->compute_services)));
+
+          // creating local storage service
+          this->htcondor_service->setLocalStorageService(
+                  simulation.add(new SimpleStorageService(this->submit_hostname, 10000000000.0)));
         }
 
         /**
