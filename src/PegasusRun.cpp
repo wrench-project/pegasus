@@ -67,16 +67,31 @@ int main(int argc, char **argv) {
 
   WRENCH_INFO("Staging workflow input files to external Storage Service...");
   std::map<std::string, wrench::WorkflowFile *> input_files = workflow.getInputFiles();
+  std::map<std::string, wrench::StorageService *> storage_services = config.getStorageServicesMap();
 
-  auto storage_service_it = config.getStorageServices().begin();
-
-  try {
-    // TODO: improve stage in data
-    simulation.stageFiles(input_files, *storage_service_it);
-  } catch (std::runtime_error &e) {
-    std::cerr << "Exception: " << e.what() << std::endl;
-    return 0;
+  for (auto task : workflow.getTasks()) {
+    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
+      for (auto file_transfer : task->getFileTransfers()) {
+        if (not file_transfer.first->isOutput()) {
+          if (file_transfer.second.first == "local") {
+            simulation.stageFile(file_transfer.first, htcondor_service->getLocalStorageService());
+          } else {
+            simulation.stageFile(file_transfer.first, storage_services.at(file_transfer.second.first));
+          }
+        }
+      }
+    }
   }
+
+//  auto storage_service_it = config.getStorageServices().begin();
+//
+//  try {
+//    // TODO: improve stage in data
+//    simulation.stageFiles(input_files, *storage_service_it);
+//  } catch (std::runtime_error &e) {
+//    std::cerr << "Exception: " << e.what() << std::endl;
+//    return 0;
+//  }
 
   // simulation execution
   WRENCH_INFO("Launching the Simulation...");

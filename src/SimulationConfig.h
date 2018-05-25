@@ -29,7 +29,9 @@ namespace wrench {
 
             HTCondorService *getHTCondorService();
 
-            std::set<StorageService*> getStorageServices();
+            std::set<StorageService *> getStorageServices();
+
+            std::map<std::string, StorageService *> getStorageServicesMap();
 
         private:
             void instantiateMultihostMulticore(std::vector<std::string> hosts);

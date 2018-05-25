@@ -102,12 +102,24 @@ namespace wrench {
         }
 
         /**
-         * @brief Get a set of wrench::StorageService available for the simulation
+         * @brief Get a set of pointers to wrench::StorageService available for the simulation
          * @return A set of storage services
          */
         std::set<StorageService *> SimulationConfig::getStorageServices() {
           return this->storage_services;
         }
+
+        /**
+         * @brief Get a map of pointers to wrench::StorageService indexed by hostname
+         * @return  A map of storage services
+         */
+        std::map<std::string, StorageService *> SimulationConfig::getStorageServicesMap() {
+          std::map<std::string, StorageService *> map;
+          for (auto storage_service : this->storage_services) {
+            map.insert(std::make_pair(storage_service->getHostname(), storage_service));
+          }
+          return map;
+        };
 
         /**
          * @brief Instantiate wrench::MultihostMulticoreComputeService

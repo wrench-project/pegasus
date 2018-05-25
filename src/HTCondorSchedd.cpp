@@ -48,7 +48,7 @@ namespace wrench {
 
           for (auto task : tasks) {
 
-            if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER_IN) {
+            if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER) {
 
               // data stage-in
               for (auto input_file : task->getInputFiles()) {
@@ -77,10 +77,6 @@ namespace wrench {
               task->setState(WorkflowTask::State::PENDING);
               transfer_jobs.insert(this->getJobManager()->createStandardJob(task, {}));
               scheduled_tasks++;
-
-            } else if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER_OUT) {
-              // data stage-out
-              std::cerr << "TASK STAGE OUT: " << task->getTaskType() << std::endl;
 
             } else {
               for (unsigned long &idle_core : idle_cores) {
