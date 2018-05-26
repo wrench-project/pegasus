@@ -129,7 +129,11 @@ namespace wrench {
         void SimulationConfig::instantiateMultihostMulticore(std::vector<std::string> hosts) {
 
           // TODO: setup map of properties for simulation calibration
-          std::map<std::string, std::string> properties_list = {};
+          std::map<std::string, std::string> properties_list = {
+                  {MultihostMulticoreComputeServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
+                  {MultihostMulticoreComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
+                  {MultihostMulticoreComputeServiceProperty::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
+          };
 
           for (auto &hostname : hosts) {
             this->compute_services.insert(std::shared_ptr<ComputeService>(

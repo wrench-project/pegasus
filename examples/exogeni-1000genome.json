@@ -2415,7 +2415,7 @@
       {
         "name": "create_dir_1000genome-20180208T172637Z_0_local", 
         "type": "auxiliary", 
-        "runtime": 0, 
+        "runtime": 14.477,
         "parents": [], 
         "files": []
       }, 

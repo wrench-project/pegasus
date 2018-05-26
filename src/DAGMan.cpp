@@ -56,6 +56,10 @@ namespace wrench {
           auto data_movement_manager = this->createDataMovementManager();
           this->standard_job_scheduler->setDataMovementManager(data_movement_manager.get());
 
+          WRENCH_INFO("Sleeping for 3 seconds to ensure ProcessId uniqueness (DAGMan simulated waiting time)");
+          S4U_Simulation::sleep(3.0);
+          WRENCH_INFO("Bootstrapping...");
+
           while (true) {
             // Get the ready tasks
             std::vector<WorkflowTask *> ready_tasks = this->workflow->getReadyTasks();
