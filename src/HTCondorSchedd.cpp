@@ -49,8 +49,8 @@ namespace wrench {
           for (auto task : tasks) {
 
             if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER) {
+              // data stage in/out task
 
-              // data stage-in
               for (auto input_file : task->getInputFiles()) {
                 // finding storage service
                 auto src_dest = (*task->getFileTransfers().find(input_file)).second;
@@ -79,6 +79,8 @@ namespace wrench {
               scheduled_tasks++;
 
             } else {
+              // regular compute task
+
               for (unsigned long &idle_core : idle_cores) {
                 if (task->getMinNumCores() <= idle_core) {
 

@@ -61,9 +61,6 @@ namespace wrench {
          */
         HTCondorService::~HTCondorService() {
           this->default_property_values.clear();
-          for (auto &cs : this->compute_resources) {
-            cs->stop();
-          }
           this->compute_resources.clear();
         }
 

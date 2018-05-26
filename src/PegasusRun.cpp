@@ -83,16 +83,6 @@ int main(int argc, char **argv) {
     }
   }
 
-//  auto storage_service_it = config.getStorageServices().begin();
-//
-//  try {
-//    // TODO: improve stage in data
-//    simulation.stageFiles(input_files, *storage_service_it);
-//  } catch (std::runtime_error &e) {
-//    std::cerr << "Exception: " << e.what() << std::endl;
-//    return 0;
-//  }
-
   // simulation execution
   WRENCH_INFO("Launching the Simulation...");
   try {
