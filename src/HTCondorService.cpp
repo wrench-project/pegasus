@@ -22,21 +22,18 @@ namespace wrench {
          *
          * @param hostname: the hostname on which to start the service
          * @param pool_name: HTCondor pool name
-         * @param supports_standard_jobs: true if the HTCondor service should support standard jobs
-         * @param supports_pilot_jobs: true if the HTCondor service should support pilot jobs
          * @param compute_resources: a set of compute resources available via the HTCondor pool
-         * @param plist: a property list ({} means "use all defaults")
+         * @param property_list: a property list ({} means "use all defaults")
+         * @param messagepayload_list: a message payload list ({} means "use all defaults")
          *
          * @throw std::runtime_error
          */
         HTCondorService::HTCondorService(const std::string &hostname,
                                          const std::string &pool_name,
-                                         bool supports_standard_jobs,
-                                         bool supports_pilot_jobs,
                                          std::set<std::shared_ptr<ComputeService>> compute_resources,
-                                         std::map<std::string, std::string> plist) :
-                ComputeService(hostname, "htcondor_service", "htcondor_service", supports_standard_jobs,
-                               supports_pilot_jobs, nullptr) {
+                                         std::map<std::string, std::string> property_list,
+                                         std::map<std::string, std::string> messagepayload_list) :
+                ComputeService(hostname, "htcondor_service", "htcondor_service", nullptr) {
 
           if (pool_name.empty()) {
             throw std::runtime_error("A pool name for the HTCondor service should be provided.");
@@ -47,13 +44,16 @@ namespace wrench {
           this->pool_name = pool_name;
           this->compute_resources = compute_resources;
 
+          // Set default and specified properties
+          this->setProperties(this->default_property_values, std::move(property_list));
+
+          // Set default and specified message payloads
+          this->setMessagePayloads(this->default_messagepayload_values, std::move(messagepayload_list));
+
           // setting simulation object for compute resources
           for (auto &&cs : this->compute_resources) {
             cs->simulation = this->simulation;
           }
-
-          // set default and specified properties
-          this->setProperties(this->default_property_values, plist);
         }
 
         /**
@@ -61,6 +61,7 @@ namespace wrench {
          */
         HTCondorService::~HTCondorService() {
           this->default_property_values.clear();
+          this->default_messagepayload_values.clear();
           this->compute_resources.clear();
         }
 
@@ -82,11 +83,12 @@ namespace wrench {
 
           //  send a "run a standard job" message to the daemon's mailbox_name
           try {
-            S4U_Mailbox::putMessage(this->mailbox_name,
-                                    new ComputeServiceSubmitStandardJobRequestMessage(
-                                            answer_mailbox, job, service_specific_args,
-                                            this->getPropertyValueAsDouble(
-                                                    ComputeServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD)));
+            S4U_Mailbox::putMessage(
+                    this->mailbox_name,
+                    new ComputeServiceSubmitStandardJobRequestMessage(
+                            answer_mailbox, job, service_specific_args,
+                            this->getMessagePayloadValueAsDouble(
+                                    HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD)));
           } catch (std::shared_ptr<NetworkError> &cause) {
             throw WorkflowExecutionException(cause);
           }
@@ -216,8 +218,8 @@ namespace wrench {
             // This is Synchronous
             try {
               S4U_Mailbox::putMessage(msg->ack_mailbox,
-                                      new ServiceDaemonStoppedMessage(this->getPropertyValueAsDouble(
-                                              HTCondorServiceProperty::DAEMON_STOPPED_MESSAGE_PAYLOAD)));
+                                      new ServiceDaemonStoppedMessage(this->getMessagePayloadValueAsDouble(
+                                              HTCondorServiceMessagePayload::DAEMON_STOPPED_MESSAGE_PAYLOAD)));
             } catch (std::shared_ptr<NetworkError> &cause) {
               return false;
             }
@@ -290,8 +292,8 @@ namespace wrench {
           // Send the reply
           ComputeServiceResourceInformationAnswerMessage *answer_message = new ComputeServiceResourceInformationAnswerMessage(
                   dict,
-                  this->getPropertyValueAsDouble(
-                          ComputeServiceProperty::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD));
+                  this->getMessagePayloadValueAsDouble(
+                          HTCondorServiceMessagePayload::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD));
           try {
             S4U_Mailbox::dputMessage(answer_mailbox, answer_message);
           } catch (std::shared_ptr<NetworkError> &cause) {
@@ -318,8 +320,8 @@ namespace wrench {
                       answer_mailbox,
                       new ComputeServiceSubmitStandardJobAnswerMessage(
                               job, this, false, std::shared_ptr<FailureCause>(new JobTypeNotSupported(job, this)),
-                              this->getPropertyValueAsDouble(
-                                      ComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+                              this->getMessagePayloadValueAsDouble(
+                                      HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
             } catch (std::shared_ptr<NetworkError> &cause) {
               return;
             }
@@ -337,8 +339,8 @@ namespace wrench {
                 S4U_Mailbox::dputMessage(
                         answer_mailbox,
                         new ComputeServiceSubmitStandardJobAnswerMessage(
-                                job, this, true, nullptr, this->getPropertyValueAsDouble(
-                                        ComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+                                job, this, true, nullptr, this->getMessagePayloadValueAsDouble(
+                                        HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
                 return;
               } catch (std::shared_ptr<NetworkError> &cause) {
                 return;
@@ -352,8 +354,8 @@ namespace wrench {
                     answer_mailbox,
                     new ComputeServiceSubmitStandardJobAnswerMessage(
                             job, this, false, std::shared_ptr<FailureCause>(new NotEnoughComputeResources(job, this)),
-                            this->getPropertyValueAsDouble(
-                                    ComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+                            this->getMessagePayloadValueAsDouble(
+                                    HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
           } catch (std::shared_ptr<NetworkError> &cause) {
             return;
           }

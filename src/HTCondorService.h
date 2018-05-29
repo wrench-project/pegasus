@@ -12,6 +12,7 @@
 
 #include <wrench-dev.h>
 #include "HTCondorServiceProperty.h"
+#include "HTCondorServiceMessagePayload.h"
 
 namespace wrench {
     namespace pegasus {
@@ -23,23 +24,27 @@ namespace wrench {
         class HTCondorService : public ComputeService {
         private:
             std::map<std::string, std::string> default_property_values = {
-                    {HTCondorServiceProperty::STOP_DAEMON_MESSAGE_PAYLOAD,                  "1024"},
-                    {HTCondorServiceProperty::DAEMON_STOPPED_MESSAGE_PAYLOAD,               "1024"},
-                    {HTCondorServiceProperty::RESOURCE_DESCRIPTION_REQUEST_MESSAGE_PAYLOAD, "1024"},
-                    {HTCondorServiceProperty::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD,  "1024"},
-                    {HTCondorServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD,  "512000000"},
-                    {HTCondorServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,   "1024"},
-                    {HTCondorServiceProperty::SUBMIT_PILOT_JOB_REQUEST_MESSAGE_PAYLOAD,     "1024"},
-                    {HTCondorServiceProperty::SUBMIT_PILOT_JOB_ANSWER_MESSAGE_PAYLOAD,      "1024"}
+                    {HTCondorServiceProperty::SUPPORTS_PILOT_JOBS,                         "true"},
+                    {HTCondorServiceProperty::SUPPORTS_STANDARD_JOBS,                      "true"}
+            };
+
+            std::map<std::string, std::string> default_messagepayload_values = {
+                    {HTCondorServiceMessagePayload::STOP_DAEMON_MESSAGE_PAYLOAD,                  "1024"},
+                    {HTCondorServiceMessagePayload::DAEMON_STOPPED_MESSAGE_PAYLOAD,               "1024"},
+                    {HTCondorServiceMessagePayload::RESOURCE_DESCRIPTION_REQUEST_MESSAGE_PAYLOAD, "1024"},
+                    {HTCondorServiceMessagePayload::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD,  "1024"},
+                    {HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD,  "512000000"},
+                    {HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,   "1024"},
+                    {HTCondorServiceMessagePayload::SUBMIT_PILOT_JOB_REQUEST_MESSAGE_PAYLOAD,     "1024"},
+                    {HTCondorServiceMessagePayload::SUBMIT_PILOT_JOB_ANSWER_MESSAGE_PAYLOAD,      "1024"}
             };
 
         public:
             HTCondorService(const std::string &hostname,
                             const std::string &pool_name,
-                            bool supports_standard_jobs,
-                            bool supports_pilot_jobs,
                             std::set<std::shared_ptr<ComputeService>> compute_resources,
-                            std::map<std::string, std::string> plist = {});
+                            std::map<std::string, std::string> property_list = {},
+                            std::map<std::string, std::string> messagepayload_list = {});
 
             /***********************/
             /** \cond DEVELOPER   **/

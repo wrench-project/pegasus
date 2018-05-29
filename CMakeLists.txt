@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(WRENCH_PEGASUS_VERSION_MAJOR "1")
 set(WRENCH_PEGASUS_VERSION_MINOR "0")
 set(WRENCH_PEGASUS_VERSION_PATCH "0")
-set(WRENCH_PEGASUS_VERSION_EXTRA "alpha")
+set(WRENCH_PEGASUS_VERSION_EXTRA "")
 
 if (${WRENCH_PEGASUS_VERSION_PATCH} EQUAL "0")
     set(WRENCH_PEGASUS_RELEASE_VERSION "${WRENCH_PEGASUS_VERSION_MAJOR}.${WRENCH_PEGASUS_VERSION_MINOR}")
@@ -36,9 +36,11 @@ set(SOURCE_FILES
         src/HTCondorSchedd.cpp
         src/HTCondorServiceMessage.h
         src/HTCondorServiceMessage.cpp
+        src/HTCondorServiceMessagePayload.h
         src/HTCondorServiceProperty.h
-        src/HTCondorServiceProperty.cpp
-        src/SimulationConfig.h src/SimulationConfig.cpp)
+        src/SimulationConfig.h
+        src/SimulationConfig.cpp
+        )
 
 set(TEST_FILES
         )

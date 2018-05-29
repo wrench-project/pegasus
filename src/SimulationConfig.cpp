@@ -69,8 +69,7 @@ namespace wrench {
 
           // build the HTCondorService
           this->htcondor_service = (HTCondorService *) simulation.add(
-                  new HTCondorService(this->submit_hostname, "local", true, false,
-                                      std::move(this->compute_services)));
+                  new HTCondorService(this->submit_hostname, "local", std::move(this->compute_services)));
 
           // creating local storage service
           this->htcondor_service->setLocalStorageService(
@@ -128,22 +127,21 @@ namespace wrench {
          */
         void SimulationConfig::instantiateMultihostMulticore(std::vector<std::string> hosts) {
 
-          // TODO: setup map of properties for simulation calibration
-          std::map<std::string, std::string> properties_list = {
-                  {MultihostMulticoreComputeServiceProperty::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
-                  {MultihostMulticoreComputeServiceProperty::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
-                  {MultihostMulticoreComputeServiceProperty::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
+          std::map<std::string, std::string> messagepayload_properties_list = {
+                  {MultihostMulticoreComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
+                  {MultihostMulticoreComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
+                  {MultihostMulticoreComputeServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
           };
 
           for (auto &hostname : hosts) {
             this->compute_services.insert(std::shared_ptr<ComputeService>(
                     new MultihostMulticoreComputeService(
-                            hostname, true, false,
+                            hostname,
                             {std::make_tuple(
                                     hostname,
                                     wrench::Simulation::getHostNumCores(hostname),
                                     wrench::Simulation::getHostMemoryCapacity(hostname))},
-                            properties_list, 1000000000.0)));
+                            1000000000.0, {}, messagepayload_properties_list)));
           }
         }
     };

@@ -7,8 +7,8 @@
  * (at your option) any later version.
  */
 
-#ifndef PEGASUS_HTCONDORSERVICEPROPERTY_H
-#define PEGASUS_HTCONDORSERVICEPROPERTY_H
+#ifndef PEGASUS_HTCONDORSERVICEMESSAGEPAYLOAD_H
+#define PEGASUS_HTCONDORSERVICEMESSAGEPAYLOAD_H
 
 #include "wrench-dev.h"
 
@@ -16,14 +16,12 @@ namespace wrench {
     namespace pegasus {
 
         /**
-         * @brief Properties for a CloudService
+         * @brief Configurable message payloads for a CloudService
          */
-        class HTCondorServiceProperty : public ComputeServiceProperty {
-
-        public:
+        class HTCondorServiceMessagePayload : public ComputeServiceMessagePayload {
 
         };
     }
 }
 
-#endif //PEGASUS_HTCONDORSERVICEPROPERTY_H
+#endif //PEGASUS_HTCONDORSERVICEMESSAGEPAYLOAD_H
