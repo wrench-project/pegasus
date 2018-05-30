@@ -95,12 +95,12 @@ int main(int argc, char **argv) {
 
   // statistics
   std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
-  trace = simulation.output.getTrace<wrench::SimulationTimestampTaskCompletion>();
+  trace = simulation.getOutput().getTrace<wrench::SimulationTimestampTaskCompletion>();
   WRENCH_INFO("Number of entries in TaskCompletion trace: %ld", trace.size());
 
   double lastTime = 0;
   for (auto &task : trace) {
-    std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getId() << " with time:  "
+    std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getID() << " with time:  "
               << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()
               << std::endl;
     lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());

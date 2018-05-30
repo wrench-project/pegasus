@@ -166,7 +166,7 @@ namespace wrench {
         */
         int HTCondorService::main() {
 
-          TerminalOutput::setThisProcessLoggingColor(COLOR_RED);
+          TerminalOutput::setThisProcessLoggingColor(TerminalOutput::COLOR_RED);
           WRENCH_INFO("HTCondor Service starting on host %s listening on mailbox_name %s", this->hostname.c_str(),
                       this->mailbox_name.c_str());
 
@@ -269,7 +269,7 @@ namespace wrench {
             num_idle_cores.push_back(std::accumulate(nicores.begin(), nicores.end(), 0));
 
             // Flop rate per compute resource
-            flop_rates.push_back(S4U_Simulation::getFlopRate(cs->getHostname()));
+            flop_rates.push_back(S4U_Simulation::getHostFlopRate(cs->getHostname()));
 
             // RAM capacity per host
             ram_capacities.push_back(S4U_Simulation::getHostMemoryCapacity(cs->getHostname()));

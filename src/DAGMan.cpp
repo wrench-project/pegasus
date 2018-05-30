@@ -27,11 +27,11 @@ namespace wrench {
                        const std::set<HTCondorService *> &htcondor_services,
                        const std::set<StorageService *> &storage_services,
                        FileRegistryService *file_registry_service) :
-                WMS(nullptr, nullptr, (std::set<ComputeService *> &) htcondor_services,
+                WMS(std::unique_ptr<StandardJobScheduler>(
+                        new HTCondorSchedd(file_registry_service, storage_services)),
+                    nullptr,
+                    (std::set<ComputeService *> &) htcondor_services,
                     storage_services, {}, file_registry_service, hostname, "dagman") {
-
-          this->standard_job_scheduler = std::unique_ptr<StandardJobScheduler>(
-                  new HTCondorSchedd(file_registry_service, storage_services));
         }
 
         /**
@@ -42,19 +42,19 @@ namespace wrench {
          * @throw std::runtime_error
          */
         int DAGMan::main() {
-          TerminalOutput::setThisProcessLoggingColor(COLOR_GREEN);
+          TerminalOutput::setThisProcessLoggingColor(TerminalOutput::COLOR_GREEN);
 
           // Check whether the DAGMan has a deferred start time
           checkDeferredStart();
 
           WRENCH_INFO("Starting DAGMan on host %s listening on mailbox_name %s", S4U_Simulation::getHostName().c_str(),
                       this->mailbox_name.c_str());
-          WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks", this->workflow->getNumberOfTasks());
+          WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks", this->getWorkflow()->getNumberOfTasks());
 
           // Create a job manager
           this->job_manager = this->createJobManager();
           auto data_movement_manager = this->createDataMovementManager();
-          this->standard_job_scheduler->setDataMovementManager(data_movement_manager.get());
+          this->getStandardJobScheduler()->setDataMovementManager(data_movement_manager.get());
 
           WRENCH_INFO("Sleeping for 3 seconds to ensure ProcessId uniqueness (DAGMan simulated waiting time)");
           S4U_Simulation::sleep(3.0);
@@ -62,7 +62,7 @@ namespace wrench {
 
           while (true) {
             // Get the ready tasks
-            std::vector<WorkflowTask *> ready_tasks = this->workflow->getReadyTasks();
+            std::vector<WorkflowTask *> ready_tasks = this->getWorkflow()->getReadyTasks();
 
             if (not ready_tasks.empty()) {
               // Get the available compute services
@@ -74,14 +74,14 @@ namespace wrench {
               }
 
               // Submit pilot jobs
-              if (this->pilot_job_scheduler) {
+              if (this->getPilotJobScheduler()) {
                 WRENCH_INFO("Scheduling pilot jobs...");
-                this->pilot_job_scheduler->schedulePilotJobs(htcondor_services);
+                this->getPilotJobScheduler()->schedulePilotJobs(htcondor_services);
               }
 
               // Run ready tasks with defined scheduler implementation
               WRENCH_INFO("Scheduling tasks...");
-              this->standard_job_scheduler->scheduleTasks(htcondor_services, ready_tasks);
+              this->getStandardJobScheduler()->scheduleTasks(htcondor_services, ready_tasks);
             }
 
             // Wait for a workflow execution event, and process it
@@ -93,13 +93,13 @@ namespace wrench {
               continue;
             }
 
-            if (this->abort || workflow->isDone()) {
+            if (this->abort || this->getWorkflow()->isDone()) {
               break;
             }
           }
 
           WRENCH_INFO("--------------------------------------------------------");
-          if (workflow->isDone()) {
+          if (this->getWorkflow()->isDone()) {
             WRENCH_INFO("Workflow execution is complete!");
           } else {
             WRENCH_INFO("Workflow execution is incomplete!");
