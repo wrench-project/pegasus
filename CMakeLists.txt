@@ -34,8 +34,6 @@ set(SOURCE_FILES
         src/PegasusRun.cpp
         src/HTCondorSchedd.h
         src/HTCondorSchedd.cpp
-        src/HTCondorServiceMessage.h
-        src/HTCondorServiceMessage.cpp
         src/HTCondorServiceMessagePayload.h
         src/HTCondorServiceProperty.h
         src/SimulationConfig.h
