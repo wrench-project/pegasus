@@ -44,13 +44,16 @@ namespace wrench {
           unsigned long scheduled_tasks = 0;
           std::vector<unsigned long> idle_cores = htcondor_service->getNumIdleCores();
 
-          std::set<StandardJob *> transfer_jobs;
-
           for (auto task : tasks) {
 
             if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER) {
               // data stage in/out task
 
+              std::map<WorkflowFile *, StorageService *> file_locations;
+              std::set<std::tuple<WorkflowFile *, StorageService *, StorageService *>> pre_file_copies;
+              std::set<std::tuple<WorkflowFile *, StorageService *, StorageService *>> post_file_copies;
+
+              // input files
               for (auto input_file : task->getInputFiles()) {
                 // finding storage service
                 auto src_dest = (*task->getFileTransfers().find(input_file)).second;
@@ -69,14 +72,41 @@ namespace wrench {
                 }
 
                 if (src != dest) {
-                  WRENCH_INFO("Executing %s", task->getID().c_str());
-                  this->getDataMovementManager()->doSynchronousFileCopy(
-                          input_file, src, dest, file_registry_service);
+                  pre_file_copies.insert(std::make_tuple(input_file, src, dest));
+                }
+                file_locations.insert(std::make_pair(input_file, dest));
+              }
+
+              // output files
+              for (auto output_file : task->getOutputFiles()) {
+                // finding storage service
+                auto src_dest = (*task->getFileTransfers().find(output_file)).second;
+
+                StorageService *src =
+                        src_dest.first == "local" ? htcondor_service->getLocalStorageService() : nullptr;
+                StorageService *dest =
+                        src_dest.second == "local" ? htcondor_service->getLocalStorageService() : nullptr;
+
+                for (auto storage_service : this->storage_services) {
+                  if (!src && storage_service->getHostname() == src_dest.first) {
+                    src = storage_service;
+                  } else if (!dest && storage_service->getHostname() == src_dest.second) {
+                    dest = storage_service;
+                  }
                 }
 
+                if (src != dest) {
+                  post_file_copies.insert(std::make_tuple(output_file, src, dest));
+                }
+                file_locations.insert(std::make_pair(output_file, dest));
               }
-              task->setState(WorkflowTask::State::PENDING);
-              transfer_jobs.insert(this->getJobManager()->createStandardJob(task, {}));
+
+              // creating and submitting job
+              WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob({task},
+                                                                                          file_locations,
+                                                                                          pre_file_copies,
+                                                                                          post_file_copies, {});
+              this->getJobManager()->submitJob(job, htcondor_service);
               scheduled_tasks++;
 
             } else {
@@ -95,7 +125,8 @@ namespace wrench {
                   }
 
                   // creating job for execution
-                  WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
+                  WorkflowJob *job = (WorkflowJob *)
+                          this->getJobManager()->createStandardJob(task, file_locations);
                   this->getJobManager()->submitJob(job, htcondor_service);
 
                   scheduled_tasks++;
@@ -103,22 +134,6 @@ namespace wrench {
                   break;
                 }
               }
-            }
-          }
-
-          // sending completion notification for transfer jobs
-          for (auto job : transfer_jobs) {
-            for (auto task : job->getTasks()) {
-              task->setInternalState(WorkflowTask::InternalState::TASK_COMPLETED);
-              for (auto child : task->getWorkflow()->getTaskChildren(task)) {
-                child->setInternalState(WorkflowTask::InternalState::TASK_READY);
-              }
-            }
-            try {
-              S4U_Mailbox::dputMessage(this->getJobManager()->mailbox_name,
-                                       new ComputeServiceStandardJobDoneMessage(job, htcondor_service, 0.0));
-            } catch (std::shared_ptr<NetworkError> &cause) {
-              // ignore
             }
           }
 

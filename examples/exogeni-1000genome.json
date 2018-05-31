@@ -2422,7 +2422,7 @@
       {
         "name": "stage_in_local_local_2_2", 
         "type": "transfer",
-        "runtime": 15.959, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2459,7 +2459,7 @@
       {
         "name": "stage_in_local_local_0_0", 
         "type": "transfer", 
-        "runtime": 95.871, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2489,7 +2489,7 @@
       {
         "name": "stage_in_local_local_0_1", 
         "type": "transfer", 
-        "runtime": 87.68, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2519,7 +2519,7 @@
       {
         "name": "stage_in_local_local_1_0", 
         "type": "transfer", 
-        "runtime": 14.361, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2542,7 +2542,7 @@
       {
         "name": "stage_in_local_local_0_2", 
         "type": "transfer", 
-        "runtime": 98.442, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2572,7 +2572,7 @@
       {
         "name": "stage_in_local_local_2_0", 
         "type": "transfer", 
-        "runtime": 54.771, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2609,7 +2609,7 @@
       {
         "name": "stage_in_local_local_2_1", 
         "type": "transfer", 
-        "runtime": 47.33, 
+        "runtime": 0,
         "parents": [
           "create_dir_1000genome-20180208T172637Z_0_local"
         ], 
@@ -2758,7 +2758,7 @@
       {
         "name": "stage_out_local_local_2_1", 
         "type": "transfer", 
-        "runtime": 15.74, 
+        "runtime": 0,
         "parents": [
           "frequency_ID0000048", 
           "frequency_ID0000044", 
@@ -2772,63 +2772,63 @@
         ], 
         "files": [
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-EAS.tar.gz", 
             "size": 142759
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-AFR.tar.gz", 
             "size": 144501
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-AFR-freq.tar.gz", 
             "size": 270158
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-ALL-freq.tar.gz", 
             "size": 285865
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-SAS.tar.gz", 
             "size": 143439
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-GBR-freq.tar.gz", 
             "size": 218475
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-AFR-freq.tar.gz", 
             "size": 271015
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-AMR-freq.tar.gz", 
             "size": 258082
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-EUR.tar.gz", 
@@ -2845,7 +2845,7 @@
       {
         "name": "stage_out_local_local_2_2", 
         "type": "transfer", 
-        "runtime": 15.539, 
+        "runtime": 0,
         "parents": [
           "frequency_ID0000046", 
           "mutation_overlap_ID0000043", 
@@ -2859,63 +2859,63 @@
         ], 
         "files": [
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-EUR-freq.tar.gz", 
             "size": 264350
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-GBR-freq.tar.gz", 
             "size": 217838
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-ALL.tar.gz", 
             "size": 166549
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-EUR.tar.gz", 
             "size": 141964
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-EUR-freq.tar.gz", 
             "size": 265673
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-EAS-freq.tar.gz", 
             "size": 264712
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-AMR.tar.gz", 
             "size": 144292
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-GBR.tar.gz", 
             "size": 138899
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-EAS.tar.gz", 
@@ -2932,7 +2932,7 @@
       {
         "name": "stage_out_local_local_2_0", 
         "type": "transfer", 
-        "runtime": 15.522, 
+        "runtime": 0,
         "parents": [
           "frequency_ID0000040", 
           "mutation_overlap_ID0000041", 
@@ -2947,70 +2947,70 @@
         ], 
         "files": [
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-AMR-freq.tar.gz", 
             "size": 257348
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-SAS-freq.tar.gz", 
             "size": 261685
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-EAS-freq.tar.gz", 
             "size": 263603
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-AMR.tar.gz", 
             "size": 142212
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr21-GBR.tar.gz", 
             "size": 136827
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-SAS-freq.tar.gz", 
             "size": 263198
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-ALL.tar.gz", 
             "size": 168396
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-ALL-freq.tar.gz", 
             "size": 287387
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-SAS.tar.gz", 
             "size": 145890
           }, 
           {
-            "dest": "data", 
+            "dest": "local",
             "src": "local", 
             "link": "output", 
             "name": "chr22-AFR.tar.gz", 

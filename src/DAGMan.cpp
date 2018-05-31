@@ -97,8 +97,10 @@ namespace wrench {
               break;
             }
 
-            WRENCH_INFO("Sleeping for 5 seconds for simulating DAGMan monitoring thread");
-            Simulation::sleep(5.0);
+            if (not ready_tasks.empty()) {
+              WRENCH_INFO("Sleeping for 5 seconds for simulating DAGMan monitoring thread");
+              Simulation::sleep(5.0);
+            }
           }
 
           WRENCH_INFO("--------------------------------------------------------");
