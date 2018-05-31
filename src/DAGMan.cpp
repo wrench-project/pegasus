@@ -57,7 +57,7 @@ namespace wrench {
           this->getStandardJobScheduler()->setDataMovementManager(data_movement_manager.get());
 
           WRENCH_INFO("Sleeping for 3 seconds to ensure ProcessId uniqueness (DAGMan simulated waiting time)");
-          S4U_Simulation::sleep(3.0);
+          Simulation::sleep(3.0);
           WRENCH_INFO("Bootstrapping...");
 
           while (true) {
@@ -96,6 +96,9 @@ namespace wrench {
             if (this->abort || this->getWorkflow()->isDone()) {
               break;
             }
+
+            WRENCH_INFO("Sleeping for 5 seconds for simulating DAGMan monitoring thread");
+            Simulation::sleep(5.0);
           }
 
           WRENCH_INFO("--------------------------------------------------------");

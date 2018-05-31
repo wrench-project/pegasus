@@ -69,6 +69,7 @@ namespace wrench {
                 }
 
                 if (src != dest) {
+                  WRENCH_INFO("Executing %s", task->getID().c_str());
                   this->getDataMovementManager()->doSynchronousFileCopy(
                           input_file, src, dest, file_registry_service);
                 }
