@@ -17,6 +17,32 @@ namespace wrench {
          *
          * @param task
          */
+        SimulationTimestampJobStart::SimulationTimestampJobStart(WorkflowTask *task)
+                : clock(S4U_Simulation::getClock()), task(task) {}
+
+        /**
+         * @brief
+         *
+         * @return
+         */
+        WorkflowTask *SimulationTimestampJobStart::getTask() {
+          return this->task;
+        }
+
+        /**
+         * @brief
+         *
+         * @return
+         */
+        double SimulationTimestampJobStart::getClock() {
+          return this->clock;
+        }
+
+        /**
+         * @brief
+         *
+         * @param task
+         */
         SimulationTimestampJobCompletion::SimulationTimestampJobCompletion(WorkflowTask *task)
                 : clock(S4U_Simulation::getClock()), task(task) {}
 

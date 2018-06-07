@@ -18,6 +18,20 @@ namespace wrench {
 
     namespace pegasus {
 
+        class SimulationTimestampJobStart {
+
+        public:
+            SimulationTimestampJobStart(WorkflowTask *task);
+
+            WorkflowTask *getTask();
+
+            double getClock();
+
+        private:
+            double clock;
+            WorkflowTask *task;
+        };
+
         class SimulationTimestampJobCompletion {
 
         public:

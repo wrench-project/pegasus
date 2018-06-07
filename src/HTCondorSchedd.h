@@ -14,6 +14,9 @@
 #include <wrench-dev.h>
 
 namespace wrench {
+
+    class Simulation;
+
     namespace pegasus {
 
         /**
@@ -33,6 +36,8 @@ namespace wrench {
 
             void scheduleTasks(const std::set<wrench::ComputeService *> &compute_services,
                                const std::vector<wrench::WorkflowTask *> &tasks) override;
+
+            void setSimuation(Simulation *simulation);
 
             void notifyRunningTaskLevelCompletion(unsigned long level);
 
@@ -57,6 +62,8 @@ namespace wrench {
             std::pair<unsigned long, unsigned long> running_tasks_level;
             /** @brief */
             unsigned long running_register_tasks = 0;
+            /** @brief */
+            Simulation *simulation;
         };
 
     }

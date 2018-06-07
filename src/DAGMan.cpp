@@ -55,7 +55,10 @@ namespace wrench {
           // Create a job manager
           this->job_manager = this->createJobManager();
           auto data_movement_manager = this->createDataMovementManager();
-          this->getStandardJobScheduler()->setDataMovementManager(data_movement_manager.get());
+
+          auto htcondor_schedd = (HTCondorSchedd *) this->getStandardJobScheduler();
+          htcondor_schedd->setSimuation(this->simulation);
+          htcondor_schedd->setDataMovementManager(data_movement_manager.get());
 
           WRENCH_INFO("Sleeping for 3 seconds to ensure ProcessId uniqueness (DAGMan simulated waiting time)");
           Simulation::sleep(3.0);
@@ -98,10 +101,10 @@ namespace wrench {
               break;
             }
 
-            if (not ready_tasks.empty()) {
-              WRENCH_INFO("Sleeping for 5 seconds for simulating DAGMan monitoring thread");
-              Simulation::sleep(5.0);
-            }
+//            if (not ready_tasks.empty()) {
+//              WRENCH_INFO("Sleeping for 5 seconds for simulating DAGMan monitoring thread");
+//              Simulation::sleep(4.0);
+//            }
           }
 
           WRENCH_INFO("--------------------------------------------------------");

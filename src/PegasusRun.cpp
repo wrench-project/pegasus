@@ -95,22 +95,29 @@ int main(int argc, char **argv) {
   WRENCH_INFO("Simulation done!");
 
   // statistics
-//  auto trace = simulation.getOutput().getTrace<wrench::SimulationTimestampTaskCompletion>();
-  auto trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobCompletion>();
-  WRENCH_INFO("Number of entries in TaskCompletion trace: %ld", trace.size());
+  std::map<std::string, double> start_stats;
+  std::map<std::string, double> completion_stats;
 
-  double lastTime = 0;
-  for (auto &task : trace) {
-    auto t = task->getContent()->getTask();
-    std::cerr << "wrench," << t->getID() << "," << t->getStartDate() << "," << task->getContent()->getClock() << ","
-              << t->getEndDate() - t->getStartDate() << "," << t->getTopLevel() << std::endl;
-//    std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getID() << " with time:  "
-//              << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()
-//              << std::endl;
-//    lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());
+  auto start_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobStart>();
+  for (auto &task : start_trace) {
+    auto t = task->getContent();
+    start_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
   }
 
-  std::cerr << "Total Time: " << lastTime << std::endl;
-  return 0;
+  auto completion_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobCompletion>();
+  for (auto &task : completion_trace) {
+    auto t = task->getContent();
+    completion_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
+  }
 
+  for (const auto &task : start_stats) {
+    double completion_time = (*completion_stats.find(task.first)).second;
+    std::cerr << "wrench," <<
+              task.first << "," <<
+              task.second << "," <<
+              completion_time << "," <<
+              completion_time - task.second << std::endl;
+  }
+
+  return 0;
 }

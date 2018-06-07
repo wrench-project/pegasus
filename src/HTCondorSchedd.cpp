@@ -9,6 +9,7 @@
 
 #include "HTCondorSchedd.h"
 #include "HTCondorService.h"
+#include "PegasusSimulationTimestampTypes.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(HTCondorSchedd, "Log category for HTCondor Scheduler Daemon");
 
@@ -19,7 +20,7 @@ namespace wrench {
          * @brief Constructor
          *
          * @param file_registry_service: a pointer to the file registry service
-         * @param storage_services:
+         * @param storage_services: a set of storage services available for the scheduler
          */
         HTCondorSchedd::HTCondorSchedd(FileRegistryService *file_registry_service,
                                        const std::set<StorageService *> &storage_services)
@@ -149,6 +150,10 @@ namespace wrench {
                 file_locations.insert(std::make_pair(output_file, dest));
               }
 
+              // create job start event
+              this->simulation->getOutput().addTimestamp<SimulationTimestampJobStart>(
+                      new SimulationTimestampJobStart(task));
+
               // creating and submitting job
               WorkflowJob *job = (WorkflowJob *) this->getJobManager()->createStandardJob({task},
                                                                                           file_locations,
@@ -176,9 +181,12 @@ namespace wrench {
                     file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
                   }
 
+                  // create job start event
+                  this->simulation->getOutput().addTimestamp<SimulationTimestampJobStart>(
+                          new SimulationTimestampJobStart(task));
+
                   // creating job for execution
-                  WorkflowJob *job = (WorkflowJob *)
-                          this->getJobManager()->createStandardJob(task, file_locations);
+                  auto *job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
                   this->getJobManager()->submitJob(job, htcondor_service);
 
                   if (task->getID().find("register_local") == 0) {
@@ -195,7 +203,7 @@ namespace wrench {
               if (task->getTopLevel() > this->running_tasks_level.first) {
                 this->running_tasks_level = std::make_pair(task->getTopLevel(), 1);
 
-              } else if (task->getTopLevel() == this->running_tasks_level.first){
+              } else if (task->getTopLevel() == this->running_tasks_level.first) {
                 this->running_tasks_level.second++;
               }
 
@@ -209,6 +217,15 @@ namespace wrench {
 
           WRENCH_INFO("Done with scheduling tasks as standard jobs: %ld tasks scheduled out of %ld", scheduled_tasks,
                       tasks.size());
+        }
+
+        /**
+         * @brief
+         *
+         * @param simulation: a pointer to the simulation object
+         */
+        void HTCondorSchedd::setSimuation(wrench::Simulation *simulation) {
+          this->simulation = simulation;
         }
 
         /**
