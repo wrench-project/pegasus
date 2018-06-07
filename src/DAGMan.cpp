@@ -9,6 +9,7 @@
 
 #include "DAGMan.h"
 #include "HTCondorSchedd.h"
+#include "PegasusSimulationTimestampTypes.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(DAGMan, "Log category for DAGMan");
 
@@ -117,9 +118,27 @@ namespace wrench {
           return 0;
         }
 
+        /**
+         * @brief
+         *
+         * @param event
+         */
         void DAGMan::processEventStandardJobCompletion(std::unique_ptr<StandardJobCompletedEvent> event) {
           auto standard_job = event->standard_job;
           WRENCH_INFO("Notified that a %ld-task job has completed", standard_job->getNumTasks());
+
+          auto htcondor_schedd = ((HTCondorSchedd *) this->getStandardJobScheduler());
+
+          for (auto task : standard_job->getTasks()) {
+            if (task->getID().find("register_") == 0) {
+              htcondor_schedd->notifyRegisterTaskCompletion();
+            }
+            htcondor_schedd->notifyRunningTaskLevelCompletion(task->getTopLevel());
+
+            // create job completion event
+            this->simulation->getOutput().addTimestamp<SimulationTimestampJobCompletion>(
+                    new SimulationTimestampJobCompletion(task));
+          }
         }
 
         /**

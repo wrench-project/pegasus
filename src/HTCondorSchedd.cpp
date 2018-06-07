@@ -23,7 +23,30 @@ namespace wrench {
          */
         HTCondorSchedd::HTCondorSchedd(FileRegistryService *file_registry_service,
                                        const std::set<StorageService *> &storage_services)
-                : file_registry_service(file_registry_service), storage_services(storage_services) {}
+                : file_registry_service(file_registry_service), storage_services(storage_services) {
+
+          // DAGMan performs BFS search by default
+          this->running_tasks_level = std::make_pair(0, 0);
+        }
+
+        /**
+         * @brief Destructor
+         */
+        HTCondorSchedd::~HTCondorSchedd() {
+          this->pending_tasks.clear();
+        }
+
+        /**
+         * @brief Compare the priority between two workflow tasks
+         *
+         * @param lhs: pointer to a workflow task
+         * @param rhs: pointer to a workflow task
+         *
+         * @return whether the priority of the left-hand-side workflow tasks is higher
+         */
+        bool HTCondorSchedd::TaskPriorityComparator::operator()(WorkflowTask *&lhs, WorkflowTask *&rhs) {
+          return lhs->getPriority() > rhs->getPriority();
+        }
 
         /**
          * @brief Schedule and run a set of ready tasks on available HTCondor resources
@@ -42,9 +65,34 @@ namespace wrench {
           auto htcondor_service = (HTCondorService *) *(compute_services.begin());
 
           unsigned long scheduled_tasks = 0;
+
           std::vector<unsigned long> idle_cores = htcondor_service->getNumIdleCores();
 
           for (auto task : tasks) {
+            if (task->getTopLevel() <= this->running_tasks_level.first ||
+                (task->getTopLevel() == this->running_tasks_level.first + 1 &&
+                 this->running_tasks_level.second == 0)) {
+
+              if (std::find(this->pending_tasks.begin(), this->pending_tasks.end(), task) ==
+                  this->pending_tasks.end()) {
+                long max_priority = task->getPriority();
+                for (auto parent : task->getWorkflow()->getTaskParents(task)) {
+                  if (parent->getPriority() > max_priority) {
+                    max_priority = parent->getPriority();
+                  }
+                }
+                task->setPriority(max_priority);
+                this->pending_tasks.push_back(task);
+              }
+            }
+          }
+
+          // sort by task priority
+          std::sort(this->pending_tasks.begin(), this->pending_tasks.end(), TaskPriorityComparator());
+
+          for (auto it = this->pending_tasks.begin(); it != this->pending_tasks.end();) {
+            auto task = *it;
+            bool scheduled = false;
 
             if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER) {
               // data stage in/out task
@@ -107,10 +155,14 @@ namespace wrench {
                                                                                           pre_file_copies,
                                                                                           post_file_copies, {});
               this->getJobManager()->submitJob(job, htcondor_service);
-              scheduled_tasks++;
+              scheduled = true;
 
             } else {
               // regular compute task
+              if (task->getID().find("register_local") == 0 && running_register_tasks > 0) {
+                ++it;
+                continue;
+              }
 
               for (unsigned long &idle_core : idle_cores) {
                 if (task->getMinNumCores() <= idle_core) {
@@ -129,16 +181,57 @@ namespace wrench {
                           this->getJobManager()->createStandardJob(task, file_locations);
                   this->getJobManager()->submitJob(job, htcondor_service);
 
-                  scheduled_tasks++;
+                  if (task->getID().find("register_local") == 0) {
+                    running_register_tasks++;
+                  }
+
                   idle_core -= task->getMinNumCores();
+                  scheduled = true;
                   break;
                 }
               }
+            }
+            if (scheduled) {
+              if (task->getTopLevel() > this->running_tasks_level.first) {
+                this->running_tasks_level = std::make_pair(task->getTopLevel(), 1);
+
+              } else if (task->getTopLevel() == this->running_tasks_level.first){
+                this->running_tasks_level.second++;
+              }
+
+              scheduled_tasks++;
+              this->pending_tasks.erase(it);
+
+            } else {
+              ++it;
             }
           }
 
           WRENCH_INFO("Done with scheduling tasks as standard jobs: %ld tasks scheduled out of %ld", scheduled_tasks,
                       tasks.size());
+        }
+
+        /**
+         * @brief Notify a task in a specific level has completed
+         *
+         * @param level: task level
+         *
+         * @throw std::invalid_argument
+         */
+        void HTCondorSchedd::notifyRunningTaskLevelCompletion(const unsigned long level) {
+          if (level > this->running_tasks_level.first) {
+            throw std::invalid_argument("HTCondorSchedd::notifyRunningTaskLevelCompletion: Invalid level");
+          }
+          if (level == this->running_tasks_level.first) {
+            this->running_tasks_level.second--;
+          }
+        }
+
+        /**
+         * @brief Notify a register task has completed
+         */
+        void HTCondorSchedd::notifyRegisterTaskCompletion() {
+          this->running_register_tasks--;
         }
     }
 }

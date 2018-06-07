@@ -440,6 +440,16 @@ def _parse_job_output(workflow, job, pegasus_dir):
                         'dest': f['dest_urls'][0]['site_label']
                     })
 
+    # parsing .sub file to get job priorities
+    sub_list = _fetch_all_files(pegasus_dir, "sub", job['name'])
+    if not sub_list:
+        logger.warning('Job %s has no .sub record. Skipping it.' % job['name'])
+    else:
+        with open(sub_list[0]) as f:
+            for line in f:
+                if line.startswith('priority'):
+                    job['priority'] = int(line.split()[2])
+
 
 def main():
     # Application's arguments

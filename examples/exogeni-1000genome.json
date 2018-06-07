@@ -1,7 +1,7 @@
 {
   "name": "1000genome-20180208T172637Z-0",
   "description": "Trace generated with wrench-pegasus-parser.py from http://wrench-project.org",
-  "createdAt": "2018-05-23T15:40:49.012950Z",
+  "createdAt": "2018-06-05T12:04:20.585682Z",
   "schemaVersion": "1.0",
   "wms": {
     "url": "http://pegasus.isi.edu",
@@ -51,7 +51,8 @@
           "1001",
           "10000"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000002",
@@ -89,7 +90,8 @@
           "2001",
           "10000"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000003",
@@ -127,7 +129,8 @@
           "3001",
           "10000"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000004",
@@ -165,7 +168,8 @@
           "4001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000005",
@@ -203,7 +207,8 @@
           "5001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000006",
@@ -241,7 +246,8 @@
           "6001",
           "10000"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000007",
@@ -279,7 +285,8 @@
           "7001",
           "10000"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000008",
@@ -317,7 +324,8 @@
           "8001",
           "10000"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000009",
@@ -355,7 +363,8 @@
           "9001",
           "10000"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000010",
@@ -393,7 +402,8 @@
           "10001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_merge_ID0000011",
@@ -486,7 +496,8 @@
           "chr21n-8001-9001.tar.gz",
           "chr21n-9001-10001.tar.gz"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 30
       },
       {
         "name": "sifting_ID0000012",
@@ -516,7 +527,8 @@
           "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
           "21"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000013",
@@ -554,7 +566,8 @@
           "1001",
           "10000"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000014",
@@ -592,7 +605,8 @@
           "2001",
           "10000"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000015",
@@ -630,7 +644,8 @@
           "3001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000016",
@@ -668,7 +683,8 @@
           "4001",
           "10000"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000017",
@@ -706,7 +722,8 @@
           "5001",
           "10000"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000018",
@@ -744,7 +761,8 @@
           "6001",
           "10000"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000019",
@@ -782,7 +800,8 @@
           "7001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000020",
@@ -820,7 +839,8 @@
           "8001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000021",
@@ -858,7 +878,8 @@
           "9001",
           "10000"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "individuals_ID0000022",
@@ -896,7 +917,8 @@
           "10001",
           "10000"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 20
       },
       {
         "name": "individuals_merge_ID0000023",
@@ -989,7 +1011,8 @@
           "chr22n-8001-9001.tar.gz",
           "chr22n-9001-10001.tar.gz"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 30
       },
       {
         "name": "sifting_ID0000024",
@@ -1018,7 +1041,8 @@
           "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
           "22"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 20
       },
       {
         "name": "mutation_overlap_ID0000025",
@@ -1068,7 +1092,8 @@
           "-pop",
           "SAS"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000026",
@@ -1118,7 +1143,8 @@
           "-pop",
           "SAS"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000027",
@@ -1168,7 +1194,8 @@
           "-pop",
           "ALL"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000028",
@@ -1218,7 +1245,8 @@
           "-pop",
           "ALL"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000029",
@@ -1267,7 +1295,8 @@
           "-pop",
           "AMR"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000030",
@@ -1317,7 +1346,8 @@
           "-pop",
           "AMR"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000031",
@@ -1367,7 +1397,8 @@
           "-pop",
           "EAS"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000032",
@@ -1417,7 +1448,8 @@
           "-pop",
           "EAS"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000033",
@@ -1466,7 +1498,8 @@
           "-pop",
           "AFR"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000034",
@@ -1516,7 +1549,8 @@
           "-pop",
           "AFR"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000035",
@@ -1566,7 +1600,8 @@
           "-pop",
           "EUR"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000036",
@@ -1615,7 +1650,8 @@
           "-pop",
           "EUR"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000037",
@@ -1665,7 +1701,8 @@
           "-pop",
           "GBR"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000038",
@@ -1714,7 +1751,8 @@
           "-pop",
           "GBR"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000039",
@@ -1764,7 +1802,8 @@
           "-pop",
           "SAS"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000040",
@@ -1814,7 +1853,8 @@
           "-pop",
           "SAS"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000041",
@@ -1864,7 +1904,8 @@
           "-pop",
           "ALL"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000042",
@@ -1914,7 +1955,8 @@
           "-pop",
           "ALL"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000043",
@@ -1963,7 +2005,8 @@
           "-pop",
           "AMR"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000044",
@@ -2013,7 +2056,8 @@
           "-pop",
           "AMR"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000045",
@@ -2063,7 +2107,8 @@
           "-pop",
           "EAS"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000046",
@@ -2113,7 +2158,8 @@
           "-pop",
           "EAS"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000047",
@@ -2162,7 +2208,8 @@
           "-pop",
           "AFR"
         ],
-        "machine": "workers1-1"
+        "machine": "workers1-1",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000048",
@@ -2212,7 +2259,8 @@
           "-pop",
           "AFR"
         ],
-        "machine": "workers1-0"
+        "machine": "workers1-0",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000049",
@@ -2262,7 +2310,8 @@
           "-pop",
           "EUR"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000050",
@@ -2311,7 +2360,8 @@
           "-pop",
           "EUR"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 40
       },
       {
         "name": "mutation_overlap_ID0000051",
@@ -2361,7 +2411,8 @@
           "-pop",
           "GBR"
         ],
-        "machine": "workers1-3"
+        "machine": "workers1-3",
+        "priority": 40
       },
       {
         "name": "frequency_ID0000052",
@@ -2410,14 +2461,16 @@
           "-pop",
           "GBR"
         ],
-        "machine": "workers1-2"
+        "machine": "workers1-2",
+        "priority": 40
       },
       {
         "name": "create_dir_1000genome-20180208T172637Z_0_local",
         "type": "auxiliary",
         "runtime": 14.477,
         "parents": [],
-        "files": []
+        "files": [],
+        "priority": 800
       },
       {
         "name": "stage_in_local_local_2_2",
@@ -2454,7 +2507,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "stage_in_local_local_0_0",
@@ -2484,7 +2538,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "stage_in_local_local_0_1",
@@ -2514,7 +2569,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "stage_in_local_local_1_0",
@@ -2537,7 +2593,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "stage_in_local_local_0_2",
@@ -2567,7 +2624,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "stage_in_local_local_2_0",
@@ -2604,7 +2662,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "stage_in_local_local_2_1",
@@ -2641,7 +2700,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 700
       },
       {
         "name": "register_local_0_0",
@@ -2672,7 +2732,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/00/register_local_0_0.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 30
       },
       {
         "name": "register_local_0_2",
@@ -2703,7 +2764,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/00/register_local_0_2.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 30
       },
       {
         "name": "register_local_0_1",
@@ -2734,7 +2796,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/00/register_local_0_1.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 30
       },
       {
         "name": "register_local_1_0",
@@ -2753,7 +2816,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/00/register_local_1_0.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 40
       },
       {
         "name": "stage_out_local_local_2_1",
@@ -2840,7 +2904,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 900
       },
       {
         "name": "stage_out_local_local_2_2",
@@ -2927,7 +2992,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 900
       },
       {
         "name": "stage_out_local_local_2_0",
@@ -3022,7 +3088,8 @@
           "--threads",
           "2"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 900
       },
       {
         "name": "register_local_2_1",
@@ -3040,7 +3107,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/01/register_local_2_1.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 60
       },
       {
         "name": "register_local_2_2",
@@ -3058,7 +3126,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/01/register_local_2_2.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 60
       },
       {
         "name": "register_local_2_0",
@@ -3076,7 +3145,8 @@
           "--insert",
           "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180208T172637Z/run0001/00/01/register_local_2_0.in"
         ],
-        "machine": "master"
+        "machine": "master",
+        "priority": 60
       },
       {
         "name": "cleanup_1000genome-20180208T172637Z_0_local",

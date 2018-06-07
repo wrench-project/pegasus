@@ -38,6 +38,8 @@ set(SOURCE_FILES
         src/HTCondorServiceProperty.h
         src/SimulationConfig.h
         src/SimulationConfig.cpp
+        src/PegasusSimulationTimestampTypes.h
+        src/PegasusSimulationTimestampTypes.cpp
         )
 
 set(TEST_FILES

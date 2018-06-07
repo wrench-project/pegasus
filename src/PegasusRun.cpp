@@ -12,6 +12,7 @@
 #include <wrench-dev.h>
 
 #include "DAGMan.h"
+#include "PegasusSimulationTimestampTypes.h"
 #include "SimulationConfig.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(PegasusRun, "Log category for PegasusRun");
@@ -94,16 +95,19 @@ int main(int argc, char **argv) {
   WRENCH_INFO("Simulation done!");
 
   // statistics
-  std::vector<wrench::SimulationTimestamp<wrench::SimulationTimestampTaskCompletion> *> trace;
-  trace = simulation.getOutput().getTrace<wrench::SimulationTimestampTaskCompletion>();
+//  auto trace = simulation.getOutput().getTrace<wrench::SimulationTimestampTaskCompletion>();
+  auto trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobCompletion>();
   WRENCH_INFO("Number of entries in TaskCompletion trace: %ld", trace.size());
 
   double lastTime = 0;
   for (auto &task : trace) {
-    std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getID() << " with time:  "
-              << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()
-              << std::endl;
-    lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());
+    auto t = task->getContent()->getTask();
+    std::cerr << "wrench," << t->getID() << "," << t->getStartDate() << "," << task->getContent()->getClock() << ","
+              << t->getEndDate() - t->getStartDate() << "," << t->getTopLevel() << std::endl;
+//    std::cerr << "Task in trace entry: " << task->getContent()->getTask()->getID() << " with time:  "
+//              << task->getContent()->getTask()->getEndDate() - task->getContent()->getTask()->getStartDate()
+//              << std::endl;
+//    lastTime = std::max(lastTime, task->getContent()->getTask()->getEndDate());
   }
 
   std::cerr << "Total Time: " << lastTime << std::endl;
