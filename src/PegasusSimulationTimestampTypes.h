@@ -18,10 +18,10 @@ namespace wrench {
 
     namespace pegasus {
 
-        class SimulationTimestampJobStart {
+        class SimulationTimestampJobSubmitted {
 
         public:
-            SimulationTimestampJobStart(WorkflowTask *task);
+            SimulationTimestampJobSubmitted(WorkflowTask *task);
 
             WorkflowTask *getTask();
 

@@ -98,8 +98,8 @@ int main(int argc, char **argv) {
   std::map<std::string, double> start_stats;
   std::map<std::string, double> completion_stats;
 
-  auto start_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobStart>();
-  for (auto &task : start_trace) {
+  auto submit_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobSubmitted>();
+  for (auto &task : submit_trace) {
     auto t = task->getContent();
     start_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
   }
