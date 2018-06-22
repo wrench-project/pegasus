@@ -32,14 +32,23 @@ set(SOURCE_FILES
         src/HTCondorService.h
         src/HTCondorService.cpp
         src/PegasusRun.cpp
-        src/HTCondorSchedd.h
-        src/HTCondorSchedd.cpp
+        src/DAGManScheduler.h
+        src/DAGManScheduler.cpp
         src/HTCondorServiceMessagePayload.h
         src/HTCondorServiceProperty.h
         src/SimulationConfig.h
         src/SimulationConfig.cpp
         src/PegasusSimulationTimestampTypes.h
         src/PegasusSimulationTimestampTypes.cpp
+        src/HTCondorCentralManagerService.h
+        src/HTCondorCentralManagerService.cpp
+        src/HTCondorCentralManagerServiceProperty.h
+        src/HTCondorCentralManagerServiceMessagePayload.h
+        src/HTCondorCentralManagerServiceMessagePayload.cpp
+        src/HTCondorCentralManagerServiceMessage.h
+        src/HTCondorCentralManagerServiceMessage.cpp
+        src/HTCondorNegotiatorService.h
+        src/HTCondorNegotiatorService.cpp
         )
 
 set(TEST_FILES

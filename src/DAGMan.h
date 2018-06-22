@@ -43,11 +43,20 @@ namespace wrench {
         private:
             int main() override;
 
+            struct TaskPriorityComparator {
+                bool operator()(WorkflowTask *&lhs, WorkflowTask *&rhs);
+            };
+
             /** @brief The job manager */
             std::shared_ptr<JobManager> job_manager;
             /** @brief Whether the workflow execution should be aborted */
             bool abort = false;
-
+            /** @brief Pair of level and number of running tasks in the level */
+            std::pair<unsigned long, unsigned long> running_tasks_level;
+            /** @brief */
+            unsigned long running_register_tasks = 0;
+            /** @brief */
+            std::set<WorkflowTask *> scheduled_tasks;
         };
     }
 }

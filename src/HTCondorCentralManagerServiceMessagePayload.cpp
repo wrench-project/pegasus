@@ -7,23 +7,10 @@
  * (at your option) any later version.
  */
 
-#ifndef PEGASUS_HTCONDORSERVICEPROPERTY_H
-#define PEGASUS_HTCONDORSERVICEPROPERTY_H
-
-#include "wrench-dev.h"
+#include "HTCondorCentralManagerServiceMessagePayload.h"
 
 namespace wrench {
     namespace pegasus {
-
-        /**
-         * @brief Properties for an HTCondor service
-         */
-        class HTCondorServiceProperty : public ComputeServiceProperty {
-
-        public:
-
-        };
+        SET_MESSAGEPAYLOAD_NAME(HTCondorCentralManagerServiceMessagePayload, HTCONDOR_NEGOTIATOR_DONE_MESSAGE_PAYLOAD);
     }
 }
-
-#endif //PEGASUS_HTCONDORSERVICEPROPERTY_H

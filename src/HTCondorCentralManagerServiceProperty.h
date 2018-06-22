@@ -7,8 +7,8 @@
  * (at your option) any later version.
  */
 
-#ifndef PEGASUS_HTCONDORSERVICEPROPERTY_H
-#define PEGASUS_HTCONDORSERVICEPROPERTY_H
+#ifndef PEGASUS_HTCONDORCENTRALMANAGERSERVICEPROPERTY_H
+#define PEGASUS_HTCONDORCENTRALMANAGERSERVICEPROPERTY_H
 
 #include "wrench-dev.h"
 
@@ -16,9 +16,9 @@ namespace wrench {
     namespace pegasus {
 
         /**
-         * @brief Properties for an HTCondor service
+         * @brief Properties for an HTCondor central manager service
          */
-        class HTCondorServiceProperty : public ComputeServiceProperty {
+        class HTCondorCentralManagerServiceProperty : public ComputeServiceProperty {
 
         public:
 
@@ -26,4 +26,4 @@ namespace wrench {
     }
 }
 
-#endif //PEGASUS_HTCONDORSERVICEPROPERTY_H
+#endif //PEGASUS_HTCONDORCENTRALMANAGERSERVICEPROPERTY_H

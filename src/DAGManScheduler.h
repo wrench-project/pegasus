@@ -22,13 +22,13 @@ namespace wrench {
         /**
          * @brief HTCondor scheduler daemon
          */
-        class HTCondorSchedd : public StandardJobScheduler {
+        class DAGManScheduler : public StandardJobScheduler {
 
         public:
-            HTCondorSchedd(FileRegistryService *file_registry_service,
+            DAGManScheduler(FileRegistryService *file_registry_service,
                            const std::set<StorageService *> &storage_services);
 
-            ~HTCondorSchedd();
+            ~DAGManScheduler();
 
             /***********************/
             /** \cond DEVELOPER    */
@@ -39,29 +39,15 @@ namespace wrench {
 
             void setSimuation(Simulation *simulation);
 
-            void notifyRunningTaskLevelCompletion(unsigned long level);
-
-            void notifyRegisterTaskCompletion();
-
             /***********************/
             /** \endcond           */
             /***********************/
 
         private:
-            struct TaskPriorityComparator {
-                bool operator()(WorkflowTask *&lhs, WorkflowTask *&rhs);
-            };
-
             /** @brief The file registry service */
             FileRegistryService *file_registry_service;
             /** @brief */
             std::set<StorageService *> storage_services;
-            /** @brief */
-            std::vector<WorkflowTask *> pending_tasks;
-            /** @brief Pair of level and number of running tasks in the level */
-            std::pair<unsigned long, unsigned long> running_tasks_level;
-            /** @brief */
-            unsigned long running_register_tasks = 0;
             /** @brief */
             Simulation *simulation;
         };

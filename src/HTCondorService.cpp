@@ -7,7 +7,7 @@
  * (at your option) any later version.
  */
 
-#include <numeric>
+#include <memory>
 #include <wrench-dev.h>
 
 #include "HTCondorService.h"
@@ -38,11 +38,7 @@ namespace wrench {
           if (pool_name.empty()) {
             throw std::runtime_error("A pool name for the HTCondor service should be provided.");
           }
-          if (compute_resources.empty()) {
-            throw std::runtime_error("At least one compute service should be provided");
-          }
           this->pool_name = pool_name;
-          this->compute_resources = compute_resources;
 
           // Set default and specified properties
           this->setProperties(this->default_property_values, std::move(property_list));
@@ -50,10 +46,9 @@ namespace wrench {
           // Set default and specified message payloads
           this->setMessagePayloads(this->default_messagepayload_values, std::move(messagepayload_list));
 
-          // setting simulation object for compute resources
-          for (auto &&cs : this->compute_resources) {
-            cs->simulation = this->simulation;
-          }
+          // create central manager service
+          this->central_manager = std::make_shared<HTCondorCentralManagerService>(hostname, compute_resources,
+                                                                                  property_list, messagepayload_list);
         }
 
         /**
@@ -62,7 +57,6 @@ namespace wrench {
         HTCondorService::~HTCondorService() {
           this->default_property_values.clear();
           this->default_messagepayload_values.clear();
-          this->compute_resources.clear();
         }
 
         /**
@@ -163,24 +157,18 @@ namespace wrench {
          * @brief Main method of the daemon
          *
          * @return 0 on termination
-        */
+         */
         int HTCondorService::main() {
 
-          TerminalOutput::setThisProcessLoggingColor(TerminalOutput::COLOR_RED);
+          TerminalOutput::setThisProcessLoggingColor(TerminalOutput::COLOR_MAGENTA);
           WRENCH_INFO("HTCondor Service starting on host %s listening on mailbox_name %s", this->hostname.c_str(),
                       this->mailbox_name.c_str());
 
-          // start the compute resource services
-          try {
-            for (auto &cs : this->compute_resources) {
-              cs->simulation = this->simulation;
-              cs->start(cs, true); // Daemonize!
-            }
-          } catch (std::runtime_error &e) {
-            throw;
-          }
+          // start the central manager service
+          this->central_manager->simulation = this->simulation;
+          this->central_manager->start(this->central_manager, true);
 
-          /** Main loop **/
+          // main loop
           while (this->processNextMessage()) {
             // no specific action
           }
@@ -225,79 +213,12 @@ namespace wrench {
             }
             return false;
 
-          } else if (auto *msg = dynamic_cast<ComputeServiceResourceInformationRequestMessage *>(message.get())) {
-            processGetResourceInformation(msg->answer_mailbox);
-            return true;
-
           } else if (auto *msg = dynamic_cast<ComputeServiceSubmitStandardJobRequestMessage *>(message.get())) {
             processSubmitStandardJob(msg->answer_mailbox, msg->job, msg->service_specific_args);
             return true;
 
           } else {
             throw std::runtime_error("Unexpected [" + message->getName() + "] message");
-          }
-        }
-
-        /**
-         * @brief Process a "get resource information message"
-         *
-         * @param answer_mailbox: the mailbox to which the description message should be sent
-         */
-        void HTCondorService::processGetResourceInformation(const std::string &answer_mailbox) {
-
-          // Build a dictionary
-          std::map<std::string, std::vector<double>> dict;
-
-          // Num hosts
-          std::vector<double> num_hosts;
-          num_hosts.push_back((double) this->compute_resources.size());
-          dict.insert(std::make_pair("num_hosts", num_hosts));
-
-          std::vector<double> num_cores;
-          std::vector<double> num_idle_cores;
-          std::vector<double> flop_rates;
-          std::vector<double> ram_capacities;
-          std::vector<double> ram_availabilities;
-
-          for (auto &&cs : this->compute_resources) {
-            // Num cores per compute resource
-            std::vector<unsigned long> ncores = cs->getNumCores();
-            num_cores.push_back(std::accumulate(ncores.begin(), ncores.end(), 0));
-
-            // Num idle cores per compute resource
-            std::vector<unsigned long> nicores = cs->getNumIdleCores();
-            num_idle_cores.push_back(std::accumulate(nicores.begin(), nicores.end(), 0));
-
-            // Flop rate per compute resource
-            flop_rates.push_back(S4U_Simulation::getHostFlopRate(cs->getHostname()));
-
-            // RAM capacity per host
-            ram_capacities.push_back(S4U_Simulation::getHostMemoryCapacity(cs->getHostname()));
-
-            // RAM availability per host
-            ram_availabilities.push_back(
-                    ComputeService::ALL_RAM);  // TODO FOR RAFAEL : What about VM memory availabilities???
-          }
-
-          dict.insert(std::make_pair("num_cores", num_cores));
-          dict.insert(std::make_pair("num_idle_cores", num_idle_cores));
-          dict.insert(std::make_pair("flop_rates", flop_rates));
-          dict.insert(std::make_pair("ram_capacities", ram_capacities));
-          dict.insert(std::make_pair("ram_availabilities", ram_availabilities));
-
-          std::vector<double> ttl;
-          ttl.push_back(ComputeService::ALL_RAM);
-          dict.insert(std::make_pair("ttl", ttl));
-
-          // Send the reply
-          ComputeServiceResourceInformationAnswerMessage *answer_message = new ComputeServiceResourceInformationAnswerMessage(
-                  dict,
-                  this->getMessagePayloadValueAsDouble(
-                          HTCondorServiceMessagePayload::RESOURCE_DESCRIPTION_ANSWER_MESSAGE_PAYLOAD));
-          try {
-            S4U_Mailbox::dputMessage(answer_mailbox, answer_message);
-          } catch (std::shared_ptr<NetworkError> &cause) {
-            return;
           }
         }
 
@@ -328,34 +249,16 @@ namespace wrench {
             return;
           }
 
-          for (auto &&cs : this->compute_resources) {
-            unsigned long sum_num_idle_cores;
-            std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
-            sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
+          this->central_manager->submitStandardJob(job, service_specific_args);
 
-            if (sum_num_idle_cores >= job->getMinimumRequiredNumCores()) {
-              cs->submitStandardJob(job, service_specific_args);
-              try {
-                S4U_Mailbox::dputMessage(
-                        answer_mailbox,
-                        new ComputeServiceSubmitStandardJobAnswerMessage(
-                                job, this, true, nullptr, this->getMessagePayloadValueAsDouble(
-                                        HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
-                return;
-              } catch (std::shared_ptr<NetworkError> &cause) {
-                return;
-              }
-            }
-          }
-
-          // could not find a suitable resource
+          // send positive answer
           try {
             S4U_Mailbox::dputMessage(
                     answer_mailbox,
                     new ComputeServiceSubmitStandardJobAnswerMessage(
-                            job, this, false, std::shared_ptr<FailureCause>(new NotEnoughComputeResources(job, this)),
-                            this->getMessagePayloadValueAsDouble(
+                            job, this, true, nullptr, this->getMessagePayloadValueAsDouble(
                                     HTCondorServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD)));
+            return;
           } catch (std::shared_ptr<NetworkError> &cause) {
             return;
           }
@@ -366,11 +269,8 @@ namespace wrench {
          */
         void HTCondorService::terminate() {
           this->setStateToDown();
-
-          WRENCH_INFO("Stopping Compute Services");
-          for (auto &cs : this->compute_resources) {
-            cs->stop();
-          }
+          this->central_manager->stop();
         }
+
     }
 }

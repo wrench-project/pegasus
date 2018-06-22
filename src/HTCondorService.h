@@ -11,6 +11,7 @@
 #define WRENCH_PEGASUS_HTCONDOR_H
 
 #include <wrench-dev.h>
+#include "HTCondorCentralManagerService.h"
 #include "HTCondorServiceProperty.h"
 #include "HTCondorServiceMessagePayload.h"
 
@@ -24,8 +25,8 @@ namespace wrench {
         class HTCondorService : public ComputeService {
         private:
             std::map<std::string, std::string> default_property_values = {
-                    {HTCondorServiceProperty::SUPPORTS_PILOT_JOBS,                         "true"},
-                    {HTCondorServiceProperty::SUPPORTS_STANDARD_JOBS,                      "true"}
+                    {HTCondorServiceProperty::SUPPORTS_PILOT_JOBS,    "true"},
+                    {HTCondorServiceProperty::SUPPORTS_STANDARD_JOBS, "true"}
             };
 
             std::map<std::string, std::string> default_messagepayload_values = {
@@ -79,16 +80,14 @@ namespace wrench {
 
             bool processNextMessage();
 
-            void processGetResourceInformation(const std::string &answer_mailbox);
-
             void processSubmitStandardJob(const std::string &answer_mailbox, StandardJob *job,
                                           std::map<std::string, std::string> &service_specific_args);
 
             void terminate();
 
             std::string pool_name;
-            std::set<std::shared_ptr<ComputeService>> compute_resources;
             StorageService *local_storage_service;
+            std::shared_ptr<HTCondorCentralManagerService> central_manager;
         };
     }
 }
