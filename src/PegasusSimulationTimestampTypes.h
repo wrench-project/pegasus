@@ -32,6 +32,20 @@ namespace wrench {
             WorkflowTask *task;
         };
 
+        class SimulationTimestampJobScheduled {
+
+        public:
+            SimulationTimestampJobScheduled(WorkflowTask *task);
+
+            WorkflowTask *getTask();
+
+            double getClock();
+
+        private:
+            double clock;
+            WorkflowTask *task;
+        };
+
         class SimulationTimestampJobCompletion {
 
         public:

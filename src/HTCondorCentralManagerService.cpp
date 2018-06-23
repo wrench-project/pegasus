@@ -175,41 +175,6 @@ namespace wrench {
           return 0;
         }
 
-//        /**
-//         * @brief Dispatch one pending job, if possible
-//         */
-//        void HTCondorCentralManagerService::dispatchPendingJobs() {
-//
-//          // TODO: check how to pass the service specific arguments
-//          std::map<std::string, std::string> specific_args;
-//
-//          bool submitted = false;
-//
-//          for (auto it = this->scheduled_jobs.begin(); it != this->scheduled_jobs.end();) {
-//            auto job = *it;
-//
-//            for (auto &&cs : this->compute_resources) {
-//              unsigned long sum_num_idle_cores;
-//              std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
-//              sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
-//
-//              if (sum_num_idle_cores >= job->getMinimumRequiredNumCores()) {
-//                WRENCH_INFO("Dispatching job %s with %ld tasks", job->getName().c_str(), job->getTasks().size());
-//                job->pushCallbackMailbox(this->mailbox_name);
-//                cs->submitStandardJob(job, specific_args);
-//                this->scheduled_jobs.erase(it);
-//                submitted = true;
-//                WRENCH_INFO("Dispatched job %s with %ld tasks", job->getName().c_str(), job->getTasks().size());
-//                break;
-//              }
-//            }
-//
-//            if (not submitted) {
-//              ++it;
-//            }
-//          }
-//        }
-
         /**
          * @brief Wait for and react to any incoming message
          *
@@ -318,7 +283,6 @@ namespace wrench {
         void HTCondorCentralManagerService::processNegotiatorCompletion(
                 std::vector<wrench::StandardJob *> pending_jobs) {
 
-          WRENCH_INFO("--------------------------- NEW PENDING JOBS: %ld", pending_jobs.size());
           for (auto sjob : pending_jobs) {
             for (auto it = this->pending_jobs.begin(); it != this->pending_jobs.end(); ++it) {
               auto pjob = *it;
@@ -328,7 +292,6 @@ namespace wrench {
               }
             }
           }
-//          this->scheduled_jobs = scheduled_jobs;
           this->dispatching_jobs = false;
         }
 

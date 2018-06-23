@@ -134,6 +134,9 @@ namespace wrench {
             }
             WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
             this->getJobManager()->submitJob(job, htcondor_service);
+            // create job scheduled event
+            this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
+                    new SimulationTimestampJobScheduled(task));
             WRENCH_INFO("Scheduled task: %s", task->getID().c_str());
             scheduled_tasks++;
           }

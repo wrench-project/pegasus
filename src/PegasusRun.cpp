@@ -97,6 +97,9 @@ int main(int argc, char **argv) {
   // statistics
   std::map<std::string, double> start_stats;
   std::map<std::string, double> completion_stats;
+  std::map<std::string, double> scheduled_stats;
+  std::map<std::string, double> duration_stats;
+  std::map<std::string, unsigned long> level_stats;
 
   auto submit_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobSubmitted>();
   for (auto &task : submit_trace) {
@@ -104,19 +107,32 @@ int main(int argc, char **argv) {
     start_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
   }
 
+  auto scheduled_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobScheduled>();
+  for (auto &task : scheduled_trace) {
+    auto t = task->getContent();
+    scheduled_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
+  }
+
   auto completion_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobCompletion>();
   for (auto &task : completion_trace) {
     auto t = task->getContent();
+    duration_stats.insert(std::make_pair(t->getTask()->getID(), t->getTask()->getEndDate() - t->getTask()->getStartDate()));
     completion_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
+    level_stats.insert(std::make_pair(t->getTask()->getID(), t->getTask()->getTopLevel()));
   }
 
   for (const auto &task : start_stats) {
     double completion_time = (*completion_stats.find(task.first)).second;
+    double duration = completion_time - (*scheduled_stats.find(task.first)).second;
+    unsigned long level = (*level_stats.find(task.first)).second;
     std::cerr << "wrench," <<
               task.first << "," <<
               task.second << "," <<
               completion_time << "," <<
-              completion_time - task.second << std::endl;
+              completion_time - task.second << "," <<
+              duration << "," <<
+              level <<
+              std::endl;
   }
 
   return 0;

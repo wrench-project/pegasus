@@ -16,6 +16,67 @@
     "makespan": 1869.0,
     "jobs": [
       {
+        "name": "sifting_ID0000012",
+        "type": "compute",
+        "runtime": 0.47,
+        "parents": [
+          "stage_in_local_local_0_0",
+          "stage_in_local_local_0_1"
+        ],
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
+            "size": 209000000
+          },
+          {
+            "link": "output",
+            "name": "sifted.SIFT.chr21.txt",
+            "size": 231958
+          }
+        ],
+        "avgCPU": 109.7872,
+        "memory": 154220.0,
+        "bytesRead": 554666622,
+        "bytesWritten": 11783906,
+        "arguments": [
+          "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
+          "21"
+        ],
+        "machine": "workers1-2",
+        "priority": 30
+      },
+      {
+        "name": "sifting_ID0000024",
+        "type": "compute",
+        "runtime": 0.595,
+        "parents": [
+          "stage_in_local_local_0_1"
+        ],
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
+            "size": 205000000
+          },
+          {
+            "link": "output",
+            "name": "sifted.SIFT.chr22.txt",
+            "size": 480587
+          }
+        ],
+        "avgCPU": 112.9412,
+        "memory": 154152.0,
+        "bytesRead": 598694651,
+        "bytesWritten": 24548669,
+        "arguments": [
+          "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
+          "22"
+        ],
+        "machine": "workers1-2",
+        "priority": 30
+      },
+      {
         "name": "individuals_ID0000001",
         "type": "compute",
         "runtime": 588.914,
@@ -500,37 +561,6 @@
         "priority": 30
       },
       {
-        "name": "sifting_ID0000012",
-        "type": "compute",
-        "runtime": 0.47,
-        "parents": [
-          "stage_in_local_local_0_0",
-          "stage_in_local_local_0_1"
-        ],
-        "files": [
-          {
-            "link": "input",
-            "name": "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
-            "size": 209000000
-          },
-          {
-            "link": "output",
-            "name": "sifted.SIFT.chr21.txt",
-            "size": 231958
-          }
-        ],
-        "avgCPU": 109.7872,
-        "memory": 154220.0,
-        "bytesRead": 554666622,
-        "bytesWritten": 11783906,
-        "arguments": [
-          "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
-          "21"
-        ],
-        "machine": "workers1-2",
-        "priority": 20
-      },
-      {
         "name": "individuals_ID0000013",
         "type": "compute",
         "runtime": 547.848,
@@ -1013,36 +1043,6 @@
         ],
         "machine": "workers1-2",
         "priority": 30
-      },
-      {
-        "name": "sifting_ID0000024",
-        "type": "compute",
-        "runtime": 0.595,
-        "parents": [
-          "stage_in_local_local_0_1"
-        ],
-        "files": [
-          {
-            "link": "input",
-            "name": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
-            "size": 205000000
-          },
-          {
-            "link": "output",
-            "name": "sifted.SIFT.chr22.txt",
-            "size": 480587
-          }
-        ],
-        "avgCPU": 112.9412,
-        "memory": 154152.0,
-        "bytesRead": 598694651,
-        "bytesWritten": 24548669,
-        "arguments": [
-          "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf",
-          "22"
-        ],
-        "machine": "workers1-2",
-        "priority": 20
       },
       {
         "name": "mutation_overlap_ID0000025",

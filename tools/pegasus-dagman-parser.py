@@ -101,8 +101,24 @@ def _parse_dagman_file(workflow, pegasus_dir):
                 for task in workflow['tasks']:
                     if task['id'] == s[3]:
                         task['end_time'] = event_time - start_time
-                        task['duration'] = task['end_time'] - task['start_time']
+                        task['walltime'] = task['end_time'] - task['start_time']
                         break
+
+
+def _parse_json_file(workflow, workflow_json):
+    """
+    Parse the Worklfow JSON file
+    :param workflow: workflow object
+    :param workflow_json: pegasus workflow json file
+    """
+    with open(workflow_json) as workflow_file:
+        w = json.load(workflow_file)
+        for job in w['workflow']['jobs']:
+            for j in workflow['tasks']:
+                if job['name'] == j['id']:
+                    j['duration'] = job['runtime']
+                    j['level'] = 0
+                    break
 
 
 def main():
@@ -110,6 +126,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Parse Pegasus submit directory to generate CSV file of tasks execution.')
     parser.add_argument('pegasus_dir', metavar='PEGASUS_DIR', help='Pegasus submit directory')
+    parser.add_argument('workflow_json', metavar='WORKFLOW_JSON', help='JSON workflow generated from Pegasus')
     parser.add_argument('-o', dest='output', action='store', help='Output filename')
     parser.add_argument('-c', '--csv', action='store_true', help='CSV Format')
     parser.add_argument('-d', '--debug', action='store_true', help='Print debug messages to stderr')
@@ -128,6 +145,9 @@ def main():
     # parse DAG file
     _parse_dagman_file(workflow, args.pegasus_dir)
 
+    # parse JSON file
+    _parse_json_file(workflow, args.workflow_json)
+
     if args.output:
 
         if not args.csv:
@@ -136,18 +156,32 @@ def main():
                 logger.info('JSON trace file written to "%s".' % args.output)
         else:
             outfile = csv.writer(open(args.output, "wb+"))
-            outfile.writerow(['engine', 'task', 'start', 'end', 'duration'])
+            outfile.writerow(['engine', 'task', 'start', 'end', 'walltime', 'duration', 'level'])
             for task in workflow['tasks']:
-                outfile.writerow(['pegasus', task['id'], task['start_time'], task['end_time'], task['duration']])
+                outfile.writerow(['pegasus',
+                                  task['id'],
+                                  task['start_time'],
+                                  task['end_time'],
+                                  task['walltime'],
+                                  task['duration'],
+                                  task['level']
+                                  ])
 
     else:
         if not args.csv:
             print(json.dumps(workflow, indent=2))
         else:
             out = csv.writer(sys.stdout)
-            out.writerow(['engine', 'task', 'start', 'end', 'duration'])
+            out.writerow(['engine', 'task', 'start', 'end', 'walltime', 'duration', 'level'])
             for task in workflow['tasks']:
-                out.writerow(['pegasus', task['id'], task['start_time'], task['end_time'], task['duration']])
+                out.writerow(['pegasus',
+                              task['id'],
+                              task['start_time'],
+                              task['end_time'],
+                              task['walltime'],
+                              task['duration'],
+                              task['level']
+                              ])
 
 
 if __name__ == '__main__':
