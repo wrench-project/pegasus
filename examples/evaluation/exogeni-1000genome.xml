@@ -8,6 +8,7 @@
         <host id="workers1-0" speed="1f" core="4"/>
         <host id="workers1-3" speed="1f" core="4"/>
         <host id="workers1-1" speed="1f" core="4"/>
+        <host id="workers1-4" speed="1f" core="4"/>
         <link id="1" bandwidth="125MBps" latency="100us"/>
         <link id="2" bandwidth="55MBps" latency="100us"/>
         <route src="master" dst="workers1-2">
@@ -20,6 +21,9 @@
             <link_ctn id="1"/>
         </route>
         <route src="master" dst="workers1-1">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="workers1-4">
             <link_ctn id="1"/>
         </route>
         <route src="data" dst="master">

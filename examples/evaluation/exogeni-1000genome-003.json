@@ -1,0 +1,3394 @@
+{
+  "name": "1000genome-20180202T200518Z-0", 
+  "description": "Trace generated with wrench-pegasus-parser.py from http://wrench-project.org", 
+  "createdAt": "2018-06-23T12:03:31.442968Z", 
+  "schemaVersion": "1.0", 
+  "wms": {
+    "url": "http://pegasus.isi.edu", 
+    "version": "4.9.0panorama", 
+    "name": "Pegasus"
+  }, 
+  "author": {
+    "name": "rafsilva", 
+    "email": "support@wrench-project.org"
+  }, 
+  "workflow": {
+    "makespan": 758.0, 
+    "jobs": [
+      {
+        "name": "individuals_wrapper_ID0000001", 
+        "type": "compute", 
+        "runtime": 171.154, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-1-1001.tar.gz", 
+            "size": 132584
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 44.0492, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "1", 
+          "1001", 
+          "10000"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000002", 
+        "type": "compute", 
+        "runtime": 192.414, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-1001-2001.tar.gz", 
+            "size": 429468
+          }
+        ], 
+        "avgCPU": 51.146, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "1001", 
+          "2001", 
+          "10000"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000003", 
+        "type": "compute", 
+        "runtime": 164.375, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-2001-3001.tar.gz", 
+            "size": 180312
+          }
+        ], 
+        "avgCPU": 50.5989, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "2001", 
+          "3001", 
+          "10000"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000004", 
+        "type": "compute", 
+        "runtime": 162.49, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-3001-4001.tar.gz", 
+            "size": 145104
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 51.4198, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "3001", 
+          "4001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000005", 
+        "type": "compute", 
+        "runtime": 161.363, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-4001-5001.tar.gz", 
+            "size": 227159
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 51.5285, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "4001", 
+          "5001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000006", 
+        "type": "compute", 
+        "runtime": 165.267, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-5001-6001.tar.gz", 
+            "size": 381700
+          }
+        ], 
+        "avgCPU": 50.58, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "5001", 
+          "6001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000007", 
+        "type": "compute", 
+        "runtime": 162.898, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-6001-7001.tar.gz", 
+            "size": 273206
+          }
+        ], 
+        "avgCPU": 50.5224, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "6001", 
+          "7001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000008", 
+        "type": "compute", 
+        "runtime": 155.198, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-7001-8001.tar.gz", 
+            "size": 394821
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 52.4182, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "7001", 
+          "8001", 
+          "10000"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000009", 
+        "type": "compute", 
+        "runtime": 159.193, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-8001-9001.tar.gz", 
+            "size": 160693
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 51.9143, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "8001", 
+          "9001", 
+          "10000"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000010", 
+        "type": "compute", 
+        "runtime": 160.482, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input",
+            "name": "ALL.chr21.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n-9001-10001.tar.gz", 
+            "size": 114044
+          }
+        ], 
+        "avgCPU": 50.1614, 
+        "arguments": [
+          "ALL.chr21.80000.vcf", 
+          "21", 
+          "9001", 
+          "10001", 
+          "10000"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_merge_wrapper_ID0000011", 
+        "type": "compute", 
+        "runtime": 28.08, 
+        "parents": [
+          "individuals_wrapper_ID0000010", 
+          "stage_in_local_local_1_0", 
+          "individuals_wrapper_ID0000007", 
+          "individuals_wrapper_ID0000006", 
+          "individuals_wrapper_ID0000005", 
+          "individuals_wrapper_ID0000004", 
+          "individuals_wrapper_ID0000009", 
+          "individuals_wrapper_ID0000008", 
+          "individuals_wrapper_ID0000003", 
+          "individuals_wrapper_ID0000002", 
+          "individuals_wrapper_ID0000001"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "chr21n-7001-8001.tar.gz", 
+            "size": 394821
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-1001-2001.tar.gz", 
+            "size": 429468
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-2001-3001.tar.gz", 
+            "size": 180312
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-4001-5001.tar.gz", 
+            "size": 227159
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-8001-9001.tar.gz", 
+            "size": 160693
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-1-1001.tar.gz", 
+            "size": 132584
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-3001-4001.tar.gz", 
+            "size": 145104
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-6001-7001.tar.gz", 
+            "size": 273206
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals_merge", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-5001-6001.tar.gz", 
+            "size": 381700
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n-9001-10001.tar.gz", 
+            "size": 114044
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }
+        ], 
+        "avgCPU": 39.5584, 
+        "arguments": [
+          "21", 
+          "chr21n-1-1001.tar.gz", 
+          "chr21n-1001-2001.tar.gz", 
+          "chr21n-2001-3001.tar.gz", 
+          "chr21n-3001-4001.tar.gz", 
+          "chr21n-4001-5001.tar.gz", 
+          "chr21n-5001-6001.tar.gz", 
+          "chr21n-6001-7001.tar.gz", 
+          "chr21n-7001-8001.tar.gz", 
+          "chr21n-8001-9001.tar.gz", 
+          "chr21n-9001-10001.tar.gz"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 30
+      }, 
+      {
+        "name": "sifting_ID0000012", 
+        "type": "compute", 
+        "runtime": 0.391, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifting", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }
+        ], 
+        "avgCPU": 96.1637, 
+        "arguments": [
+          "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf", 
+          "21"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000013", 
+        "type": "compute", 
+        "runtime": 139.875, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-1-1001.tar.gz", 
+            "size": 134977
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 45.615, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "1", 
+          "1001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000014", 
+        "type": "compute", 
+        "runtime": 158.643, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-1001-2001.tar.gz", 
+            "size": 136929
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 51.3127, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "1001", 
+          "2001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000015", 
+        "type": "compute", 
+        "runtime": 223.229, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-2001-3001.tar.gz", 
+            "size": 164180
+          }
+        ], 
+        "avgCPU": 37.3357, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "2001", 
+          "3001", 
+          "10000"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000016", 
+        "type": "compute", 
+        "runtime": 224.613, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-3001-4001.tar.gz", 
+            "size": 145550
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 36.9133, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "3001", 
+          "4001", 
+          "10000"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000017", 
+        "type": "compute", 
+        "runtime": 222.099, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-4001-5001.tar.gz", 
+            "size": 159095
+          }
+        ], 
+        "avgCPU": 37.3527, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "4001", 
+          "5001", 
+          "10000"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000018", 
+        "type": "compute", 
+        "runtime": 183.005, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-5001-6001.tar.gz", 
+            "size": 141387
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 50.7483, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "5001", 
+          "6001", 
+          "10000"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000019", 
+        "type": "compute", 
+        "runtime": 222.175, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-6001-7001.tar.gz", 
+            "size": 160710
+          }
+        ], 
+        "avgCPU": 38.0547, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "6001", 
+          "7001", 
+          "10000"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000020", 
+        "type": "compute", 
+        "runtime": 159.993, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-7001-8001.tar.gz", 
+            "size": 160371
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 51.7223, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "7001", 
+          "8001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000021", 
+        "type": "compute", 
+        "runtime": 183.835, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-8001-9001.tar.gz", 
+            "size": 155514
+          }
+        ], 
+        "avgCPU": 51.1546, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "8001", 
+          "9001", 
+          "10000"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_wrapper_ID0000022", 
+        "type": "compute", 
+        "runtime": 155.392, 
+        "parents": [
+          "stage_in_local_local_0_0", 
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }, 
+          {
+            "link": "input",
+            "name": "ALL.chr22.80000.vcf",
+            "size": 774000000
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n-9001-10001.tar.gz", 
+            "size": 155610
+          }, 
+          {
+            "link": "output", 
+            "name": "columns.txt", 
+            "size": 20078
+          }
+        ], 
+        "avgCPU": 52.1056, 
+        "arguments": [
+          "ALL.chr22.80000.vcf", 
+          "22", 
+          "9001", 
+          "10001", 
+          "10000"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "individuals_merge_wrapper_ID0000023", 
+        "type": "compute", 
+        "runtime": 32.352, 
+        "parents": [
+          "individuals_wrapper_ID0000021", 
+          "individuals_wrapper_ID0000020", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_wrapper_ID0000018", 
+          "individuals_wrapper_ID0000017", 
+          "individuals_wrapper_ID0000016", 
+          "individuals_wrapper_ID0000015", 
+          "individuals_wrapper_ID0000019", 
+          "individuals_wrapper_ID0000014", 
+          "individuals_wrapper_ID0000013", 
+          "stage_in_local_local_1_0"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "chr22n-1001-2001.tar.gz", 
+            "size": 136929
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-2001-3001.tar.gz", 
+            "size": 164180
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-6001-7001.tar.gz", 
+            "size": 160710
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-1-1001.tar.gz", 
+            "size": 134977
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-5001-6001.tar.gz", 
+            "size": 141387
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-3001-4001.tar.gz", 
+            "size": 145550
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-4001-5001.tar.gz", 
+            "size": 159095
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-9001-10001.tar.gz", 
+            "size": 155610
+          }, 
+          {
+            "link": "input", 
+            "name": "individuals_merge", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-7001-8001.tar.gz", 
+            "size": 160371
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n-8001-9001.tar.gz", 
+            "size": 155514
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }
+        ], 
+        "avgCPU": 36.0658, 
+        "arguments": [
+          "22", 
+          "chr22n-1-1001.tar.gz", 
+          "chr22n-1001-2001.tar.gz", 
+          "chr22n-2001-3001.tar.gz", 
+          "chr22n-3001-4001.tar.gz", 
+          "chr22n-4001-5001.tar.gz", 
+          "chr22n-5001-6001.tar.gz", 
+          "chr22n-6001-7001.tar.gz", 
+          "chr22n-7001-8001.tar.gz", 
+          "chr22n-8001-9001.tar.gz", 
+          "chr22n-9001-10001.tar.gz"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 30
+      }, 
+      {
+        "name": "sifting_ID0000024", 
+        "type": "compute", 
+        "runtime": 0.461, 
+        "parents": [
+          "stage_in_local_local_0_1", 
+          "stage_in_local_local_0_2"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "sifting", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }
+        ], 
+        "avgCPU": 78.9588, 
+        "arguments": [
+          "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf", 
+          "22"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 20
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000025", 
+        "type": "compute", 
+        "runtime": 5.526, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "SAS", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-SAS.tar.gz", 
+            "size": 143237
+          }
+        ], 
+        "avgCPU": 99.3847, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "SAS"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000026", 
+        "type": "compute", 
+        "runtime": 112.804, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "SAS", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-SAS-freq.tar.gz", 
+            "size": 261600
+          }
+        ], 
+        "avgCPU": 99.7341, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "SAS"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000027", 
+        "type": "compute", 
+        "runtime": 27.055, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "ALL", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-ALL.tar.gz", 
+            "size": 167078
+          }
+        ], 
+        "avgCPU": 98.8061, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "ALL"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000028", 
+        "type": "compute", 
+        "runtime": 115.432, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "ALL", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-ALL-freq.tar.gz", 
+            "size": 285759
+          }
+        ], 
+        "avgCPU": 99.6292, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "ALL"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000029", 
+        "type": "compute", 
+        "runtime": 4.668, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "AMR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-AMR.tar.gz", 
+            "size": 142207
+          }
+        ], 
+        "avgCPU": 99.0574, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "AMR"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000030", 
+        "type": "compute", 
+        "runtime": 114.509, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "AMR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-AMR-freq.tar.gz", 
+            "size": 256930
+          }
+        ], 
+        "avgCPU": 99.8035, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "AMR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000031", 
+        "type": "compute", 
+        "runtime": 5.216, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EAS", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-EAS.tar.gz", 
+            "size": 142765
+          }
+        ], 
+        "avgCPU": 99.8466, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "EAS"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000032", 
+        "type": "compute", 
+        "runtime": 109.377, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EAS", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-EAS-freq.tar.gz", 
+            "size": 262912
+          }
+        ], 
+        "avgCPU": 99.9735, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "EAS"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000033", 
+        "type": "compute", 
+        "runtime": 6.504, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "AFR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-AFR.tar.gz", 
+            "size": 144606
+          }
+        ], 
+        "avgCPU": 99.631, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "AFR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000034", 
+        "type": "compute", 
+        "runtime": 114.576, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "AFR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-AFR-freq.tar.gz", 
+            "size": 270679
+          }
+        ], 
+        "avgCPU": 99.4449, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "AFR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000035", 
+        "type": "compute", 
+        "runtime": 5.491, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EUR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-EUR.tar.gz", 
+            "size": 141667
+          }
+        ], 
+        "avgCPU": 99.654, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "EUR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000036", 
+        "type": "compute", 
+        "runtime": 112.864, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EUR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-EUR-freq.tar.gz", 
+            "size": 264188
+          }
+        ], 
+        "avgCPU": 99.642, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "EUR"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000037", 
+        "type": "compute", 
+        "runtime": 3.525, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "GBR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-GBR.tar.gz", 
+            "size": 136765
+          }
+        ], 
+        "avgCPU": 99.5177, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "GBR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000038", 
+        "type": "compute", 
+        "runtime": 113.087, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_merge_wrapper_ID0000011"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr21n.tar.gz", 
+            "size": 6326020
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr21.txt", 
+            "size": 231958
+          }, 
+          {
+            "link": "input", 
+            "name": "GBR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr21-GBR-freq.tar.gz", 
+            "size": 217778
+          }
+        ], 
+        "avgCPU": 99.6649, 
+        "arguments": [
+          "-c", 
+          "21", 
+          "-pop", 
+          "GBR"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000039", 
+        "type": "compute", 
+        "runtime": 5.448, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "SAS", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-SAS.tar.gz", 
+            "size": 145797
+          }
+        ], 
+        "avgCPU": 99.486, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "SAS"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000040", 
+        "type": "compute", 
+        "runtime": 117.712, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "SAS", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-SAS-freq.tar.gz", 
+            "size": 263157
+          }
+        ], 
+        "avgCPU": 99.633, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "SAS"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000041", 
+        "type": "compute", 
+        "runtime": 26.954, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "ALL", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-ALL.tar.gz", 
+            "size": 168391
+          }
+        ], 
+        "avgCPU": 98.9389, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "ALL"
+        ], 
+        "machine": "workers1-0", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000042", 
+        "type": "compute", 
+        "runtime": 119.378, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "ALL", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-ALL-freq.tar.gz", 
+            "size": 287183
+          }
+        ], 
+        "avgCPU": 99.1305, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "ALL"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000043", 
+        "type": "compute", 
+        "runtime": 4.596, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "AMR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-AMR.tar.gz", 
+            "size": 144258
+          }
+        ], 
+        "avgCPU": 98.2594, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "AMR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000044", 
+        "type": "compute", 
+        "runtime": 107.246, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "AMR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-AMR-freq.tar.gz", 
+            "size": 257869
+          }
+        ], 
+        "avgCPU": 99.8713, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "AMR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000045", 
+        "type": "compute", 
+        "runtime": 5.054, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EAS", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-EAS.tar.gz", 
+            "size": 144942
+          }
+        ], 
+        "avgCPU": 99.723, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "EAS"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000046", 
+        "type": "compute", 
+        "runtime": 112.529, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EAS", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-EAS-freq.tar.gz", 
+            "size": 264064
+          }
+        ], 
+        "avgCPU": 99.8711, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "EAS"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000047", 
+        "type": "compute", 
+        "runtime": 6.415, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "AFR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-AFR.tar.gz", 
+            "size": 146396
+          }
+        ], 
+        "avgCPU": 99.6415, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "AFR"
+        ], 
+        "machine": "workers1-2", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000048", 
+        "type": "compute", 
+        "runtime": 112.432, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "AFR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-AFR-freq.tar.gz", 
+            "size": 271047
+          }
+        ], 
+        "avgCPU": 99.936, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "AFR"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000049", 
+        "type": "compute", 
+        "runtime": 5.597, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EUR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-EUR.tar.gz", 
+            "size": 143756
+          }
+        ], 
+        "avgCPU": 97.6237, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "EUR"
+        ], 
+        "machine": "workers1-1", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000050", 
+        "type": "compute", 
+        "runtime": 117.621, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "EUR", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-EUR-freq.tar.gz", 
+            "size": 265886
+          }
+        ], 
+        "avgCPU": 99.7407, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "EUR"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 40
+      }, 
+      {
+        "name": "mutation_overlap_wrapper_ID0000051", 
+        "type": "compute", 
+        "runtime": 3.203, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "GBR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-GBR.tar.gz", 
+            "size": 138895
+          }
+        ], 
+        "avgCPU": 99.6566, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "GBR"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 40
+      }, 
+      {
+        "name": "frequency_wrapper_ID0000052", 
+        "type": "compute", 
+        "runtime": 117.208, 
+        "parents": [
+          "stage_in_local_local_2_2", 
+          "stage_in_local_local_2_0", 
+          "stage_in_local_local_2_1", 
+          "individuals_wrapper_ID0000022", 
+          "sifting_ID0000024", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [
+          {
+            "link": "input", 
+            "name": "columns.txt", 
+            "size": 20078
+          }, 
+          {
+            "link": "input", 
+            "name": "sifted.SIFT.chr22.txt", 
+            "size": 480587
+          }, 
+          {
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "link": "input", 
+            "name": "chr22n.tar.gz", 
+            "size": 2400152
+          }, 
+          {
+            "link": "input", 
+            "name": "GBR", 
+            "size": 0
+          }, 
+          {
+            "link": "output", 
+            "name": "chr22-GBR-freq.tar.gz", 
+            "size": 218549
+          }
+        ], 
+        "avgCPU": 99.3345, 
+        "arguments": [
+          "-c", 
+          "22", 
+          "-pop", 
+          "GBR"
+        ], 
+        "machine": "workers1-3", 
+        "priority": 40
+      }, 
+      {
+        "name": "create_dir_1000genome-20180202T200518Z_0_local", 
+        "type": "auxiliary", 
+        "runtime": 14.423, 
+        "parents": [], 
+        "files": [], 
+        "priority": 800
+      }, 
+      {
+        "name": "stage_in_local_local_2_2", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "mutation_overlap_wrapper", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "AFR", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "frequency_wrapper", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 2.5796, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "stage_in_local_local_0_0", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "data",
+            "link": "input", 
+            "name": "ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "individuals_wrapper", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "data",
+            "link": "input", 
+            "name": "ALL.chr21.80000.vcf", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 2.7979, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "stage_in_local_local_0_1", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "sifting", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "individuals", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 2.4146, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "stage_in_local_local_1_0", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "individuals_merge_wrapper", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "individuals_merge", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 2.0501, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "stage_in_local_local_0_2", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "data",
+            "link": "input", 
+            "name": "ALL.chr22.80000.vcf", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "data",
+            "link": "input", 
+            "name": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 1.8329, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "stage_in_local_local_2_0", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "ALL", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "AMR", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "GBR", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "EUR", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 2.0349, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "stage_in_local_local_2_1", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "create_dir_1000genome-20180202T200518Z_0_local"
+        ], 
+        "files": [
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "mutation_overlap", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "EAS", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "frequency", 
+            "size": 0
+          }, 
+          {
+            "dest": "local", 
+            "src": "local", 
+            "link": "input", 
+            "name": "SAS", 
+            "size": 0
+          }
+        ], 
+        "avgCPU": 2.6492, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 700
+      }, 
+      {
+        "name": "register_local_0_1", 
+        "type": "auxiliary", 
+        "runtime": 0.544, 
+        "parents": [
+          "individuals_wrapper_ID0000021", 
+          "individuals_wrapper_ID0000020", 
+          "sifting_ID0000024", 
+          "individuals_wrapper_ID0000017", 
+          "individuals_wrapper_ID0000016", 
+          "individuals_wrapper_ID0000019", 
+          "individuals_wrapper_ID0000010", 
+          "individuals_wrapper_ID0000013", 
+          "individuals_wrapper_ID0000007", 
+          "individuals_wrapper_ID0000005", 
+          "individuals_wrapper_ID0000004", 
+          "individuals_wrapper_ID0000008", 
+          "individuals_wrapper_ID0000003", 
+          "individuals_wrapper_ID0000001"
+        ], 
+        "files": [], 
+        "avgCPU": 116.1765, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/00/register_local_0_1.in"
+        ], 
+        "machine": "master", 
+        "priority": 30
+      }, 
+      {
+        "name": "register_local_0_2", 
+        "type": "auxiliary", 
+        "runtime": 0.409, 
+        "parents": [
+          "individuals_wrapper_ID0000021", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_wrapper_ID0000018", 
+          "individuals_wrapper_ID0000017", 
+          "individuals_wrapper_ID0000015", 
+          "individuals_wrapper_ID0000019", 
+          "individuals_wrapper_ID0000014", 
+          "individuals_wrapper_ID0000013", 
+          "individuals_wrapper_ID0000006", 
+          "individuals_wrapper_ID0000005", 
+          "individuals_wrapper_ID0000009", 
+          "individuals_wrapper_ID0000008", 
+          "individuals_wrapper_ID0000002", 
+          "individuals_wrapper_ID0000001"
+        ], 
+        "files": [], 
+        "avgCPU": 120.2934, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/00/register_local_0_2.in"
+        ], 
+        "machine": "master", 
+        "priority": 30
+      }, 
+      {
+        "name": "register_local_0_0", 
+        "type": "auxiliary", 
+        "runtime": 0.394, 
+        "parents": [
+          "sifting_ID0000012", 
+          "individuals_wrapper_ID0000020", 
+          "individuals_wrapper_ID0000022", 
+          "individuals_wrapper_ID0000018", 
+          "individuals_wrapper_ID0000016", 
+          "individuals_wrapper_ID0000015", 
+          "individuals_wrapper_ID0000010", 
+          "individuals_wrapper_ID0000014", 
+          "individuals_wrapper_ID0000007", 
+          "individuals_wrapper_ID0000006", 
+          "individuals_wrapper_ID0000004", 
+          "individuals_wrapper_ID0000009", 
+          "individuals_wrapper_ID0000003", 
+          "individuals_wrapper_ID0000002"
+        ], 
+        "files": [], 
+        "avgCPU": 123.8579, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/00/register_local_0_0.in"
+        ], 
+        "machine": "master", 
+        "priority": 30
+      }, 
+      {
+        "name": "register_local_1_0", 
+        "type": "auxiliary", 
+        "runtime": 0.459, 
+        "parents": [
+          "individuals_merge_wrapper_ID0000011", 
+          "individuals_merge_wrapper_ID0000023"
+        ], 
+        "files": [], 
+        "avgCPU": 112.4183, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/00/register_local_1_0.in"
+        ], 
+        "machine": "master", 
+        "priority": 40
+      }, 
+      {
+        "name": "stage_out_local_local_2_2", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "mutation_overlap_wrapper_ID0000031", 
+          "mutation_overlap_wrapper_ID0000037", 
+          "frequency_wrapper_ID0000042", 
+          "frequency_wrapper_ID0000040", 
+          "mutation_overlap_wrapper_ID0000027", 
+          "mutation_overlap_wrapper_ID0000045", 
+          "frequency_wrapper_ID0000034", 
+          "mutation_overlap_wrapper_ID0000049", 
+          "frequency_wrapper_ID0000026"
+        ], 
+        "files": [
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-EAS.tar.gz", 
+            "size": 144942
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-ALL-freq.tar.gz", 
+            "size": 287183
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-SAS-freq.tar.gz", 
+            "size": 263157
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-EUR.tar.gz", 
+            "size": 143756
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-EAS.tar.gz", 
+            "size": 142765
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-GBR.tar.gz", 
+            "size": 136765
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-AFR-freq.tar.gz", 
+            "size": 270679
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-ALL.tar.gz", 
+            "size": 167078
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-SAS-freq.tar.gz", 
+            "size": 261600
+          }
+        ], 
+        "avgCPU": 5.8803, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 900
+      }, 
+      {
+        "name": "stage_out_local_local_2_0", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "mutation_overlap_wrapper_ID0000033", 
+          "frequency_wrapper_ID0000044", 
+          "mutation_overlap_wrapper_ID0000029", 
+          "frequency_wrapper_ID0000046", 
+          "mutation_overlap_wrapper_ID0000041", 
+          "mutation_overlap_wrapper_ID0000047", 
+          "frequency_wrapper_ID0000030", 
+          "frequency_wrapper_ID0000038", 
+          "mutation_overlap_wrapper_ID0000025", 
+          "frequency_wrapper_ID0000052"
+        ], 
+        "files": [
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-ALL.tar.gz", 
+            "size": 168391
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-AFR.tar.gz", 
+            "size": 146396
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-AMR-freq.tar.gz", 
+            "size": 257869
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-GBR-freq.tar.gz", 
+            "size": 218549
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-EAS-freq.tar.gz", 
+            "size": 264064
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-AFR.tar.gz", 
+            "size": 144606
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-SAS.tar.gz", 
+            "size": 143237
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-AMR-freq.tar.gz", 
+            "size": 256930
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-AMR.tar.gz", 
+            "size": 142207
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-GBR-freq.tar.gz", 
+            "size": 217778
+          }
+        ], 
+        "avgCPU": 8.713, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 900
+      }, 
+      {
+        "name": "stage_out_local_local_2_1", 
+        "type": "transfer", 
+        "runtime": 0,
+        "parents": [
+          "mutation_overlap_wrapper_ID0000035", 
+          "frequency_wrapper_ID0000048", 
+          "mutation_overlap_wrapper_ID0000043", 
+          "frequency_wrapper_ID0000032", 
+          "mutation_overlap_wrapper_ID0000039", 
+          "frequency_wrapper_ID0000036", 
+          "mutation_overlap_wrapper_ID0000051", 
+          "frequency_wrapper_ID0000028", 
+          "frequency_wrapper_ID0000050"
+        ], 
+        "files": [
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-AMR.tar.gz", 
+            "size": 144258
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-GBR.tar.gz", 
+            "size": 138895
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-EUR-freq.tar.gz", 
+            "size": 265886
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-SAS.tar.gz", 
+            "size": 145797
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr22-AFR-freq.tar.gz", 
+            "size": 271047
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-EUR.tar.gz", 
+            "size": 141667
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-EAS-freq.tar.gz", 
+            "size": 262912
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-ALL-freq.tar.gz", 
+            "size": 285759
+          }, 
+          {
+            "dest": "local",
+            "src": "local", 
+            "link": "output", 
+            "name": "chr21-EUR-freq.tar.gz", 
+            "size": 264188
+          }
+        ], 
+        "avgCPU": 9.2881, 
+        "arguments": [
+          "--threads", 
+          "2"
+        ], 
+        "machine": "master", 
+        "priority": 900
+      }, 
+      {
+        "name": "register_local_2_2", 
+        "type": "auxiliary", 
+        "runtime": 0.41, 
+        "parents": [
+          "stage_out_local_local_2_2"
+        ], 
+        "files": [], 
+        "avgCPU": 123.9024, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/01/register_local_2_2.in"
+        ], 
+        "machine": "master", 
+        "priority": 60
+      }, 
+      {
+        "name": "register_local_2_0", 
+        "type": "auxiliary", 
+        "runtime": 0.407, 
+        "parents": [
+          "stage_out_local_local_2_0"
+        ], 
+        "files": [], 
+        "avgCPU": 116.9533, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/01/register_local_2_0.in"
+        ], 
+        "machine": "master", 
+        "priority": 60
+      }, 
+      {
+        "name": "cleanup_1000genome-20180202T200518Z_0_local", 
+        "type": "auxiliary", 
+        "runtime": 0, 
+        "parents": [
+          "stage_out_local_local_2_2", 
+          "stage_out_local_local_2_1", 
+          "stage_out_local_local_2_0"
+        ], 
+        "files": []
+      }, 
+      {
+        "name": "register_local_2_1", 
+        "type": "auxiliary", 
+        "runtime": 0.386, 
+        "parents": [
+          "stage_out_local_local_2_1"
+        ], 
+        "files": [], 
+        "avgCPU": 123.3161, 
+        "arguments": [
+          "--conf", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/pegasus.3617451440745668392.properties", 
+          "-v", 
+          "--insert", 
+          "/home/panorama/1000genome-workflow/submit/panorama/pegasus/1000genome-20180202T200518Z/run0001/00/01/register_local_2_1.in"
+        ], 
+        "machine": "master", 
+        "priority": 60
+      }
+    ], 
+    "machines": [
+      {
+        "nodeName": "master", 
+        "system": "linux", 
+        "architecture": "x86_64", 
+        "memory": 12303708, 
+        "release": "4.4.0-112-generic", 
+        "cpu": {
+          "count": 4, 
+          "vendor": "GenuineIntel", 
+          "speed": 2000
+        }
+      }, 
+      {
+        "nodeName": "workers1-2", 
+        "system": "linux", 
+        "architecture": "x86_64", 
+        "memory": 12303708, 
+        "release": "4.4.0-112-generic", 
+        "cpu": {
+          "count": 4, 
+          "vendor": "GenuineIntel", 
+          "speed": 2000
+        }
+      }, 
+      {
+        "nodeName": "workers1-0", 
+        "system": "linux", 
+        "architecture": "x86_64", 
+        "memory": 12303708, 
+        "release": "4.4.0-112-generic", 
+        "cpu": {
+          "count": 4, 
+          "vendor": "GenuineIntel", 
+          "speed": 2000
+        }
+      }, 
+      {
+        "nodeName": "workers1-3", 
+        "system": "linux", 
+        "architecture": "x86_64", 
+        "memory": 12303708, 
+        "release": "4.4.0-112-generic", 
+        "cpu": {
+          "count": 4, 
+          "vendor": "GenuineIntel", 
+          "speed": 2000
+        }
+      }, 
+      {
+        "nodeName": "workers1-1", 
+        "system": "linux", 
+        "architecture": "x86_64", 
+        "memory": 12303708, 
+        "release": "4.4.0-112-generic", 
+        "cpu": {
+          "count": 4, 
+          "vendor": "GenuineIntel", 
+          "speed": 2000
+        }
+      }
+    ], 
+    "executedAt": "20180202T200522+0000"
+  }
+}
