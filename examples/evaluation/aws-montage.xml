@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
+<platform version="4.1">
+    <zone id="AS0" routing="Full">
+        <host id="master" speed="1f" core="4"/>
+        <host id="ipac" speed="1f" core="1"/>
+        <host id="worker1" speed="1f" core="4"/>
+        <host id="worker2" speed="1f" core="4"/>
+        <host id="worker3" speed="1f" core="4"/>
+        <host id="worker4" speed="1f" core="4"/>
+        <link id="1" bandwidth="0.74GBps" latency="100us"/>
+        <link id="2" bandwidth="55MBps" latency="100us"/>
+        <route src="master" dst="worker1">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker2">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker3">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker4">
+            <link_ctn id="1"/>
+        </route>
+        <route src="ipac" dst="master">
+            <link_ctn id="2"/>
+        </route>
+    </zone>
+</platform>
