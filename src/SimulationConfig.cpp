@@ -47,8 +47,10 @@ namespace wrench {
           for (auto &storage : storage_resources) {
             std::string storage_host = getPropertyValue<std::string>("hostname", storage);
             WRENCH_INFO("Instantiating a SimpleStorageService on: %s", storage_host.c_str());
-            this->storage_services.insert(simulation.add(
-                    new SimpleStorageService(storage_host, getPropertyValue<double>("capacity", storage))));
+            auto storage_service = simulation.add(
+                    new SimpleStorageService(storage_host, getPropertyValue<double>("capacity", storage)));
+            storage_service->setNetworkTimeoutValue(30);
+            this->storage_services.insert(storage_service);
           }
 
           // compute resources
@@ -59,7 +61,7 @@ namespace wrench {
             if (type == "multicore") {
               instantiateMultihostMulticore(resource.at("compute_hosts"));
             } else if (type == "cloud") {
-              // TODO: to be implemented
+              instantiateCloud(resource.at("service_host"), resource.at("compute_hosts"));
             } else if (type == "batch") {
               // TODO: to be implemented
             } else {
@@ -72,8 +74,10 @@ namespace wrench {
                   new HTCondorService(this->submit_hostname, "local", std::move(this->compute_services)));
 
           // creating local storage service
-          this->htcondor_service->setLocalStorageService(
-                  simulation.add(new SimpleStorageService(this->submit_hostname, 10000000000.0)));
+          auto local_storage_service = simulation.add(
+                  new SimpleStorageService(this->submit_hostname, 1000000000000000.0));
+          local_storage_service->setNetworkTimeoutValue(30);
+          this->htcondor_service->setLocalStorageService(local_storage_service);
         }
 
         /**
@@ -141,8 +145,28 @@ namespace wrench {
                                     hostname,
                                     wrench::Simulation::getHostNumCores(hostname),
                                     wrench::Simulation::getHostMemoryCapacity(hostname))},
-                            1000000000.0, {}, messagepayload_properties_list)));
+                            100000000000.0, {}, messagepayload_properties_list)));
           }
+        }
+
+        /**
+         * @brief Instantiate wrench::MultihostMulticoreComputeService
+         *
+         * @param service_host: name of the host to run the cloud service
+         * @param hosts: vector of hosts to be instantiated
+         */
+        void SimulationConfig::instantiateCloud(std::string service_host, std::vector<std::string> hosts) {
+
+          std::map<std::string, std::string> messagepayload_properties_list = {
+                  {CloudServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
+                  {CloudServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
+                  {CloudServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
+          };
+
+          auto cloud_service = std::shared_ptr<ComputeService>(
+                  new CloudService(service_host, hosts, 100000000000.0, {}, messagepayload_properties_list));
+
+          this->compute_services.insert(cloud_service);
         }
     };
 }

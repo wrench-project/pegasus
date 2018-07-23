@@ -39,6 +39,10 @@ namespace wrench {
         private:
             int main() override;
 
+            struct JobPriorityComparator {
+                bool operator()(StandardJob *&lhs, StandardJob *&rhs);
+            };
+
             /** mailbox to reply **/
             std::string reply_mailbox;
             /** set of compute resources **/

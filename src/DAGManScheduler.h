@@ -39,6 +39,8 @@ namespace wrench {
 
             void setSimuation(Simulation *simulation);
 
+            void setMonitorCallbackMailbox(std::string monitor_callback_mailbox);
+
             /***********************/
             /** \endcond           */
             /***********************/
@@ -50,6 +52,8 @@ namespace wrench {
             std::set<StorageService *> storage_services;
             /** @brief */
             Simulation *simulation;
+            /** @brief */
+            std::string monitor_callback_mailbox;
         };
 
     }

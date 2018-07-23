@@ -29,11 +29,12 @@ include_directories(src/ include/ /usr/local/include /usr/local/include/wrench)
 set(SOURCE_FILES
         src/DAGMan.h
         src/DAGMan.cpp
-        src/HTCondorService.h
-        src/HTCondorService.cpp
-        src/PegasusRun.cpp
+        src/DAGManMonitor.h
+        src/DAGManMonitor.cpp
         src/DAGManScheduler.h
         src/DAGManScheduler.cpp
+        src/HTCondorService.h
+        src/HTCondorService.cpp
         src/HTCondorServiceMessagePayload.h
         src/HTCondorServiceProperty.h
         src/SimulationConfig.h
@@ -49,6 +50,7 @@ set(SOURCE_FILES
         src/HTCondorCentralManagerServiceMessage.cpp
         src/HTCondorNegotiatorService.h
         src/HTCondorNegotiatorService.cpp
+        src/PegasusRun.cpp
         )
 
 set(TEST_FILES

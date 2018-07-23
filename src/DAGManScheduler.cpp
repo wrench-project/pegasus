@@ -133,6 +133,7 @@ namespace wrench {
 
             }
             WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
+            job->pushCallbackMailbox(this->monitor_callback_mailbox);
             this->getJobManager()->submitJob(job, htcondor_service);
             // create job scheduled event
             this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
@@ -152,6 +153,15 @@ namespace wrench {
          */
         void DAGManScheduler::setSimuation(wrench::Simulation *simulation) {
           this->simulation = simulation;
+        }
+
+        /**
+         * @brief:
+         *
+         * @param monitor_callback_mailbox
+         */
+        void DAGManScheduler::setMonitorCallbackMailbox(std::string monitor_callback_mailbox) {
+          this->monitor_callback_mailbox = monitor_callback_mailbox;
         }
 
     }

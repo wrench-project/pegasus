@@ -11,6 +11,7 @@
 #define WRENCH_PEGASUS_DAGMAN_H
 
 #include <wrench-dev.h>
+#include "DAGManMonitor.h"
 #include "HTCondorService.h"
 
 namespace wrench {
@@ -31,8 +32,6 @@ namespace wrench {
             /***********************/
             /** \cond DEVELOPER    */
             /***********************/
-
-            void processEventStandardJobCompletion(std::unique_ptr<StandardJobCompletedEvent> event) override;
 
             void processEventStandardJobFailure(std::unique_ptr<StandardJobFailedEvent>) override;
 
@@ -57,6 +56,8 @@ namespace wrench {
             unsigned long running_register_tasks = 0;
             /** @brief */
             std::set<WorkflowTask *> scheduled_tasks;
+            /** @brief */
+            std::shared_ptr<DAGManMonitor> dagman_monitor;
         };
     }
 }

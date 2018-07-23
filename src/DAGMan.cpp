@@ -36,6 +36,8 @@ namespace wrench {
 
           // DAGMan performs BFS search by default
           this->running_tasks_level = std::make_pair(0, 0);
+
+          this->dagman_monitor = std::make_shared<DAGManMonitor>(this->hostname);
         }
 
         /**
@@ -67,13 +69,19 @@ namespace wrench {
                       this->mailbox_name.c_str());
           WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks", this->getWorkflow()->getNumberOfTasks());
 
+          // starting monitor
+          this->dagman_monitor->simulation = this->simulation;
+          this->dagman_monitor->start(dagman_monitor, true);
+
           // Create a job manager
           this->job_manager = this->createJobManager();
           auto data_movement_manager = this->createDataMovementManager();
 
-          auto htcondor_schedd = (DAGManScheduler *) this->getStandardJobScheduler();
-          htcondor_schedd->setSimuation(this->simulation);
-          htcondor_schedd->setDataMovementManager(data_movement_manager.get());
+          // scheduler
+          auto dagman_scheduler = (DAGManScheduler *) this->getStandardJobScheduler();
+          dagman_scheduler->setSimuation(this->simulation);
+          dagman_scheduler->setDataMovementManager(data_movement_manager.get());
+          dagman_scheduler->setMonitorCallbackMailbox(this->dagman_monitor->getMailbox());
 
           WRENCH_INFO("Sleeping for 3 seconds to ensure ProcessId uniqueness (DAGMan simulated waiting time)");
           Simulation::sleep(3.0);
@@ -84,109 +92,111 @@ namespace wrench {
             std::vector<WorkflowTask *> dagman_ready_tasks;
 
             for (auto task : this->getWorkflow()->getReadyTasks()) {
-              if (task->getTopLevel() <= this->running_tasks_level.first ||
-                  (task->getTopLevel() == this->running_tasks_level.first + 1 &&
-                   this->running_tasks_level.second == 0)) {
-
-                // set task priority according to DAGMan rules for parent tasks
-                long max_priority = task->getPriority();
-                for (auto parent : task->getWorkflow()->getTaskParents(task)) {
-                  if (parent->getPriority() > max_priority) {
-                    max_priority = parent->getPriority();
-                  }
+              // set task priority according to DAGMan rules for parent tasks
+              long max_priority = task->getPriority();
+              for (auto parent : task->getWorkflow()->getTaskParents(task)) {
+                if (parent->getPriority() > max_priority) {
+                  max_priority = parent->getPriority();
                 }
-                task->setPriority(max_priority);
-                dagman_ready_tasks.push_back(task);
               }
+              task->setPriority(max_priority);
+              dagman_ready_tasks.push_back(task);
             }
 
             // sort tasks by priority
             std::sort(dagman_ready_tasks.begin(), dagman_ready_tasks.end(), TaskPriorityComparator());
 
             unsigned long submitted_tasks = 0;
-            unsigned long total_dagman_ready_tasks = dagman_ready_tasks.size();
 
-            // DAGMan only submits up to 5 tasks by default per cycle
-            while (submitted_tasks < total_dagman_ready_tasks) {
+            std::vector<WorkflowTask *> tasks_to_submit;
 
-              std::vector<WorkflowTask *> tasks_to_submit;
+            for (auto it = dagman_ready_tasks.begin(); it != dagman_ready_tasks.end();) {
+              auto task = *it;
 
-              for (auto it = dagman_ready_tasks.begin(); it != dagman_ready_tasks.end();) {
-                auto task = *it;
-
-                if (tasks_to_submit.size() == 5) {
-                  break;
-                }
-                // by default DAGMan only runs a single register job at once
-                if (task->getID().find("register_local") == 0) {
-                  if (running_register_tasks > 0) {
-                    submitted_tasks++;
-                    dagman_ready_tasks.erase(it);
-                    continue;
-                  }
-                  running_register_tasks++;
-                }
-
-                if (this->scheduled_tasks.find(task) == this->scheduled_tasks.end()) {
-                  this->scheduled_tasks.insert(task);
-                  tasks_to_submit.push_back(task);
-                  dagman_ready_tasks.erase(it);
-
-                  // updating number of tasks running per level
-                  if (task->getTopLevel() > this->running_tasks_level.first) {
-                    this->running_tasks_level = std::make_pair(task->getTopLevel(), 1);
-
-                  } else if (task->getTopLevel() == this->running_tasks_level.first) {
-                    this->running_tasks_level.second++;
-                  }
-
-                  // create job submitted event
-                  this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
-                          new SimulationTimestampJobSubmitted(task));
-                  WRENCH_INFO("Submitted task: %s", task->getID().c_str());
-
-                } else {
+              if (tasks_to_submit.size() == 5) {
+                break;
+              }
+              // by default DAGMan only runs a single register job at once
+              if (task->getID().find("register_local") == 0) {
+                if (running_register_tasks > 0) {
                   submitted_tasks++;
                   dagman_ready_tasks.erase(it);
+                  continue;
                 }
+                running_register_tasks++;
               }
 
-              // submit tasks
-              if (not tasks_to_submit.empty()) {
-                // Get the available compute services
-                std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();
+              if (this->scheduled_tasks.find(task) == this->scheduled_tasks.end()) {
+                this->scheduled_tasks.insert(task);
+                tasks_to_submit.push_back(task);
+                dagman_ready_tasks.erase(it);
 
-                if (htcondor_services.empty()) {
-                  WRENCH_INFO("Aborting - No HTCondor services available!");
-                  break;
+                // updating number of tasks running per level
+                if (task->getTopLevel() > this->running_tasks_level.first) {
+                  this->running_tasks_level = std::make_pair(task->getTopLevel(), 1);
+
+                } else if (task->getTopLevel() == this->running_tasks_level.first) {
+                  this->running_tasks_level.second++;
                 }
 
-                // Submit pilot jobs
-                if (this->getPilotJobScheduler()) {
-                  WRENCH_INFO("Scheduling pilot jobs...");
-                  this->getPilotJobScheduler()->schedulePilotJobs(htcondor_services);
-                }
+                // create job submitted event
+                this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
+                        new SimulationTimestampJobSubmitted(task));
+                WRENCH_INFO("Submitted task: %s", task->getID().c_str());
 
-                // Run ready tasks with defined scheduler implementation
-                WRENCH_INFO("Scheduling tasks...");
-                this->getStandardJobScheduler()->scheduleTasks(htcondor_services, tasks_to_submit);
-                submitted_tasks += tasks_to_submit.size();
+              } else {
+                submitted_tasks++;
+                dagman_ready_tasks.erase(it);
+              }
+            }
+
+            // submit tasks
+            if (not tasks_to_submit.empty()) {
+              // Get the available compute services
+              std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();
+
+              if (htcondor_services.empty()) {
+                WRENCH_INFO("Aborting - No HTCondor services available!");
+                break;
               }
 
-//              if (submitted_tasks < total_dagman_ready_tasks) {
-//                // sleeping 5 seconds between tasks submissions in DAGMan
-//                Simulation::sleep(5.0);
-//              }
+              // Submit pilot jobs
+              if (this->getPilotJobScheduler()) {
+                WRENCH_INFO("Scheduling pilot jobs...");
+                this->getPilotJobScheduler()->schedulePilotJobs(htcondor_services);
+              }
+
+              // Run ready tasks with defined scheduler implementation
+              WRENCH_INFO("Scheduling tasks...");
+              this->getStandardJobScheduler()->scheduleTasks(htcondor_services, tasks_to_submit);
             }
 
-            // Wait for a workflow execution event, and process it
-            try {
-              this->waitForAndProcessNextEvent();
-            } catch (WorkflowExecutionException &e) {
-              WRENCH_INFO("Error while getting next execution event (%s)... ignoring and trying again",
-                          (e.getCause()->toString().c_str()));
-              continue;
+            // simulate timespan between DAGMan status pull for HTCondor
+            Simulation::sleep(2.0);
+            for (auto job : this->dagman_monitor->getCompletedJobs()) {
+              auto standard_job = (StandardJob *) job;
+              for (auto task : standard_job->getTasks()) {
+                WRENCH_INFO("    Task completed: %s", task->getID().c_str());
+
+                if (task->getID().find("register_") == 0) {
+                  // a register task has completed
+                  this->running_register_tasks--;
+                }
+
+                // notify a task in a specific level has completed
+                if (task->getTopLevel() > this->running_tasks_level.first) {
+                  throw std::invalid_argument("DAGMan::processEventStandardJobCompletion: Invalid task level");
+                }
+                if (task->getTopLevel() == this->running_tasks_level.first) {
+                  this->running_tasks_level.second--;
+                }
+
+                // create job completion event
+                this->simulation->getOutput().addTimestamp<SimulationTimestampJobCompletion>(
+                        new SimulationTimestampJobCompletion(task));
+              }
             }
+
 
             if (this->abort || this->getWorkflow()->isDone()) {
               break;
@@ -205,37 +215,6 @@ namespace wrench {
           this->job_manager.reset();
 
           return 0;
-        }
-
-        /**
-         * @brief
-         *
-         * @param event
-         */
-        void DAGMan::processEventStandardJobCompletion(std::unique_ptr<StandardJobCompletedEvent> event) {
-
-          auto standard_job = event->standard_job;
-          WRENCH_INFO("Notified that a %ld-task job has completed", standard_job->getNumTasks());
-          for (auto task : standard_job->getTasks()) {
-            WRENCH_INFO("    Task completed: %s", task->getID().c_str());
-
-            if (task->getID().find("register_") == 0) {
-              // a register task has completed
-              this->running_register_tasks--;
-            }
-
-            // notify a task in a specific level has completed
-            if (task->getTopLevel() > this->running_tasks_level.first) {
-              throw std::invalid_argument("DAGMan::processEventStandardJobCompletion: Invalid task level");
-            }
-            if (task->getTopLevel() == this->running_tasks_level.first) {
-              this->running_tasks_level.second--;
-            }
-
-            // create job completion event
-            this->simulation->getOutput().addTimestamp<SimulationTimestampJobCompletion>(
-                    new SimulationTimestampJobCompletion(task));
-          }
         }
 
         /**

@@ -36,6 +36,8 @@ namespace wrench {
         private:
             void instantiateMultihostMulticore(std::vector<std::string> hosts);
 
+            void instantiateCloud(std::string service_host, std::vector<std::string> hosts);
+
             /**
              * @brief Get the value for a key from the JSON properties file
              *

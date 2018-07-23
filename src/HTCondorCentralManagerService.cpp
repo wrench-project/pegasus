@@ -154,6 +154,16 @@ namespace wrench {
             for (auto &cs : this->compute_resources) {
               cs->simulation = this->simulation;
               cs->start(cs, true); // Daemonize!
+
+              // for cloud services
+              if (auto cloud = dynamic_cast<CloudService *>(cs.get())) {
+                for (auto host : cloud->getExecutionHosts()) {
+                  for (int i = 0; i < S4U_Simulation::getHostNumCores(host); i++) {
+                    cloud->createVM(host, 1);
+                  }
+                }
+              }
+
             }
           } catch (std::runtime_error &e) {
             throw;
@@ -162,7 +172,7 @@ namespace wrench {
           // main loop
           while (this->processNextMessage()) {
             // starting an HTCondor negotiator
-            if (not this->dispatching_jobs && not this->pending_jobs.empty()) {
+            if (not this->dispatching_jobs && not this->pending_jobs.empty() && not this->resources_unavailable) {
               this->dispatching_jobs = true;
               auto negotiator = std::make_shared<HTCondorNegotiatorService>(this->hostname, this->compute_resources,
                                                                             this->pending_jobs, this->mailbox_name);
@@ -244,6 +254,7 @@ namespace wrench {
                 std::map<std::string, std::string> &service_specific_args) {
 
           this->pending_jobs.push_back(job);
+          this->resources_unavailable = false;
 
           try {
             S4U_Mailbox::dputMessage(
@@ -264,13 +275,19 @@ namespace wrench {
          */
         void HTCondorCentralManagerService::processStandardJobCompletion(StandardJob *job) {
           WRENCH_INFO("A standard job has completed job %s", job->getName().c_str());
+          std::string callback_mailbox = job->popCallbackMailbox();
+          for (auto task : job->getTasks()) {
+            WRENCH_INFO("    Task completed: %s (%s)", task->getID().c_str(), callback_mailbox.c_str());
+          }
+
 
           // Send the callback to the originator
           try {
             S4U_Mailbox::dputMessage(
-                    job->popCallbackMailbox(), new ComputeServiceStandardJobDoneMessage(
+                    callback_mailbox, new ComputeServiceStandardJobDoneMessage(
                             job, this, this->getMessagePayloadValueAsDouble(
                                     HTCondorCentralManagerServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD)));
+            this->resources_unavailable = false;
           } catch (std::shared_ptr<NetworkError> &cause) {
           }
         }
@@ -278,12 +295,18 @@ namespace wrench {
         /**
          * @brief Process a negotiator cycle completion
          *
-         * @param pending_jobs: list of pending jobs upon negotiator cycle completion
+         * @param scheduled_jobs: list of scheduled jobs upon negotiator cycle completion
          */
         void HTCondorCentralManagerService::processNegotiatorCompletion(
-                std::vector<wrench::StandardJob *> pending_jobs) {
+                std::vector<wrench::StandardJob *> scheduled_jobs) {
 
-          for (auto sjob : pending_jobs) {
+          if (scheduled_jobs.empty()) {
+            this->resources_unavailable = true;
+            this->dispatching_jobs = false;
+            return;
+          }
+
+          for (auto sjob : scheduled_jobs) {
             for (auto it = this->pending_jobs.begin(); it != this->pending_jobs.end(); ++it) {
               auto pjob = *it;
               if (sjob == pjob) {
@@ -292,6 +315,7 @@ namespace wrench {
               }
             }
           }
+
           this->dispatching_jobs = false;
         }
 

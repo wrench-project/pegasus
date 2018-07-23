@@ -43,6 +43,32 @@ namespace wrench {
         }
 
         /**
+         * @brief Compare the priority between two workflow standard job
+         *
+         * @param lhs: pointer to a standard job
+         * @param rhs: pointer to a standard job
+         *
+         * @return whether the priority of the left-hand-side standard job is higher
+         */
+        bool HTCondorNegotiatorService::JobPriorityComparator::operator()(StandardJob *&lhs, StandardJob *&rhs) {
+          long lhs_max_priority = 0;
+          long rhs_max_priority = 0;
+
+          for (auto task : lhs->getTasks()) {
+            if (task->getPriority() > lhs_max_priority) {
+              lhs_max_priority = task->getPriority();
+            }
+          }
+          for (auto task : rhs->getTasks()) {
+            if (task->getPriority() > rhs_max_priority) {
+              rhs_max_priority = task->getPriority();
+            }
+          }
+
+          return lhs_max_priority > rhs_max_priority;
+        }
+
+        /**
          * @brief Main method of the daemon
          *
          * @return 0 on termination
@@ -55,20 +81,31 @@ namespace wrench {
 
           // TODO: check how to pass the service specific arguments
           std::map<std::string, std::string> specific_args;
-
           std::vector<StandardJob *> scheduled_jobs;
 
-          for (auto job : this->pending_jobs) {
-            for (auto &&cs : this->compute_resources) {
-              unsigned long sum_num_idle_cores;
-              std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
-              sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
+          std::map<std::shared_ptr<ComputeService>, unsigned long> cs_map;
+          for (auto &&cs : this->compute_resources) {
+            unsigned long sum_num_idle_cores;
+            std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
+            sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
+            cs_map.insert(std::make_pair(cs, sum_num_idle_cores));
+          }
 
-              if (sum_num_idle_cores >= job->getMinimumRequiredNumCores()) {
+          // sort tasks by priority
+          std::sort(this->pending_jobs.begin(), this->pending_jobs.end(), JobPriorityComparator());
+
+          for (auto job : this->pending_jobs) {
+            for (auto &item : cs_map) {
+              if (item.second >= job->getMinimumRequiredNumCores()) {
                 WRENCH_INFO("Dispatching job %s with %ld tasks", job->getName().c_str(), job->getTasks().size());
+                for (auto task : job->getTasks()) {
+                  WRENCH_INFO("    Task ID: %s", task->getID().c_str());
+                }
+
                 job->pushCallbackMailbox(this->reply_mailbox);
-                cs->submitStandardJob(job, specific_args);
+                item.first->submitStandardJob(job, specific_args);
                 scheduled_jobs.push_back(job);
+                item.second -= job->getMinimumRequiredNumCores();
                 WRENCH_INFO("Dispatched job %s with %ld tasks", job->getName().c_str(), job->getTasks().size());
                 break;
               }
