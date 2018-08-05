@@ -21,15 +21,18 @@ namespace wrench {
          *
          * @param hostname: the hostname on which to start the service
          * @param compute_resources: a set of compute resources available via the HTCondor pool
+         * @param running_jobs:
          * @param pending_jobs: a list of pending jobs
          * @param reply_mailbox: the mailbox to which the "done/failed" message should be sent
          */
-        HTCondorNegotiatorService::HTCondorNegotiatorService(std::string &hostname,
-                                                             std::set<std::shared_ptr<ComputeService>> &compute_resources,
-                                                             std::vector<StandardJob *> &pending_jobs,
-                                                             std::string &reply_mailbox)
+        HTCondorNegotiatorService::HTCondorNegotiatorService(
+                std::string &hostname,
+                std::map<std::shared_ptr<ComputeService>, unsigned long> &compute_resources,
+                std::map<StandardJob *, std::shared_ptr<ComputeService>> &running_jobs,
+                std::vector<StandardJob *> &pending_jobs,
+                std::string &reply_mailbox)
                 : Service(hostname, "htcondor_negotiator", "htcondor_negotiator"), reply_mailbox(reply_mailbox),
-                  compute_resources(compute_resources), pending_jobs(pending_jobs) {
+                  compute_resources(&compute_resources), running_jobs(&running_jobs), pending_jobs(pending_jobs) {
 
           this->setMessagePayloads(this->default_messagepayload_values, messagepayload_list);
         }
@@ -39,7 +42,6 @@ namespace wrench {
          */
         HTCondorNegotiatorService::~HTCondorNegotiatorService() {
           this->pending_jobs.clear();
-          this->compute_resources.clear();
         }
 
         /**
@@ -82,20 +84,23 @@ namespace wrench {
           // TODO: check how to pass the service specific arguments
           std::map<std::string, std::string> specific_args;
           std::vector<StandardJob *> scheduled_jobs;
-
-          std::map<std::shared_ptr<ComputeService>, unsigned long> cs_map;
-          for (auto &&cs : this->compute_resources) {
-            unsigned long sum_num_idle_cores;
-            std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
-            sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
-            cs_map.insert(std::make_pair(cs, sum_num_idle_cores));
-          }
+//          unsigned long total_idle_cores = 0;
+//
+//          if (HTCondorNegotiatorService::cs_map.empty()) {
+//            for (auto &&cs : this->compute_resources) {
+//              unsigned long sum_num_idle_cores;
+//              std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
+//              sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
+//              total_idle_cores += sum_num_idle_cores;
+//              HTCondorNegotiatorService::cs_map.insert(std::make_pair(cs, sum_num_idle_cores));
+//            }
+//          }
 
           // sort tasks by priority
           std::sort(this->pending_jobs.begin(), this->pending_jobs.end(), JobPriorityComparator());
 
           for (auto job : this->pending_jobs) {
-            for (auto &item : cs_map) {
+            for (auto &item : *this->compute_resources) {
               if (item.second >= job->getMinimumRequiredNumCores()) {
                 WRENCH_INFO("Dispatching job %s with %ld tasks", job->getName().c_str(), job->getTasks().size());
                 for (auto task : job->getTasks()) {
@@ -104,6 +109,7 @@ namespace wrench {
 
                 job->pushCallbackMailbox(this->reply_mailbox);
                 item.first->submitStandardJob(job, specific_args);
+                this->running_jobs->insert(std::make_pair(job, item.first));
                 scheduled_jobs.push_back(job);
                 item.second -= job->getMinimumRequiredNumCores();
                 WRENCH_INFO("Dispatched job %s with %ld tasks", job->getName().c_str(), job->getTasks().size());

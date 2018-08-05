@@ -81,6 +81,10 @@ namespace wrench {
             bool dispatching_jobs = false;
             /** whether a negotiator could not dispach jobs **/
             bool resources_unavailable = false;
+            /** **/
+            std::map<std::shared_ptr<ComputeService>, unsigned long> compute_resources_map;
+            /** **/
+            std::map<StandardJob *, std::shared_ptr<ComputeService>> running_jobs;
         };
 
     }

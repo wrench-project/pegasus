@@ -52,6 +52,8 @@ namespace wrench {
         HTCondorCentralManagerService::~HTCondorCentralManagerService() {
           this->pending_jobs.clear();
           this->compute_resources.clear();
+          this->compute_resources_map.clear();
+          this->running_jobs.clear();
         }
 
         /**
@@ -164,6 +166,13 @@ namespace wrench {
                 }
               }
 
+              // set the number of available cores
+              unsigned long sum_num_idle_cores;
+              std::vector<unsigned long> num_idle_cores = cs->getNumIdleCores();
+              sum_num_idle_cores = std::accumulate(num_idle_cores.begin(), num_idle_cores.end(), 0ul);
+              this->compute_resources_map.insert(std::make_pair(cs, sum_num_idle_cores));
+              WRENCH_INFO("SERVICE_VM %ld", sum_num_idle_cores);
+
             }
           } catch (std::runtime_error &e) {
             throw;
@@ -174,7 +183,8 @@ namespace wrench {
             // starting an HTCondor negotiator
             if (not this->dispatching_jobs && not this->pending_jobs.empty() && not this->resources_unavailable) {
               this->dispatching_jobs = true;
-              auto negotiator = std::make_shared<HTCondorNegotiatorService>(this->hostname, this->compute_resources,
+              auto negotiator = std::make_shared<HTCondorNegotiatorService>(this->hostname, this->compute_resources_map,
+                                                                            this->running_jobs,
                                                                             this->pending_jobs, this->mailbox_name);
               negotiator->simulation = this->simulation;
               negotiator->start(negotiator, true);
@@ -280,7 +290,6 @@ namespace wrench {
             WRENCH_INFO("    Task completed: %s (%s)", task->getID().c_str(), callback_mailbox.c_str());
           }
 
-
           // Send the callback to the originator
           try {
             S4U_Mailbox::dputMessage(
@@ -290,6 +299,11 @@ namespace wrench {
             this->resources_unavailable = false;
           } catch (std::shared_ptr<NetworkError> &cause) {
           }
+
+          auto cs = this->running_jobs.find(job);
+          auto cs_map = this->compute_resources_map.find(cs->second);
+          cs_map->second = cs_map->second + job->getMinimumRequiredNumCores();
+          this->running_jobs.erase(job);
         }
 
         /**

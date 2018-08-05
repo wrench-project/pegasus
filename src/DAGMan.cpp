@@ -172,7 +172,7 @@ namespace wrench {
             }
 
             // simulate timespan between DAGMan status pull for HTCondor
-            Simulation::sleep(2.0);
+            Simulation::sleep(0.1);
             for (auto job : this->dagman_monitor->getCompletedJobs()) {
               auto standard_job = (StandardJob *) job;
               for (auto task : standard_job->getTasks()) {

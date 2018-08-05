@@ -30,7 +30,8 @@ namespace wrench {
         public:
 
             HTCondorNegotiatorService(std::string &hostname,
-                                      std::set<std::shared_ptr<ComputeService>> &compute_resources,
+                                      std::map<std::shared_ptr<ComputeService>, unsigned long> &compute_resources,
+                                      std::map<StandardJob *, std::shared_ptr<ComputeService>> &running_jobs,
                                       std::vector<StandardJob *> &pending_jobs,
                                       std::string &reply_mailbox);
 
@@ -46,7 +47,8 @@ namespace wrench {
             /** mailbox to reply **/
             std::string reply_mailbox;
             /** set of compute resources **/
-            std::set<std::shared_ptr<ComputeService>> compute_resources;
+            std::map<std::shared_ptr<ComputeService>, unsigned long> *compute_resources;
+            std::map<StandardJob *, std::shared_ptr<ComputeService>> *running_jobs;
             /** queue of pending jobs **/
             std::vector<StandardJob *> pending_jobs;
         };
