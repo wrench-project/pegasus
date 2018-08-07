@@ -95,7 +95,14 @@ def _parse_dagman_file(workflow, pegasus_dir):
 
             s = line.split()
             if 'Submitting HTCondor Node' in line:
-                workflow['tasks'].append({'id': s[5], 'start_time': event_time - start_time})
+                type = s[5][:s[5].find('_')]
+                if type.startswith('clean'):
+                    type = 'clean_up'
+                elif type.startswith('create'):
+                    type = 'create_dir'
+                elif type.startswith('stage'):
+                    type = s[5][:s[5].find('_', s[5].find('_') + 1)]
+                workflow['tasks'].append({'id': s[5], 'start_time': event_time - start_time, 'type': type})
 
             if 'job completed' in line:
                 for task in workflow['tasks']:
@@ -156,7 +163,7 @@ def main():
                 logger.info('JSON trace file written to "%s".' % args.output)
         else:
             outfile = csv.writer(open(args.output, "wb+"))
-            outfile.writerow(['engine', 'task', 'start', 'end', 'walltime', 'duration', 'level'])
+            outfile.writerow(['engine', 'task', 'start', 'end', 'walltime', 'duration', 'level', 'type'])
             for task in workflow['tasks']:
                 outfile.writerow(['pegasus',
                                   task['id'],
@@ -164,7 +171,8 @@ def main():
                                   task['end_time'],
                                   task['walltime'],
                                   task['duration'],
-                                  task['level']
+                                  task['level'],
+                                  task['type']
                                   ])
 
     else:
@@ -172,7 +180,7 @@ def main():
             print(json.dumps(workflow, indent=2))
         else:
             out = csv.writer(sys.stdout)
-            out.writerow(['engine', 'task', 'start', 'end', 'walltime', 'duration', 'level'])
+            out.writerow(['engine', 'task', 'start', 'end', 'walltime', 'duration', 'level', 'type'])
             for task in workflow['tasks']:
                 out.writerow(['pegasus',
                               task['id'],
@@ -180,7 +188,8 @@ def main():
                               task['end_time'],
                               task['walltime'],
                               task['duration'],
-                              task['level']
+                              task['level'],
+                              task['type']
                               ])
 
 

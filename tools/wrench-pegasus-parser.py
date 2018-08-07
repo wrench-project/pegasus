@@ -141,8 +141,10 @@ def _parse_dax(workflow, pegasus_dir):
     """
     dax_list = _fetch_all_files(pegasus_dir, "dax", "")
     if len(dax_list) < 1:
-        logger.error('The directory contains no ".dax" file')
-        exit(1)
+        dax_list = _fetch_all_files(pegasus_dir, "xml", "")
+        if len(dax_list) < 1:
+            logger.error('The directory contains no ".dax" or ".xml" file')
+            exit(1)
 
     dax_file = dax_list[0]
     logger.info('DAX file: ' + os.path.basename(dax_file))
@@ -422,6 +424,7 @@ def _parse_job_output(workflow, job, pegasus_dir):
 
     # parsing .in file for stage in/out jobs
     if job['name'].startswith(('stage_in_', 'stage_out_')):
+        # job['runtime'] = 0
         in_list = _fetch_all_files(pegasus_dir, "in", job['name'])
         if not in_list:
             logger.warning('Job %s has no .in record. Skipping it.' % job['name'])
