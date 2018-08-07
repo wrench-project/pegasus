@@ -4,10 +4,38 @@
     <zone id="AS0" routing="Full">
         <host id="master" speed="1f" core="4"/>
         <host id="ipac" speed="1f" core="1"/>
-        <host id="worker1" speed="1f" core="32"/>
-        <host id="worker2" speed="1f" core="32"/>
-        <host id="worker3" speed="1f" core="32"/>
-        <host id="worker4" speed="1f" core="32"/>
+        <host id="worker1" speed="1f" core="4"/>
+        <host id="worker2" speed="1f" core="4"/>
+        <host id="worker3" speed="1f" core="4"/>
+        <host id="worker4" speed="1f" core="4"/>
+        <host id="worker5" speed="1f" core="4"/>
+        <host id="worker6" speed="1f" core="4"/>
+        <host id="worker7" speed="1f" core="4"/>
+        <host id="worker8" speed="1f" core="4"/>
+        <host id="worker9" speed="1f" core="4"/>
+        <host id="worker10" speed="1f" core="4"/>
+        <host id="worker11" speed="1f" core="4"/>
+        <host id="worker12" speed="1f" core="4"/>
+        <host id="worker13" speed="1f" core="4"/>
+        <host id="worker14" speed="1f" core="4"/>
+        <host id="worker15" speed="1f" core="4"/>
+        <host id="worker16" speed="1f" core="4"/>
+        <host id="worker17" speed="1f" core="4"/>
+        <host id="worker18" speed="1f" core="4"/>
+        <host id="worker19" speed="1f" core="4"/>
+        <host id="worker20" speed="1f" core="4"/>
+        <host id="worker21" speed="1f" core="4"/>
+        <host id="worker22" speed="1f" core="4"/>
+        <host id="worker23" speed="1f" core="4"/>
+        <host id="worker24" speed="1f" core="4"/>
+        <host id="worker25" speed="1f" core="4"/>
+        <host id="worker26" speed="1f" core="4"/>
+        <host id="worker27" speed="1f" core="4"/>
+        <host id="worker28" speed="1f" core="4"/>
+        <host id="worker29" speed="1f" core="4"/>
+        <host id="worker30" speed="1f" core="4"/>
+        <host id="worker31" speed="1f" core="4"/>
+        <host id="worker32" speed="1f" core="4"/>
         <link id="1" bandwidth="1.24GBps" latency="100us"/>
         <link id="2" bandwidth="55MBps" latency="100us"/>
         <route src="master" dst="worker1">
@@ -20,6 +48,90 @@
             <link_ctn id="1"/>
         </route>
         <route src="master" dst="worker4">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker5">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker6">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker7">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker8">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker9">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker10">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker11">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker12">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker13">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker14">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker15">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker16">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker17">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker18">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker19">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker20">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker21">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker22">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker23">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker24">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker25">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker26">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker27">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker28">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker29">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker30">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker31">
+            <link_ctn id="1"/>
+        </route>
+        <route src="master" dst="worker32">
             <link_ctn id="1"/>
         </route>
         <route src="ipac" dst="master">
