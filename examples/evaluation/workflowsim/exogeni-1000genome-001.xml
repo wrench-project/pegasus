@@ -1,0 +1,519 @@
+<?xml version="1.0" ?>
+<adag>
+	<job id="ID0000012" name="sifting" namespace="Montage" runtime="0.47" version="1.0">
+		<uses file="ALL.chr21.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf" link="input" optional="false" register="true" size="209000000" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="output" optional="false" register="true" size="231958" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000012"/>
+	<job id="ID0000024" name="sifting" namespace="Montage" runtime="0.595" version="1.0">
+		<uses file="ALL.chr22.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.annotation.vcf" link="input" optional="false" register="true" size="205000000" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="output" optional="false" register="true" size="480587" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000024"/>
+	<job id="ID0000001" name="individuals" namespace="Montage" runtime="588.914" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr21n-1-1001.tar.gz" link="output" optional="false" register="true" size="134417" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000001"/>
+	<job id="ID0000002" name="individuals" namespace="Montage" runtime="623.239" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21n-1001-2001.tar.gz" link="output" optional="false" register="true" size="430872" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000002"/>
+	<job id="ID0000003" name="individuals" namespace="Montage" runtime="592.336" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21n-2001-3001.tar.gz" link="output" optional="false" register="true" size="181535" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000003"/>
+	<job id="ID0000004" name="individuals" namespace="Montage" runtime="599.66" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr21n-3001-4001.tar.gz" link="output" optional="false" register="true" size="147063" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000004"/>
+	<job id="ID0000005" name="individuals" namespace="Montage" runtime="594.27" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr21n-4001-5001.tar.gz" link="output" optional="false" register="true" size="229099" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000005"/>
+	<job id="ID0000006" name="individuals" namespace="Montage" runtime="594.315" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21n-5001-6001.tar.gz" link="output" optional="false" register="true" size="383079" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000006"/>
+	<job id="ID0000007" name="individuals" namespace="Montage" runtime="594.498" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21n-6001-7001.tar.gz" link="output" optional="false" register="true" size="273559" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000007"/>
+	<job id="ID0000008" name="individuals" namespace="Montage" runtime="597.733" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr21n-7001-8001.tar.gz" link="output" optional="false" register="true" size="398325" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000008"/>
+	<job id="ID0000009" name="individuals" namespace="Montage" runtime="341.665" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr21n-8001-9001.tar.gz" link="output" optional="false" register="true" size="162539" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000009"/>
+	<job id="ID0000010" name="individuals" namespace="Montage" runtime="523.821" version="1.0">
+		<uses file="ALL.chr21.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21n-9001-10001.tar.gz" link="output" optional="false" register="true" size="116640" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000010"/>
+	<job id="merge" name="individuals" namespace="Montage" runtime="225.389" version="1.0">
+		<uses file="chr21n-7001-8001.tar.gz" link="input" optional="false" register="true" size="398325" transfer="true" type="data"/>
+		<uses file="chr21n-1001-2001.tar.gz" link="input" optional="false" register="true" size="430872" transfer="true" type="data"/>
+		<uses file="chr21n-2001-3001.tar.gz" link="input" optional="false" register="true" size="181535" transfer="true" type="data"/>
+		<uses file="chr21n-4001-5001.tar.gz" link="input" optional="false" register="true" size="229099" transfer="true" type="data"/>
+		<uses file="chr21n-8001-9001.tar.gz" link="input" optional="false" register="true" size="162539" transfer="true" type="data"/>
+		<uses file="chr21n-1-1001.tar.gz" link="input" optional="false" register="true" size="134417" transfer="true" type="data"/>
+		<uses file="chr21n-3001-4001.tar.gz" link="input" optional="false" register="true" size="147063" transfer="true" type="data"/>
+		<uses file="chr21n-6001-7001.tar.gz" link="input" optional="false" register="true" size="273559" transfer="true" type="data"/>
+		<uses file="chr21n-5001-6001.tar.gz" link="input" optional="false" register="true" size="383079" transfer="true" type="data"/>
+		<uses file="chr21n-9001-10001.tar.gz" link="input" optional="false" register="true" size="116640" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="output" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+	</job>
+	<child ref="merge">
+		<parent ref="ID0000004"/>
+		<parent ref="ID0000005"/>
+		<parent ref="ID0000006"/>
+		<parent ref="ID0000007"/>
+		<parent ref="ID0000001"/>
+		<parent ref="ID0000002"/>
+		<parent ref="ID0000003"/>
+		<parent ref="ID0000008"/>
+		<parent ref="ID0000009"/>
+		<parent ref="ID0000010"/>
+	</child>
+	<job id="ID0000013" name="individuals" namespace="Montage" runtime="547.848" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr22n-1-1001.tar.gz" link="output" optional="false" register="true" size="137189" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000013"/>
+	<job id="ID0000014" name="individuals" namespace="Montage" runtime="595.429" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr22n-1001-2001.tar.gz" link="output" optional="false" register="true" size="139484" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000014"/>
+	<job id="ID0000015" name="individuals" namespace="Montage" runtime="594.911" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr22n-2001-3001.tar.gz" link="output" optional="false" register="true" size="164815" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000015"/>
+	<job id="ID0000016" name="individuals" namespace="Montage" runtime="605.107" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr22n-3001-4001.tar.gz" link="output" optional="false" register="true" size="148056" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000016"/>
+	<job id="ID0000017" name="individuals" namespace="Montage" runtime="595.106" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr22n-4001-5001.tar.gz" link="output" optional="false" register="true" size="161131" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000017"/>
+	<job id="ID0000018" name="individuals" namespace="Montage" runtime="627.246" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr22n-5001-6001.tar.gz" link="output" optional="false" register="true" size="142867" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000018"/>
+	<job id="ID0000019" name="individuals" namespace="Montage" runtime="614.309" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr22n-6001-7001.tar.gz" link="output" optional="false" register="true" size="161613" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000019"/>
+	<job id="ID0000020" name="individuals" namespace="Montage" runtime="521.743" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr22n-7001-8001.tar.gz" link="output" optional="false" register="true" size="162057" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000020"/>
+	<job id="ID0000021" name="individuals" namespace="Montage" runtime="518.469" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr22n-8001-9001.tar.gz" link="output" optional="false" register="true" size="155327" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000021"/>
+	<job id="ID0000022" name="individuals" namespace="Montage" runtime="631.254" version="1.0">
+		<uses file="ALL.chr22.80000.vcf" link="input" optional="false" register="true" size="774000000" transfer="true" type="data"/>
+		<uses file="chr22n-9001-10001.tar.gz" link="output" optional="false" register="true" size="158865" transfer="true" type="data"/>
+		<uses file="columns.txt" link="output" optional="false" register="true" size="20078" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000022"/>
+	<job id="merge" name="individuals" namespace="Montage" runtime="223.7" version="1.0">
+		<uses file="chr22n-1001-2001.tar.gz" link="input" optional="false" register="true" size="139484" transfer="true" type="data"/>
+		<uses file="chr22n-2001-3001.tar.gz" link="input" optional="false" register="true" size="164815" transfer="true" type="data"/>
+		<uses file="chr22n-6001-7001.tar.gz" link="input" optional="false" register="true" size="161613" transfer="true" type="data"/>
+		<uses file="chr22n-1-1001.tar.gz" link="input" optional="false" register="true" size="137189" transfer="true" type="data"/>
+		<uses file="chr22n-5001-6001.tar.gz" link="input" optional="false" register="true" size="142867" transfer="true" type="data"/>
+		<uses file="chr22n-3001-4001.tar.gz" link="input" optional="false" register="true" size="148056" transfer="true" type="data"/>
+		<uses file="chr22n-4001-5001.tar.gz" link="input" optional="false" register="true" size="161131" transfer="true" type="data"/>
+		<uses file="chr22n-9001-10001.tar.gz" link="input" optional="false" register="true" size="158865" transfer="true" type="data"/>
+		<uses file="chr22n-7001-8001.tar.gz" link="input" optional="false" register="true" size="162057" transfer="true" type="data"/>
+		<uses file="chr22n-8001-9001.tar.gz" link="input" optional="false" register="true" size="155327" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="output" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+	</job>
+	<child ref="merge">
+		<parent ref="ID0000015"/>
+		<parent ref="ID0000016"/>
+		<parent ref="ID0000017"/>
+		<parent ref="ID0000018"/>
+		<parent ref="ID0000013"/>
+		<parent ref="ID0000014"/>
+		<parent ref="ID0000019"/>
+		<parent ref="ID0000022"/>
+		<parent ref="ID0000020"/>
+		<parent ref="ID0000021"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="5.818" version="1.0">
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="SAS" link="input" optional="false" register="true" size="5248" transfer="true" type="data"/>
+		<uses file="chr21-SAS.tar.gz" link="output" optional="false" register="true" size="143439" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000026" name="frequency" namespace="Montage" runtime="116.827" version="1.0">
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="SAS" link="input" optional="false" register="true" size="5248" transfer="true" type="data"/>
+		<uses file="chr21-SAS-freq.tar.gz" link="output" optional="false" register="true" size="261685" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000026">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="28.066" version="1.0">
+		<uses file="ALL" link="input" optional="false" register="true" size="28000" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-ALL.tar.gz" link="output" optional="false" register="true" size="166549" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000028" name="frequency" namespace="Montage" runtime="115.425" version="1.0">
+		<uses file="ALL" link="input" optional="false" register="true" size="28000" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-ALL-freq.tar.gz" link="output" optional="false" register="true" size="285865" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000028">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="4.926" version="1.0">
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="AMR" link="input" optional="false" register="true" size="4248" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-AMR.tar.gz" link="output" optional="false" register="true" size="142212" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000030" name="frequency" namespace="Montage" runtime="116.974" version="1.0">
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="AMR" link="input" optional="false" register="true" size="4248" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-AMR-freq.tar.gz" link="output" optional="false" register="true" size="257348" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000030">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="5.907" version="1.0">
+		<uses file="EAS" link="input" optional="false" register="true" size="4896" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-EAS.tar.gz" link="output" optional="false" register="true" size="142759" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000032" name="frequency" namespace="Montage" runtime="122.599" version="1.0">
+		<uses file="EAS" link="input" optional="false" register="true" size="4896" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-EAS-freq.tar.gz" link="output" optional="false" register="true" size="263603" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000032">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="6.887" version="1.0">
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="AFR" link="input" optional="false" register="true" size="8088" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-AFR.tar.gz" link="output" optional="false" register="true" size="144501" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000034" name="frequency" namespace="Montage" runtime="122.185" version="1.0">
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="AFR" link="input" optional="false" register="true" size="8088" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-AFR-freq.tar.gz" link="output" optional="false" register="true" size="270158" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000034">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="5.819" version="1.0">
+		<uses file="EUR" link="input" optional="false" register="true" size="5312" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-EUR.tar.gz" link="output" optional="false" register="true" size="141964" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000036" name="frequency" namespace="Montage" runtime="122.343" version="1.0">
+		<uses file="EUR" link="input" optional="false" register="true" size="5312" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-EUR-freq.tar.gz" link="output" optional="false" register="true" size="264350" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000036">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="3.852" version="1.0">
+		<uses file="GBR" link="input" optional="false" register="true" size="856" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-GBR.tar.gz" link="output" optional="false" register="true" size="136827" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000038" name="frequency" namespace="Montage" runtime="117.002" version="1.0">
+		<uses file="GBR" link="input" optional="false" register="true" size="856" transfer="true" type="data"/>
+		<uses file="chr21n.tar.gz" link="input" optional="false" register="true" size="6336280" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr21.txt" link="input" optional="false" register="true" size="231958" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr21-GBR-freq.tar.gz" link="output" optional="false" register="true" size="217838" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000038">
+		<parent ref="ID0000012"/>
+		<parent ref="merge"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="5.804" version="1.0">
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="SAS" link="input" optional="false" register="true" size="5248" transfer="true" type="data"/>
+		<uses file="chr22-SAS.tar.gz" link="output" optional="false" register="true" size="145890" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000040" name="frequency" namespace="Montage" runtime="115.254" version="1.0">
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="SAS" link="input" optional="false" register="true" size="5248" transfer="true" type="data"/>
+		<uses file="chr22-SAS-freq.tar.gz" link="output" optional="false" register="true" size="263198" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000040">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="27.42" version="1.0">
+		<uses file="ALL" link="input" optional="false" register="true" size="28000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-ALL.tar.gz" link="output" optional="false" register="true" size="168396" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000042" name="frequency" namespace="Montage" runtime="118.016" version="1.0">
+		<uses file="ALL" link="input" optional="false" register="true" size="28000" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-ALL-freq.tar.gz" link="output" optional="false" register="true" size="287387" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000042">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="4.908" version="1.0">
+		<uses file="AMR" link="input" optional="false" register="true" size="4248" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-AMR.tar.gz" link="output" optional="false" register="true" size="144292" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000044" name="frequency" namespace="Montage" runtime="120.011" version="1.0">
+		<uses file="AMR" link="input" optional="false" register="true" size="4248" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-AMR-freq.tar.gz" link="output" optional="false" register="true" size="258082" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000044">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="5.718" version="1.0">
+		<uses file="EAS" link="input" optional="false" register="true" size="4896" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-EAS.tar.gz" link="output" optional="false" register="true" size="145033" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000046" name="frequency" namespace="Montage" runtime="115.399" version="1.0">
+		<uses file="EAS" link="input" optional="false" register="true" size="4896" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-EAS-freq.tar.gz" link="output" optional="false" register="true" size="264712" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000046">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="6.816" version="1.0">
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="AFR" link="input" optional="false" register="true" size="8088" transfer="true" type="data"/>
+		<uses file="chr22-AFR.tar.gz" link="output" optional="false" register="true" size="146343" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000048" name="frequency" namespace="Montage" runtime="117.386" version="1.0">
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="AFR" link="input" optional="false" register="true" size="8088" transfer="true" type="data"/>
+		<uses file="chr22-AFR-freq.tar.gz" link="output" optional="false" register="true" size="271015" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000048">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="5.941" version="1.0">
+		<uses file="EUR" link="input" optional="false" register="true" size="5312" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-EUR.tar.gz" link="output" optional="false" register="true" size="143802" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000050" name="frequency" namespace="Montage" runtime="115.874" version="1.0">
+		<uses file="EUR" link="input" optional="false" register="true" size="5312" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="chr22-EUR-freq.tar.gz" link="output" optional="false" register="true" size="265673" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000050">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="overlap" name="mutation" namespace="Montage" runtime="3.945" version="1.0">
+		<uses file="GBR" link="input" optional="false" register="true" size="856" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr22-GBR.tar.gz" link="output" optional="false" register="true" size="138899" transfer="true" type="data"/>
+	</job>
+	<child ref="overlap">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+	<job id="ID0000052" name="frequency" namespace="Montage" runtime="115.421" version="1.0">
+		<uses file="GBR" link="input" optional="false" register="true" size="856" transfer="true" type="data"/>
+		<uses file="sifted.SIFT.chr22.txt" link="input" optional="false" register="true" size="480587" transfer="true" type="data"/>
+		<uses file="chr22n.tar.gz" link="input" optional="false" register="true" size="2400048" transfer="true" type="data"/>
+		<uses file="columns.txt" link="input" optional="false" register="true" size="20078" transfer="true" type="data"/>
+		<uses file="chr22-GBR-freq.tar.gz" link="output" optional="false" register="true" size="218475" transfer="true" type="data"/>
+	</job>
+	<child ref="ID0000052">
+		<parent ref="merge"/>
+		<parent ref="ID0000024"/>
+		<parent ref="ID0000022"/>
+	</child>
+</adag>
