@@ -47,7 +47,8 @@ def _convert_to_dax3_xml(data):
 
     for job in data['workflow']['jobs']:
         if job['type'] == 'compute':
-            job_id = job['name'].split('_')[1]
+            j = job['name'].split('_')
+            job_id = j[len(j) - 1]
             name = job['name'].split('_')[0]
             runtime = str(job['runtime'])
             job_element = ET.SubElement(root, 'job', id=job_id, namespace="Montage", name=name, version='1.0',
@@ -62,7 +63,8 @@ def _convert_to_dax3_xml(data):
                 child = ET.SubElement(root, 'child', ref=job_id)
                 for parent in job['parents']:
                     if not parent.startswith(('stage_', 'create_dir', 'cleanup', 'clean_up', 'register_')):
-                        parent_id = parent.split('_')[1]
+                        p = parent.split('_')
+                        parent_id = p[len(p) - 1]
                         ET.SubElement(child, 'parent', ref=parent_id)
 
     return ET.ElementTree(root)
