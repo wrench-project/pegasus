@@ -1,4 +1,6 @@
 [![Build Status][travis-badge]][travis-link]
+[![GitHub Release][release-badge]][release-link]
+[![License: LGPL v3][license-badge]](LICENSE.md)
 
 # WRENCH-Pegasus Implementation
 
@@ -80,4 +82,8 @@ WRENCH-Pegasus' [Github Issues Track](https://github.com/wrench-project/pegasus/
 
 [travis-badge]:             https://travis-ci.org/wrench-project/pegasus.svg?branch=master
 [travis-link]:              https://travis-ci.org/wrench-project/pegasus
+[license-badge]:            https://img.shields.io/badge/License-LGPL%20v3-blue.svg
+[release-badge]:            https://img.shields.io/github/release/wrench-project/pegasus/all.svg
+[release-link]:             https://github.com/wrench-project/pegasus/releases
+
 
