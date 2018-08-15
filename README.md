@@ -4,10 +4,15 @@
 
 <img src="https://raw.githubusercontent.com/wrench-project/wrench/master/doc/images/logo-vertical.png" width="100" />
 
+This project is a WRENCH-based simulator of the [Pegasus](https://pegasus.isi.edu) WMS. 
+Since Pegasus relies on HTCondor, first we have implemented the HTCondor services as
+
 WRENCH is an _open-source library_ for developing workflow simulators. WRENCH exposes several high-level simulation 
 abstractions to provide the **building blocks** for developing custom simulators.
 
 More information: [WRENCH Project Website](http://wrench-project.org)
+
+<img src="doc/images/wrench-pegasus-architecture.png" width="200" />
 
 ## Prerequisites
 
@@ -23,7 +28,7 @@ And, one of the following:
 
 ## Dependencies
 
-- [WRENCH](http://wrench-project.org/) - version 1.0.0 or higher
+- [WRENCH](http://wrench-project.org/) - version [1.0.0](https://github.com/wrench-project/wrench/releases/tag/1.0.0)
 
 ## Building From Source
 

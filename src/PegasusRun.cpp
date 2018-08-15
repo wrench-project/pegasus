@@ -48,8 +48,8 @@ int main(int argc, char **argv) {
   // loading the workflow from the JSON file
   WRENCH_INFO("Loading workflow from: %s", workflow_file);
   wrench::Workflow workflow;
-  workflow.loadFromDAX(workflow_file, "1f");
-//  workflow.loadFromJSON(workflow_file, "1f");
+//  workflow.loadFromDAX(workflow_file, "1f");
+  workflow.loadFromJSON(workflow_file, "1f");
   WRENCH_INFO("The workflow has %ld tasks", workflow.getNumberOfTasks());
 
   // create the HTCondor services
@@ -67,32 +67,23 @@ int main(int argc, char **argv) {
                                                                    file_registry_service));
   dagman->addWorkflow(&workflow);
 
-  std::cerr << "Staging input files..." << std::endl;
+  WRENCH_INFO("Staging workflow input files to external Storage Service...");
   std::map<std::string, wrench::WorkflowFile *> input_files = workflow.getInputFiles();
-  try {
-    simulation.stageFiles(input_files, htcondor_service->getLocalStorageService());
-  } catch (std::runtime_error &e) {
-    std::cerr << "Exception: " << e.what() << std::endl;
-    return 0;
-  }
+  std::map<std::string, wrench::StorageService *> storage_services = config.getStorageServicesMap();
 
-//  WRENCH_INFO("Staging workflow input files to external Storage Service...");
-//  std::map<std::string, wrench::WorkflowFile *> input_files = workflow.getInputFiles();
-//  std::map<std::string, wrench::StorageService *> storage_services = config.getStorageServicesMap();
-//
-//  for (auto task : workflow.getTasks()) {
-//    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
-//      for (auto file_transfer : task->getFileTransfers()) {
-//        if (not file_transfer.first->isOutput()) {
-//          if (file_transfer.second.first == "local") {
-//            simulation.stageFile(file_transfer.first, htcondor_service->getLocalStorageService());
-//          } else {
-//            simulation.stageFile(file_transfer.first, storage_services.at(file_transfer.second.first));
-//          }
-//        }
-//      }
-//    }
-//  }
+  for (auto task : workflow.getTasks()) {
+    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
+      for (auto file_transfer : task->getFileTransfers()) {
+        if (not file_transfer.first->isOutput()) {
+          if (file_transfer.second.first == "local") {
+            simulation.stageFile(file_transfer.first, htcondor_service->getLocalStorageService());
+          } else {
+            simulation.stageFile(file_transfer.first, storage_services.at(file_transfer.second.first));
+          }
+        }
+      }
+    }
+  }
 
   // simulation execution
   WRENCH_INFO("Launching the Simulation...");
