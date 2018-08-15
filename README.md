@@ -5,14 +5,43 @@
 <img src="https://raw.githubusercontent.com/wrench-project/wrench/master/doc/images/logo-vertical.png" width="100" />
 
 This project is a WRENCH-based simulator of the [Pegasus](https://pegasus.isi.edu) WMS. 
-Since Pegasus relies on HTCondor, first we have implemented the HTCondor services as
+Since Pegasus relies on HTCondor, first we have implemented the HTCondor services as 
+simulated core CI services, which together form a new Compute Service that exposes the 
+WRENCH Developer API. This makes HTCondor available to any WMS implementation that is 
+to be simulated using WRENCH.
 
-WRENCH is an _open-source library_ for developing workflow simulators. WRENCH exposes several high-level simulation 
+HTCondor is composed of six main service daemons (startd, starter, schedd, shadow, 
+negotiator, and collector). In addition, each host on which one or more of these 
+daemons is spawned must also run a master daemon, which controls the execution of 
+all other daemons (including initialization and completion). The bottom part of 
+the simulator architecture figure below depicts the components of our simulated 
+HTCondor implementation, where daemons are shown in red-bordered boxes. In our simulator 
+we implement the 3 fundamental HTCondor services, implemented as particular sets 
+of daemons, as depicted in the bottom part of the figure shown below in borderless 
+white boxes. The Job Execution Service consists of a startd daemon, which adds the 
+host on which it is running to the HTCondor pool, and of a starter daemon, which 
+manages task executions on this host. The Central Manager Service consists of a 
+collector daemon, which collects information about all other daemons, and of a 
+negotiator daemon, which performs task/resource matchmaking. The Job Submission 
+Service consists of a schedd daemon, which maintains a queue of tasks, and of 
+several instances of a shadow daemon, each of which corresponds to a task submitted 
+to the Condor pool for execution.
+
+We implemented the simulated Pegasus WMS, including the DAGMan workflow engine, 
+using the WRENCH Developer API. This implementation instantiates all services and 
+parses the workflow description file, the platform description file, and a 
+Pegasus-specific configuration file. DAGMan orchestrates the workflow execution, 
+and monitors the status of tasks submitted to the HTCondor pool using a pull model.
+The top part of the architecture figure below depicts the components of our 
+simulated Pegasus implementation (each shown in a red box).
+
+<img src="doc/images/wrench-pegasus-architecture.png" width="350" />
+
+### WRENCH
+
+[WRENCH](http://wrench-project.org) is an _open-source library_ for developing workflow simulators. WRENCH exposes several high-level simulation 
 abstractions to provide the **building blocks** for developing custom simulators.
 
-More information: [WRENCH Project Website](http://wrench-project.org)
-
-<img src="doc/images/wrench-pegasus-architecture.png" width="200" />
 
 ## Prerequisites
 
