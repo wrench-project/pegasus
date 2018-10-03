@@ -161,7 +161,8 @@ namespace wrench {
               if (auto cloud = dynamic_cast<CloudService *>(cs.get())) {
                 for (auto host : cloud->getExecutionHosts()) {
                   for (int i = 0; i < S4U_Simulation::getHostNumCores(host); i++) {
-                    cloud->createVM(1,ComputeService::ALL_RAM);
+                    cloud->createVM(host, 1);
+//                    cloud->createVM(1,ComputeService::ALL_RAM);  // for more recent WRENCH
                   }
                 }
               }
