@@ -26,7 +26,8 @@ int main(int argc, char **argv) {
   // check to make sure there are the right number of arguments
   if (argc != 4) {
     std::cerr << "WRENCH Pegasus WMS Simulator" << std::endl;
-    std::cerr << "Usage: " << argv[0] << " <xml platform file> <JSON workflow file> <JSON simulation config file>"
+    std::cerr << "Usage: " << argv[0]
+              << " <xml platform file> <JSON or XML workflow file> <JSON simulation config file>"
               << std::endl;
     exit(1);
   }
@@ -45,22 +46,40 @@ int main(int argc, char **argv) {
   wrench::pegasus::SimulationConfig config;
   config.loadProperties(simulation, properties_file);
 
-  // loading the workflow from the JSON file
+  // loading the workflow from the JSON or XML file
   WRENCH_INFO("Loading workflow from: %s", workflow_file);
+  std::istringstream ss(workflow_file);
+  std::string token;
+  std::vector<std::string> tokens;
+  while (std::getline(ss, token, '.')) {
+    tokens.push_back(token);
+  }
+
+  if (tokens.size() < 2) {
+    std::cerr << "Invalid workflow file name " << workflow_file << " (should be *.xml or *.json)\n";
+    exit(1);
+  }
   wrench::Workflow workflow;
-//  workflow.loadFromDAX(workflow_file, "1f");
-  workflow.loadFromJSON(workflow_file, "1f");
+  if (tokens[tokens.size() - 1] == "xml") {
+    workflow.loadFromDAX(workflow_file, "1f");
+  } else if (tokens[tokens.size() - 1] == "json") {
+    workflow.loadFromJSON(workflow_file, "1f");
+  } else {
+    std::cerr << "Invalid workflow file name " << workflow_file << " (should be *.xml or *.json)\n";
+    exit(1);
+  }
+
   WRENCH_INFO("The workflow has %ld tasks", workflow.getNumberOfTasks());
 
-  // create the HTCondor services
+// create the HTCondor services
   wrench::pegasus::HTCondorService *htcondor_service = config.getHTCondorService();
 
-  // file registry service
+// file registry service
   WRENCH_INFO("Instantiating a FileRegistryService on: %s", config.getFileRegistryHostname().c_str());
   wrench::FileRegistryService *file_registry_service = simulation.add(
           new wrench::FileRegistryService(config.getFileRegistryHostname()));
 
-  // create the DAGMan wms
+// create the DAGMan wms
   wrench::WMS *dagman = simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
                                                                    {htcondor_service},
                                                                    config.getStorageServices(),
@@ -85,7 +104,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  // simulation execution
+// simulation execution
   WRENCH_INFO("Launching the Simulation...");
   try {
     simulation.launch();
@@ -95,7 +114,7 @@ int main(int argc, char **argv) {
   }
   WRENCH_INFO("Simulation done!");
 
-  // statistics
+// statistics
   std::map<std::string, double> start_stats;
   std::map<std::string, double> completion_stats;
   std::map<std::string, double> scheduled_stats;
