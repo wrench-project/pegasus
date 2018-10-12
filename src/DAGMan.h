@@ -12,7 +12,7 @@
 
 #include <wrench-dev.h>
 #include "DAGManMonitor.h"
-#include "HTCondorService.h"
+#include "wrench/services/compute/htcondor/HTCondorService.h"
 
 namespace wrench {
     namespace pegasus {

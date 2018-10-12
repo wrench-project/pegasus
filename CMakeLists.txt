@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # build the version number
 set(WRENCH_PEGASUS_VERSION_MAJOR "1")
-set(WRENCH_PEGASUS_VERSION_MINOR "0")
+set(WRENCH_PEGASUS_VERSION_MINOR "2")
 set(WRENCH_PEGASUS_VERSION_PATCH "0")
 set(WRENCH_PEGASUS_VERSION_EXTRA "")
 
@@ -33,23 +33,10 @@ set(SOURCE_FILES
         src/DAGManMonitor.cpp
         src/DAGManScheduler.h
         src/DAGManScheduler.cpp
-        src/HTCondorService.h
-        src/HTCondorService.cpp
-        src/HTCondorServiceMessagePayload.h
-        src/HTCondorServiceProperty.h
         src/SimulationConfig.h
         src/SimulationConfig.cpp
         src/PegasusSimulationTimestampTypes.h
         src/PegasusSimulationTimestampTypes.cpp
-        src/HTCondorCentralManagerService.h
-        src/HTCondorCentralManagerService.cpp
-        src/HTCondorCentralManagerServiceProperty.h
-        src/HTCondorCentralManagerServiceMessagePayload.h
-        src/HTCondorCentralManagerServiceMessagePayload.cpp
-        src/HTCondorCentralManagerServiceMessage.h
-        src/HTCondorCentralManagerServiceMessage.cpp
-        src/HTCondorNegotiatorService.h
-        src/HTCondorNegotiatorService.cpp
         src/PegasusRun.cpp
         )
 

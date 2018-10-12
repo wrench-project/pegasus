@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
   WRENCH_INFO("The workflow has %ld tasks", workflow.getNumberOfTasks());
 
   // create the HTCondor services
-  wrench::pegasus::HTCondorService *htcondor_service = config.getHTCondorService();
+  wrench::HTCondorService *htcondor_service = config.getHTCondorService();
 
   // file registry service
   WRENCH_INFO("Instantiating a FileRegistryService on: %s", config.getFileRegistryHostname().c_str());

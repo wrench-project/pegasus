@@ -138,14 +138,14 @@ namespace wrench {
           };
 
           for (auto &hostname : hosts) {
-            this->compute_services.insert(std::shared_ptr<ComputeService>(
+            this->compute_services.insert(
                     new MultihostMulticoreComputeService(
                             hostname,
                             {std::make_tuple(
                                     hostname,
                                     wrench::Simulation::getHostNumCores(hostname),
                                     wrench::Simulation::getHostMemoryCapacity(hostname))},
-                            100000000000.0, {}, messagepayload_properties_list)));
+                            100000000000.0, {}, messagepayload_properties_list));
           }
         }
 
@@ -163,8 +163,8 @@ namespace wrench {
                   {CloudServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
           };
 
-          auto cloud_service = std::shared_ptr<ComputeService>(
-                  new CloudService(service_host, hosts, 100000000000.0, {}, messagepayload_properties_list));
+          auto cloud_service = new CloudService(service_host, hosts, 100000000000.0, {},
+                                                messagepayload_properties_list);
 
           this->compute_services.insert(cloud_service);
         }

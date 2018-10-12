@@ -8,7 +8,7 @@
  */
 
 #include "DAGManScheduler.h"
-#include "HTCondorService.h"
+#include "wrench/services/compute/htcondor/HTCondorService.h"
 #include "PegasusSimulationTimestampTypes.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(HTCondorSchedd, "Log category for HTCondor Scheduler Daemon");

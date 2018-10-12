@@ -13,7 +13,7 @@
 #include <nlohmann/json.hpp>
 #include <wrench-dev.h>
 
-#include "HTCondorService.h"
+#include "wrench/services/compute/htcondor/HTCondorService.h"
 
 namespace wrench {
     namespace pegasus {
@@ -58,7 +58,7 @@ namespace wrench {
 
             std::string submit_hostname;
             std::string file_registry_hostname;
-            std::set<std::shared_ptr<ComputeService>> compute_services;
+            std::set<ComputeService *> compute_services;
             std::set<StorageService *> storage_services;
             HTCondorService *htcondor_service;
         };
