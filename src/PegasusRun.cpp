@@ -26,7 +26,8 @@ int main(int argc, char **argv) {
   // check to make sure there are the right number of arguments
   if (argc != 4) {
     std::cerr << "WRENCH Pegasus WMS Simulator" << std::endl;
-    std::cerr << "Usage: " << argv[0] << " <xml platform file> <JSON workflow file> <JSON simulation config file>"
+    std::cerr << "Usage: " << argv[0]
+              << " <xml platform file> <JSON or XML workflow file> <JSON simulation config file>"
               << std::endl;
     exit(1);
   }
@@ -45,11 +46,29 @@ int main(int argc, char **argv) {
   wrench::pegasus::SimulationConfig config;
   config.loadProperties(simulation, properties_file);
 
-  // loading the workflow from the JSON file
+  // loading the workflow from the JSON or XML file
   WRENCH_INFO("Loading workflow from: %s", workflow_file);
+  std::istringstream ss(workflow_file);
+  std::string token;
+  std::vector<std::string> tokens;
+  while (std::getline(ss, token, '.')) {
+    tokens.push_back(token);
+  }
+
+  if (tokens.size() < 2) {
+    std::cerr << "Invalid workflow file name " << workflow_file << " (should be *.xml or *.json)\n";
+    exit(1);
+  }
   wrench::Workflow workflow;
-//  workflow.loadFromDAX(workflow_file, "1f");
-  workflow.loadFromJSON(workflow_file, "1f");
+  if (tokens[tokens.size() - 1] == "xml") {
+    workflow.loadFromDAX(workflow_file, "1f");
+  } else if (tokens[tokens.size() - 1] == "json") {
+    workflow.loadFromJSON(workflow_file, "1f");
+  } else {
+    std::cerr << "Invalid workflow file name " << workflow_file << " (should be *.xml or *.json)\n";
+    exit(1);
+  }
+
   WRENCH_INFO("The workflow has %ld tasks", workflow.getNumberOfTasks());
 
   // create the HTCondor services
@@ -117,7 +136,8 @@ int main(int argc, char **argv) {
   auto completion_trace = simulation.getOutput().getTrace<wrench::pegasus::SimulationTimestampJobCompletion>();
   for (auto &task : completion_trace) {
     auto t = task->getContent();
-    duration_stats.insert(std::make_pair(t->getTask()->getID(), t->getTask()->getEndDate() - t->getTask()->getStartDate()));
+    duration_stats.insert(
+            std::make_pair(t->getTask()->getID(), t->getTask()->getEndDate() - t->getTask()->getStartDate()));
     completion_stats.insert(std::make_pair(t->getTask()->getID(), t->getClock()));
     level_stats.insert(std::make_pair(t->getTask()->getID(), t->getTask()->getTopLevel()));
   }
