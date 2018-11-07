@@ -6,7 +6,7 @@
 
 <img src="https://raw.githubusercontent.com/wrench-project/wrench/master/doc/images/logo-vertical.png" width="100" />
 
-This project is a WRENCH-based simulator of the [Pegasus](https://pegasus.isi.edu) WMS. 
+This project is a [WRENCH](http://wrench-project.org)-based simulator of the [Pegasus](https://pegasus.isi.edu) WMS. 
 Since Pegasus relies on HTCondor, first we have implemented the HTCondor services as 
 simulated core CI services, which together form a new Compute Service that exposes the 
 WRENCH Developer API. This makes HTCondor available to any WMS implementation that is 
@@ -39,11 +39,6 @@ simulated Pegasus implementation (each shown in a red box).
 
 <img src="doc/images/wrench-pegasus-architecture.png" width="350" />
 
-### WRENCH
-
-[WRENCH](http://wrench-project.org) is an _open-source library_ for developing workflow simulators. WRENCH exposes several high-level simulation 
-abstractions to provide the **building blocks** for developing custom simulators.
-
 
 ## Prerequisites
 
@@ -59,7 +54,7 @@ And, one of the following:
 
 ## Dependencies
 
-- [WRENCH](http://wrench-project.org/) - version [1.0.0](https://github.com/wrench-project/wrench/releases/tag/1.0.0)
+- [WRENCH](http://wrench-project.org/) - [version 1.2](https://github.com/wrench-project/wrench/releases/tag/v1.2)
 
 ## Building From Source
 
@@ -85,5 +80,4 @@ WRENCH-Pegasus' [Github Issues Track](https://github.com/wrench-project/pegasus/
 [license-badge]:            https://img.shields.io/badge/License-LGPL%20v3-blue.svg
 [release-badge]:            https://img.shields.io/github/release/wrench-project/pegasus/all.svg
 [release-link]:             https://github.com/wrench-project/pegasus/releases
-
 

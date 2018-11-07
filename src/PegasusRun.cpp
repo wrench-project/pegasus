@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
   }
 
   for (const auto &task : start_stats) {
-    double completion_time = (*completion_stats.find(task.first)).second;
+    auto completion_time = (*completion_stats.find(task.first)).second;
     double duration = completion_time - (*scheduled_stats.find(task.first)).second;
     unsigned long level = (*level_stats.find(task.first)).second;
 
