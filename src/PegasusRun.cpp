@@ -86,12 +86,16 @@ int main(int argc, char **argv) {
                                                                    file_registry_service));
   dagman->addWorkflow(&workflow);
 
+  // stage input data
   WRENCH_INFO("Staging workflow input files to external Storage Service...");
   std::map<std::string, wrench::WorkflowFile *> input_files = workflow.getInputFiles();
   std::map<std::string, wrench::StorageService *> storage_services = config.getStorageServicesMap();
 
+  int num_transfer_tasks = 0;
+
   for (auto task : workflow.getTasks()) {
     if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
+      num_transfer_tasks++;
       for (auto file_transfer : task->getFileTransfers()) {
         if (not file_transfer.first->isOutput()) {
           if (file_transfer.second.first == "local") {
@@ -101,6 +105,16 @@ int main(int argc, char **argv) {
           }
         }
       }
+    }
+  }
+
+  if (num_transfer_tasks == 0) {
+    // handle the XML import case where there are no transfer tasks
+    for (auto file : input_files) {
+      for (auto storage_service : storage_services) {
+        simulation.stageFiles(input_files, storage_service.second);
+      }
+      simulation.stageFiles(input_files, htcondor_service->getLocalStorageService());
     }
   }
 

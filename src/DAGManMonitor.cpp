@@ -19,7 +19,8 @@ namespace wrench {
          *
          * @param hostname: the name of the host on which the service will run
          */
-        DAGManMonitor::DAGManMonitor(std::string &hostname) : Service(hostname, "dagman_monitor", "dagman_monitor") {}
+        DAGManMonitor::DAGManMonitor(std::string &hostname, Workflow *workflow) :
+                Service(hostname, "dagman_monitor", "dagman_monitor"), workflow(workflow) {}
 
         /**
          * @brief Destructor
@@ -81,33 +82,25 @@ namespace wrench {
          * @throw std::runtime_error
          */
         bool DAGManMonitor::processNextMessage() {
-          // Wait for a message
-          std::unique_ptr<SimulationMessage> message;
-
+          // Wait for a workflow execution event
+          std::unique_ptr<wrench::WorkflowExecutionEvent> event;
           try {
-            message = S4U_Mailbox::getMessage(this->mailbox_name);
-          } catch (std::shared_ptr<NetworkError> &cause) {
-            return true;
+            event = this->workflow->waitForNextExecutionEvent();
+
+          } catch (wrench::WorkflowExecutionException &e) {
+            throw std::runtime_error("Error while getting and execution event: " + e.getCause()->toString());
           }
-
-          if (message == nullptr) {
-            WRENCH_INFO("Got a NULL message... Likely this means we're all done. Aborting");
-            return false;
+          switch (event->type) {
+            case wrench::WorkflowExecutionEvent::STANDARD_JOB_COMPLETION: {
+              StandardJob *job = (dynamic_cast<StandardJobCompletedEvent *>(event.get()))->standard_job;
+              this->processStandardJobCompletion(job);
+              break;
+            }
+            default: {
+              throw std::runtime_error("Unexpected workflow execution event: " + std::to_string((int) (event->type)));
+            }
           }
-
-          WRENCH_INFO("Got a [%s] message", message->getName().c_str());
-
-          if (auto *msg = dynamic_cast<ServiceStopDaemonMessage *>(message.get())) {
-            this->completed_jobs.clear();
-            return false;
-
-          } else if (auto *msg = dynamic_cast<ComputeServiceStandardJobDoneMessage *>(message.get())) {
-            processStandardJobCompletion(msg->job);
-            return true;
-
-          } else {
-            throw std::runtime_error("Unexpected [" + message->getName() + "] message");
-          }
+          return true;
         }
 
         /**

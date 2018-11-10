@@ -36,8 +36,6 @@ namespace wrench {
 
           // DAGMan performs BFS search by default
           this->running_tasks_level = std::make_pair(0, 0);
-
-          this->dagman_monitor = std::make_shared<DAGManMonitor>(this->hostname);
         }
 
         /**
@@ -70,6 +68,7 @@ namespace wrench {
           WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks", this->getWorkflow()->getNumberOfTasks());
 
           // starting monitor
+          this->dagman_monitor = std::make_shared<DAGManMonitor>(this->hostname, this->getWorkflow());
           this->dagman_monitor->simulation = this->simulation;
           this->dagman_monitor->start(dagman_monitor, true);
 

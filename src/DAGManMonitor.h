@@ -20,7 +20,7 @@ namespace wrench {
          */
         class DAGManMonitor : public Service {
         public:
-            DAGManMonitor(std::string &hostname);
+            DAGManMonitor(std::string &hostname, Workflow *workflow);
 
             ~DAGManMonitor() override;
 
@@ -36,6 +36,8 @@ namespace wrench {
             void processStandardJobCompletion(StandardJob *job);
 
             std::set<WorkflowJob *> completed_jobs;
+
+            Workflow *workflow;
         };
     }
 }

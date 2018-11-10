@@ -133,7 +133,6 @@ namespace wrench {
 
             }
             WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
-            job->pushCallbackMailbox(this->monitor_callback_mailbox);
             this->getJobManager()->submitJob(job, htcondor_service);
             // create job scheduled event
             this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
