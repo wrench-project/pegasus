@@ -54,7 +54,7 @@ And, one of the following:
 
 ## Dependencies
 
-- [WRENCH](http://wrench-project.org/) - [version 1.2](https://github.com/wrench-project/wrench/releases/tag/v1.2)
+- [WRENCH](http://wrench-project.org/) - [version 1.3](https://github.com/wrench-project/wrench/releases/tag/v1.3)
 
 ## Building From Source
 
@@ -63,7 +63,7 @@ If all dependencies are installed, compiling and installing WRENCH-Pegasus is as
 ```bash
 cmake .
 make
-make install  # try "sudo make install" if you don't have the permission to write
+make install  # try "sudo make install" if you do not have the permission to write
 ```
 
 ## Get in Touch

@@ -132,20 +132,20 @@ namespace wrench {
         void SimulationConfig::instantiateMultihostMulticore(std::vector<std::string> hosts) {
 
           std::map<std::string, std::string> messagepayload_properties_list = {
-                  {MultihostMulticoreComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
-                  {MultihostMulticoreComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
-                  {MultihostMulticoreComputeServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
+                  {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
+                  {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
+                  {BareMetalComputeServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
           };
 
           for (auto &hostname : hosts) {
+            std::map<std::string, std::tuple<unsigned long, double>> compute_resources;
+            compute_resources.insert(std::make_pair(hostname,
+                                                    std::make_tuple(
+                                                            wrench::Simulation::getHostNumCores(hostname),
+                                                            wrench::Simulation::getHostMemoryCapacity(hostname))));
             this->compute_services.insert(
-                    new MultihostMulticoreComputeService(
-                            hostname,
-                            {std::make_tuple(
-                                    hostname,
-                                    wrench::Simulation::getHostNumCores(hostname),
-                                    wrench::Simulation::getHostMemoryCapacity(hostname))},
-                            100000000000.0, {}, messagepayload_properties_list));
+                    new BareMetalComputeService(hostname, compute_resources, 100000000000.0, {},
+                                                messagepayload_properties_list));
           }
         }
 
