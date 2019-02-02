@@ -28,6 +28,8 @@ namespace wrench {
                    const std::set<StorageService *> &storage_services,
                    FileRegistryService *file_registry_service);
 
+            void setExecutionHosts(const std::vector<std::string> &execution_hosts);
+
         protected:
             /***********************/
             /** \cond DEVELOPER    */
@@ -58,6 +60,8 @@ namespace wrench {
             std::set<WorkflowTask *> scheduled_tasks;
             /** @brief */
             std::shared_ptr<DAGManMonitor> dagman_monitor;
+            /** @brief List of execution hosts */
+            std::vector<std::string> execution_hosts;
         };
     }
 }

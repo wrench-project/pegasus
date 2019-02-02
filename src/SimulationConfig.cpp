@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2019. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ namespace wrench {
             std::string type = getPropertyValue<std::string>("type", resource);
 
             if (type == "multicore") {
-              instantiateMultihostMulticore(resource.at("compute_hosts"));
+              instantiateBareMetal(resource.at("compute_hosts"));
             } else if (type == "cloud") {
               instantiateCloud(resource.at("service_host"), resource.at("compute_hosts"));
             } else if (type == "batch") {
@@ -125,11 +125,19 @@ namespace wrench {
         };
 
         /**
+         * @brief Get a vector of execution hosts that can be used to compute tasks
+         * @return A vector of execution hosts
+         */
+        std::vector<std::string> SimulationConfig::getExecutionHosts() {
+          return this->execution_hosts;
+        }
+
+        /**
          * @brief Instantiate wrench::MultihostMulticoreComputeService
          *
          * @param hosts: vector of hosts to be instantiated
          */
-        void SimulationConfig::instantiateMultihostMulticore(std::vector<std::string> hosts) {
+        void SimulationConfig::instantiateBareMetal(std::vector<std::string> hosts) {
 
           std::map<std::string, std::string> messagepayload_properties_list = {
                   {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
@@ -138,6 +146,7 @@ namespace wrench {
           };
 
           for (auto &hostname : hosts) {
+            this->execution_hosts.push_back(hostname);
             std::map<std::string, std::tuple<unsigned long, double>> compute_resources;
             compute_resources.insert(std::make_pair(hostname,
                                                     std::make_tuple(
@@ -163,6 +172,7 @@ namespace wrench {
                   {CloudServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
           };
 
+          this->execution_hosts.insert(this->execution_hosts.end(), hosts.begin(), hosts.end());
           auto cloud_service = new CloudService(service_host, hosts, 100000000000.0, {},
                                                 messagepayload_properties_list);
 

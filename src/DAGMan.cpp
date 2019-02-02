@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2019. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,14 @@ namespace wrench {
         }
 
         /**
+         * @brief Set the list of execution hosts available for computing tasks
+         * @param execution_hosts: A vector of execution hosts
+         */
+        void DAGMan::setExecutionHosts(const std::vector<std::string> &execution_hosts) {
+          this->execution_hosts = execution_hosts;
+        }
+
+        /**
          * @brief Compare the priority between two workflow tasks
          *
          * @param lhs: pointer to a workflow task
@@ -71,6 +79,9 @@ namespace wrench {
           this->dagman_monitor = std::make_shared<DAGManMonitor>(this->hostname, this->getWorkflow());
           this->dagman_monitor->simulation = this->simulation;
           this->dagman_monitor->start(dagman_monitor, true);
+
+          // create the energy meter
+//          std::shared_ptr<wrench::EnergyMeter> energy_meter = this->createEnergyMeter();
 
           // Create a job manager
           this->job_manager = this->createJobManager();

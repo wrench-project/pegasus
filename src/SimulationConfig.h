@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2019. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,10 @@ namespace wrench {
 
             std::map<std::string, StorageService *> getStorageServicesMap();
 
+            std::vector<std::string> getExecutionHosts();
+
         private:
-            void instantiateMultihostMulticore(std::vector<std::string> hosts);
+            void instantiateBareMetal(std::vector<std::string> hosts);
 
             void instantiateCloud(std::string service_host, std::vector<std::string> hosts);
 
@@ -60,6 +62,7 @@ namespace wrench {
             std::string file_registry_hostname;
             std::set<ComputeService *> compute_services;
             std::set<StorageService *> storage_services;
+            std::vector<std::string> execution_hosts;
             HTCondorService *htcondor_service;
         };
 

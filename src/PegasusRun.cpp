@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2019. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,11 +80,12 @@ int main(int argc, char **argv) {
           new wrench::FileRegistryService(config.getFileRegistryHostname()));
 
   // create the DAGMan wms
-  wrench::WMS *dagman = simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
-                                                                   {htcondor_service},
-                                                                   config.getStorageServices(),
-                                                                   file_registry_service));
+  auto dagman = (wrench::pegasus::DAGMan *) simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
+                                                                                       {htcondor_service},
+                                                                                       config.getStorageServices(),
+                                                                                       file_registry_service));
   dagman->addWorkflow(&workflow);
+  dagman->setExecutionHosts(config.getExecutionHosts());
 
   // stage input data
   WRENCH_INFO("Staging workflow input files to external Storage Service...");
