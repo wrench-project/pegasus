@@ -31,10 +31,8 @@ set(SOURCE_FILES
         src/DAGMan.cpp
         src/DAGManMonitor.h
         src/DAGManMonitor.cpp
-        src/scheduler/DAGManScheduler.h
-        src/scheduler/DAGManScheduler.cpp
-        src/scheduler/DAGManTaskTypeScheduler.h
-        src/scheduler/DAGManTaskTypeScheduler.cpp
+        src/DAGManScheduler.h
+        src/DAGManScheduler.cpp
         src/SimulationConfig.h
         src/SimulationConfig.cpp
         src/PegasusSimulationTimestampTypes.h

@@ -48,6 +48,8 @@ namespace wrench {
                 bool operator()(WorkflowTask *&lhs, WorkflowTask *&rhs);
             };
 
+            std::string getTaskIDType(const std::string &taskID);
+
             /** @brief The job manager */
             std::shared_ptr<JobManager> job_manager;
             /** @brief Whether the workflow execution should be aborted */
@@ -56,8 +58,10 @@ namespace wrench {
             std::pair<unsigned long, unsigned long> running_tasks_level;
             /** @brief */
             unsigned long running_register_tasks = 0;
-            /** @brief */
+            /** @brief Set of tasks scheduled for running */
             std::set<WorkflowTask *> scheduled_tasks;
+            /** @brief Pair of current running task transformation type */
+            std::pair<std::string, int> current_running_task_type;
             /** @brief */
             std::shared_ptr<DAGManMonitor> dagman_monitor;
             /** @brief List of execution hosts */

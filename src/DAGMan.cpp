@@ -8,7 +8,7 @@
  */
 
 #include "DAGMan.h"
-#include "scheduler/DAGManScheduler.h"
+#include "DAGManScheduler.h"
 #include "PegasusSimulationTimestampTypes.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(DAGMan, "Log category for DAGMan");
@@ -81,7 +81,7 @@ namespace wrench {
           this->dagman_monitor->start(dagman_monitor, true);
 
           // create the energy meter
-          auto energy_meter = this->createEnergyMeter(this->execution_hosts, 1);
+//          auto energy_meter = this->createEnergyMeter(this->execution_hosts, 1);
 
           // Create a job manager
           this->job_manager = this->createJobManager();
@@ -126,34 +126,53 @@ namespace wrench {
               if (tasks_to_submit.size() == 5) {
                 break;
               }
-              // by default DAGMan only runs a single register job at once
-              if (task->getID().find("register_local") == 0) {
-                if (running_register_tasks > 0) {
+
+              // get task ID type
+              std::string task_id_type = this->getTaskIDType(task->getID());
+
+              if (this->current_running_task_type.first.empty() ||
+                  this->current_running_task_type.first == task_id_type) {
+
+                // by default DAGMan only runs a single register job at once
+                if (task->getID().find("register_local") == 0) {
+                  if (running_register_tasks > 0) {
+                    submitted_tasks++;
+                    dagman_ready_tasks.erase(it);
+                    continue;
+                  }
+                  running_register_tasks++;
+                }
+
+                if (this->scheduled_tasks.find(task) == this->scheduled_tasks.end()) {
+
+                  // update current running task type
+                  if (this->current_running_task_type.first.empty()) {
+                    this->current_running_task_type = std::make_pair(task_id_type, 1);
+                  } else {
+                    this->current_running_task_type.second++;
+                  }
+
+                  this->scheduled_tasks.insert(task);
+                  tasks_to_submit.push_back(task);
+                  dagman_ready_tasks.erase(it);
+
+                  // updating number of tasks running per level
+                  if (task->getTopLevel() > this->running_tasks_level.first) {
+                    this->running_tasks_level = std::make_pair(task->getTopLevel(), 1);
+
+                  } else if (task->getTopLevel() == this->running_tasks_level.first) {
+                    this->running_tasks_level.second++;
+                  }
+
+                  // create job submitted event
+                  this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
+                          new SimulationTimestampJobSubmitted(task));
+                  WRENCH_INFO("Submitted task: %s", task->getID().c_str());
+
+                } else {
                   submitted_tasks++;
                   dagman_ready_tasks.erase(it);
-                  continue;
                 }
-                running_register_tasks++;
-              }
-
-              if (this->scheduled_tasks.find(task) == this->scheduled_tasks.end()) {
-                this->scheduled_tasks.insert(task);
-                tasks_to_submit.push_back(task);
-                dagman_ready_tasks.erase(it);
-
-                // updating number of tasks running per level
-                if (task->getTopLevel() > this->running_tasks_level.first) {
-                  this->running_tasks_level = std::make_pair(task->getTopLevel(), 1);
-
-                } else if (task->getTopLevel() == this->running_tasks_level.first) {
-                  this->running_tasks_level.second++;
-                }
-
-                // create job submitted event
-                this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
-                        new SimulationTimestampJobSubmitted(task));
-                WRENCH_INFO("Submitted task: %s", task->getID().c_str());
-
               } else {
                 submitted_tasks++;
                 dagman_ready_tasks.erase(it);
@@ -188,6 +207,12 @@ namespace wrench {
               for (auto task : standard_job->getTasks()) {
                 WRENCH_INFO("    Task completed: %s", task->getID().c_str());
 
+                // update current running task ID type
+                this->current_running_task_type.second -= 1;
+                if (this->current_running_task_type.second == 0) {
+                  this->current_running_task_type.first = "";
+                }
+
                 if (task->getID().find("register_") == 0) {
                   // a register task has completed
                   this->running_register_tasks--;
@@ -207,7 +232,6 @@ namespace wrench {
               }
             }
 
-
             if (this->abort || this->getWorkflow()->isDone()) {
               break;
             }
@@ -225,6 +249,16 @@ namespace wrench {
           this->job_manager.reset();
 
           return 0;
+        }
+
+        /**
+         * @brief Extract the task ID type from a task ID
+         *
+         * @param taskID: task ID
+         * @return Task ID type
+         */
+        std::string DAGMan::getTaskIDType(const std::string &taskID) {
+          return taskID.substr(0, taskID.find('_'));
         }
 
         /**
