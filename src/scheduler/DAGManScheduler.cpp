@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2019. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -8,7 +8,6 @@
  */
 
 #include "DAGManScheduler.h"
-#include "wrench/services/compute/htcondor/HTCondorService.h"
 #include "PegasusSimulationTimestampTypes.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(HTCondorSchedd, "Log category for HTCondor Scheduler Daemon");
@@ -23,7 +22,7 @@ namespace wrench {
          * @param storage_services: a set of storage services available for the scheduler
          */
         DAGManScheduler::DAGManScheduler(FileRegistryService *file_registry_service,
-                                       const std::set<StorageService *> &storage_services)
+                                         const std::set<StorageService *> &storage_services)
                 : file_registry_service(file_registry_service), storage_services(storage_services) {}
 
         /**
@@ -40,7 +39,7 @@ namespace wrench {
          * @throw std::runtime_error
          */
         void DAGManScheduler::scheduleTasks(const std::set<ComputeService *> &compute_services,
-                                           const std::vector<WorkflowTask *> &tasks) {
+                                            const std::vector<WorkflowTask *> &tasks) {
 
           WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
 
@@ -150,7 +149,7 @@ namespace wrench {
          *
          * @param simulation: a pointer to the simulation object
          */
-        void DAGManScheduler::setSimuation(wrench::Simulation *simulation) {
+        void DAGManScheduler::setSimulation(wrench::Simulation *simulation) {
           this->simulation = simulation;
         }
 

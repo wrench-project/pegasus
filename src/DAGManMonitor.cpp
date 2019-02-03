@@ -115,6 +115,9 @@ namespace wrench {
           std::string callback_mailbox = job->popCallbackMailbox();
           for (auto task : job->getTasks()) {
             WRENCH_INFO("    Task completed: %s (%s)", task->getID().c_str(), callback_mailbox.c_str());
+            std::cout << "---------------------------------- TASK: " << task->getExecutionHost() << std::endl;
+            std::cout << "---------------------------------- ENERGY: "
+                      << this->simulation->getCurrentPstate(task->getExecutionHost()) << std::endl;
           }
 
           this->completed_jobs.insert(job);

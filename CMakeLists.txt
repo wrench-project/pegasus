@@ -31,13 +31,17 @@ set(SOURCE_FILES
         src/DAGMan.cpp
         src/DAGManMonitor.h
         src/DAGManMonitor.cpp
-        src/DAGManScheduler.h
-        src/DAGManScheduler.cpp
+        src/scheduler/DAGManScheduler.h
+        src/scheduler/DAGManScheduler.cpp
+        src/scheduler/DAGManTaskTypeScheduler.h
+        src/scheduler/DAGManTaskTypeScheduler.cpp
         src/SimulationConfig.h
         src/SimulationConfig.cpp
         src/PegasusSimulationTimestampTypes.h
         src/PegasusSimulationTimestampTypes.cpp
         src/PegasusRun.cpp
+        src/PowerMeter.h
+        src/PowerMeter.cpp
         )
 
 set(TEST_FILES

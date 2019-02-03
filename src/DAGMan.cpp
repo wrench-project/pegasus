@@ -8,7 +8,7 @@
  */
 
 #include "DAGMan.h"
-#include "DAGManScheduler.h"
+#include "scheduler/DAGManScheduler.h"
 #include "PegasusSimulationTimestampTypes.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(DAGMan, "Log category for DAGMan");
@@ -81,7 +81,7 @@ namespace wrench {
           this->dagman_monitor->start(dagman_monitor, true);
 
           // create the energy meter
-//          std::shared_ptr<wrench::EnergyMeter> energy_meter = this->createEnergyMeter();
+          auto energy_meter = this->createEnergyMeter(this->execution_hosts, 1);
 
           // Create a job manager
           this->job_manager = this->createJobManager();
@@ -89,7 +89,7 @@ namespace wrench {
 
           // scheduler
           auto dagman_scheduler = (DAGManScheduler *) this->getStandardJobScheduler();
-          dagman_scheduler->setSimuation(this->simulation);
+          dagman_scheduler->setSimulation(this->simulation);
           dagman_scheduler->setDataMovementManager(data_movement_manager.get());
           dagman_scheduler->setMonitorCallbackMailbox(this->dagman_monitor->getMailbox());
 
