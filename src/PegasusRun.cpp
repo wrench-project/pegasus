@@ -180,6 +180,14 @@ int main(int argc, char **argv) {
               level << "," <<
               task_name <<
               std::endl;
+
+
+    auto power_trace = simulation.getOutput().getTrace<wrench::SimulationTimestampEnergyConsumption>();
+    for (auto measurement : power_trace) {
+      std::cerr << measurement->getContent()->getDate() << "," <<
+                measurement->getContent()->getHostname() << "," <<
+                measurement->getContent()->getConsumption() << std::endl;
+    }
   }
 
   return 0;

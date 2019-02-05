@@ -19,16 +19,33 @@ namespace wrench {
 
         class PowerMeter : public Service {
         public:
+            PowerMeter(WMS *wms, const std::vector<std::string> &hostnames, double period, bool pairwise = false);
+
             void kill();
 
-            void stop();
+            void stop() override;
 
         protected:
             friend class DAGMan;
 
         private:
-            int main();
+            int main() override;
+
+            struct TaskStartTimeComparator {
+                bool operator()(WorkflowTask *&lhs, WorkflowTask *&rhs);
+            };
+
+            double computePowerMeasurements(const std::string &hostname,
+                                          std::set<WorkflowTask *> tasks,
+                                          bool record_as_time_stamp);
+
             bool processNextMessage(double timeout);
+
+            // Relevant WMS
+            WMS *wms;
+            bool pairwise;
+            std::map<std::string, double> measurement_periods;
+            std::map<std::string, double> time_to_next_measurement;
         };
     }
 }

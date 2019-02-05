@@ -81,7 +81,7 @@ namespace wrench {
           this->dagman_monitor->start(dagman_monitor, true);
 
           // create the energy meter
-//          auto energy_meter = this->createEnergyMeter(this->execution_hosts, 1);
+          auto power_meter = this->createPowerMeter(this->execution_hosts, 1);
 
           // Create a job manager
           this->job_manager = this->createJobManager();
@@ -259,6 +259,22 @@ namespace wrench {
          */
         std::string DAGMan::getTaskIDType(const std::string &taskID) {
           return taskID.substr(0, taskID.find('_'));
+        }
+
+        /**
+         * @brief Instantiate and start a power meter
+         * @param hostnames: the list of metered hosts, as hostnames
+         * @param measurement_period: the measurement period
+         * @return a power meter
+         */
+        std::shared_ptr<PowerMeter> DAGMan::createPowerMeter(const std::vector<std::string> &hostnames,
+                                                             double measurement_period) {
+
+          auto power_meter_raw_ptr = new PowerMeter(this, hostnames, measurement_period);
+          std::shared_ptr<PowerMeter> power_meter = std::shared_ptr<PowerMeter>(power_meter_raw_ptr);
+          power_meter->simulation = this->simulation;
+          power_meter->start(power_meter, true); // Always daemonize
+          return power_meter;
         }
 
         /**

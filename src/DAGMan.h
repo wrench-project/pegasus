@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2019. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
 
 #include <wrench-dev.h>
 #include "DAGManMonitor.h"
-#include "wrench/services/compute/htcondor/HTCondorService.h"
+#include "PowerMeter.h"
 
 namespace wrench {
     namespace pegasus {
@@ -37,6 +37,11 @@ namespace wrench {
 
             void processEventStandardJobFailure(std::unique_ptr<StandardJobFailedEvent>) override;
 
+            std::string getTaskIDType(const std::string &taskID);
+
+            std::shared_ptr<PowerMeter> createPowerMeter(const std::vector<std::string> &hostnames,
+                                                         double measurement_period);
+
             /***********************/
             /** \endcond           */
             /***********************/
@@ -47,8 +52,6 @@ namespace wrench {
             struct TaskPriorityComparator {
                 bool operator()(WorkflowTask *&lhs, WorkflowTask *&rhs);
             };
-
-            std::string getTaskIDType(const std::string &taskID);
 
             /** @brief The job manager */
             std::shared_ptr<JobManager> job_manager;
