@@ -157,8 +157,8 @@ namespace wrench {
           int task_index = 0;
 
           for (auto task : tasks) {
+            // power related to cpu usage
             // dynamic power per socket
-            std::cout << "------- SIZE: " << tasks.size() << std::endl;
             double dynamic_power =
                     (S4U_Simulation::getMaxPowerPossible(hostname) - S4U_Simulation::getMinPowerAvailable(hostname)) *
                     (task->getAverageCPU() / 100) / 2;
@@ -173,6 +173,10 @@ namespace wrench {
             } else {
               consumption += -0.4 * (task_index + 1) + dynamic_power / 6;
             }
+
+            // power related to IO usage
+            unsigned long total_io = (task->getBytesRead() + task->getBytesWritten()) / 100000000;
+            consumption += this->pairwise ? 0.486 * total_io : 0.082 * total_io;
 
             task_index++;
           }
