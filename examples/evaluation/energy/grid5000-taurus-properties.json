@@ -1,0 +1,18 @@
+{
+  "submit_host": "taurus-master.lyon.grid5000.fr",
+  "file_registry_host": "taurus-master.lyon.grid5000.fr",
+  "storage_hosts": [
+    {
+      "hostname": "taurus-master.lyon.grid5000.fr",
+      "capacity": 10000000000000.0
+    }
+  ],
+  "compute_services": [
+    {
+      "type": "multicore",
+      "compute_hosts": [
+        "taurus-worker.lyon.grid5000.fr"
+      ]
+    }
+  ]
+}
