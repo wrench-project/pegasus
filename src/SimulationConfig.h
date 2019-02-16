@@ -35,6 +35,8 @@ namespace wrench {
 
             std::vector<std::string> getExecutionHosts();
 
+            bool isEnergySchemePairwise();
+
         private:
             void instantiateBareMetal(std::vector<std::string> hosts);
 
@@ -46,14 +48,19 @@ namespace wrench {
              * @tparam T
              * @param keyName: property key that will be searched for
              * @param jsonData: JSON object to extract the value for the provided key
+             * @param required: whether the property must exist
              *
              * @throw std::invalid_argument
              * @return The value for the provided key, if present
              */
             template<class T>
-            T getPropertyValue(const std::string &keyName, const nlohmann::json &jsonData) {
+            T getPropertyValue(const std::string &keyName, const nlohmann::json &jsonData, const bool required = true) {
               if (jsonData.find(keyName) == jsonData.end()) {
-                throw std::invalid_argument("SimulationConfig::loadProperties(): Unable to find " + keyName);
+                if (required) {
+                  throw std::invalid_argument("SimulationConfig::loadProperties(): Unable to find " + keyName);
+                } else {
+                  return T();
+                }
               }
               return jsonData.at(keyName);
             }
@@ -64,6 +71,7 @@ namespace wrench {
             std::set<StorageService *> storage_services;
             std::vector<std::string> execution_hosts;
             HTCondorService *htcondor_service;
+            bool energy_scheme_pairwise = false;
         };
 
     }

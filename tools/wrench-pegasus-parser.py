@@ -74,6 +74,9 @@ def _get_trace_base(args):
         logger.warning('Please, updated the email address, or use the "-e" option.')
         email = 'support@wrench-project.org'
 
+    if args.ignore_auxiliary:
+        logger.warning('Ignoring Pegasus auxiliary jobs.')
+
     # parsing braindump.txt
     braindump_file = args.pegasus_dir + '/braindump.txt'
     version = None
@@ -185,7 +188,7 @@ def _parse_dax(workflow, pegasus_dir):
             for f in j.findall('{http://pegasus.isi.edu/schema/DAX}uses'):
                 file = collections.OrderedDict()
                 file['link'] = f.get('link')
-                file['name'] = f.get('name')
+                file['name'] = f.get('name') if not f.get('name') == None else f.get('file')
                 file['size'] = 0
                 job['files'].append(file)
 
@@ -199,11 +202,12 @@ def _parse_dax(workflow, pegasus_dir):
         os.remove(dax_file)
 
 
-def _parse_dag(workflow, pegasus_dir):
+def _parse_dag(workflow, pegasus_dir, ignore_auxiliary):
     """
     Parse the DAG file
     :param workflow: workflow object
     :param pegasus_dir: pegasus workflow submit dir
+    :param ignore_auxiliary: ignore auxiliary jobs
     """
     dags_list = _fetch_all_files(pegasus_dir, "dag", "")
     if len(dags_list) < 1:
@@ -215,6 +219,7 @@ def _parse_dag(workflow, pegasus_dir):
     logger.debug('Processing DAG file.')
 
     num_jobs = 0
+    jobs_set = set()
     with open(dag_file) as f:
         for line in f:
             if line.startswith('JOB'):
@@ -228,7 +233,7 @@ def _parse_dag(workflow, pegasus_dir):
                         job = j
                         break
 
-                if not job:
+                if not job and not ignore_auxiliary:
                     job = collections.OrderedDict()
                     job['name'] = job_name
                     job['type'] = 'compute'
@@ -238,7 +243,9 @@ def _parse_dag(workflow, pegasus_dir):
                     workflow['jobs'].append(job)
 
                 # Parsing job stdout file
-                _parse_job_output(workflow, job, pegasus_dir)
+                if job:
+                    jobs_set.add(job['name'])
+                    _parse_job_output(workflow, job, pegasus_dir)
 
             elif line.startswith('PARENT'):
                 # Typically, parent/child references are at the end of the DAG file
@@ -246,7 +253,7 @@ def _parse_dag(workflow, pegasus_dir):
                 parent = s[1]
                 child = s[3]
                 for j in workflow['jobs']:
-                    if j['name'] == child:
+                    if j['name'] == child and parent in jobs_set:
                         j['parents'].append(parent)
                         break
 
@@ -414,7 +421,7 @@ def _parse_job_output(workflow, job, pegasus_dir):
     # parsing meta file
     meta_list = _fetch_all_files(pegasus_dir, "meta", job['name'])
     if not meta_list:
-        logger.warning('Job %s has no meta record. Skipping it.' % job['name'])
+        logger.warning('Job %s has no meta record (skipping meta analysis).' % job['name'])
     else:
         with open(meta_list[0]) as metadata:
             m = json.load(metadata)
@@ -423,25 +430,25 @@ def _parse_job_output(workflow, job, pegasus_dir):
                     files_map[f['_id']] = f['_attributes']['size']
 
     # parsing .in file for stage in/out jobs
-    if job['name'].startswith(('stage_in_', 'stage_out_')):
-        # job['runtime'] = 0
-        in_list = _fetch_all_files(pegasus_dir, "in", job['name'])
-        if not in_list:
-            logger.warning('Job %s has no .in record. Skipping it.' % job['name'])
-        else:
-            link = 'input' if job['name'].startswith('stage_in_') else 'output'
-            with open(in_list[0]) as inlist:
-                m = json.load(inlist)
-                for f in m:
-                    name = f['lfn']
-                    size = files_map[name] if name in files_map else 0
-                    job['files'].append({
-                        'link': link,
-                        'name': name,
-                        'size': size,
-                        'src': f['src_urls'][0]['site_label'],
-                        'dest': f['dest_urls'][0]['site_label']
-                    })
+    # if job['name'].startswith(('stage_in_', 'stage_out_')):
+    #     # job['runtime'] = 0
+    #     in_list = _fetch_all_files(pegasus_dir, "in", job['name'])
+    #     if not in_list:
+    #         logger.warning('Job %s has no .in record. Skipping it.' % job['name'])
+    #     else:
+    #         link = 'input' if job['name'].startswith('stage_in_') else 'output'
+    #         with open(in_list[0]) as inlist:
+    #             m = json.load(inlist)
+    #             for f in m:
+    #                 name = f['lfn']
+    #                 size = files_map[name] if name in files_map else 0
+    #                 job['files'].append({
+    #                     'link': link,
+    #                     'name': name,
+    #                     'size': size,
+    #                     'src': f['src_urls'][0]['site_label'],
+    #                     'dest': f['dest_urls'][0]['site_label']
+    #                 })
 
     # parsing .sub file to get job priorities
     sub_list = _fetch_all_files(pegasus_dir, "sub", job['name'])
@@ -462,6 +469,8 @@ def main():
     parser.add_argument('-e', dest='author_email', action='store', help='Author\'s email')
     parser.add_argument('-n', dest='description', action='store', help='Trace description')
     parser.add_argument('-o', dest='output', action='store', help='Output filename')
+    parser.add_argument('-x', '--ignore-auxiliary', dest='ignore_auxiliary', action='store_true',
+                        help='Ignore auxiliary jobs')
     parser.add_argument('-d', '--debug', action='store_true', help='Print debug messages to stderr')
     args = parser.parse_args()
 
@@ -481,7 +490,7 @@ def main():
     _parse_dax(workflow, args.pegasus_dir)
 
     # parse DAG file
-    _parse_dag(workflow, args.pegasus_dir)
+    _parse_dag(workflow, args.pegasus_dir, args.ignore_auxiliary)
 
     if args.output:
         with open(args.output, 'w') as outfile:

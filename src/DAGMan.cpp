@@ -263,14 +263,14 @@ namespace wrench {
 
         /**
          * @brief Instantiate and start a power meter
-         * @param hostnames: the list of metered hosts, as hostnames
+         * @param hostname_list: the list of metered hosts, as hostnames
          * @param measurement_period: the measurement period
          * @return a power meter
          */
-        std::shared_ptr<PowerMeter> DAGMan::createPowerMeter(const std::vector<std::string> &hostnames,
+        std::shared_ptr<PowerMeter> DAGMan::createPowerMeter(const std::vector<std::string> &hostname_list,
                                                              double measurement_period) {
 
-          auto power_meter_raw_ptr = new PowerMeter(this, hostnames, measurement_period);
+          auto power_meter_raw_ptr = new PowerMeter(this, hostname_list, measurement_period, true);
           std::shared_ptr<PowerMeter> power_meter = std::shared_ptr<PowerMeter>(power_meter_raw_ptr);
           power_meter->simulation = this->simulation;
           power_meter->start(power_meter, true); // Always daemonize

@@ -1,6 +1,7 @@
 {
   "submit_host": "taurus-master.lyon.grid5000.fr",
   "file_registry_host": "taurus-master.lyon.grid5000.fr",
+  "energy_scheme": "pairwise",
   "storage_hosts": [
     {
       "hostname": "taurus-master.lyon.grid5000.fr",
@@ -9,7 +10,7 @@
   ],
   "compute_services": [
     {
-      "type": "multicore",
+      "type": "bare-metal",
       "compute_hosts": [
         "taurus-worker.lyon.grid5000.fr"
       ]

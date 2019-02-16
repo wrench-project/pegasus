@@ -41,6 +41,10 @@ namespace wrench {
 
           this->submit_hostname = getPropertyValue<std::string>("submit_host", json_data);
           this->file_registry_hostname = getPropertyValue<std::string>("file_registry_host", json_data);
+          std::string energy_scheme = getPropertyValue<std::string>("energy_scheme", json_data, false);
+          if (!energy_scheme.empty() && energy_scheme == "pairwise") {
+            this->energy_scheme_pairwise = true;
+          }
 
           // storage resources
           std::vector<nlohmann::json> storage_resources = json_data.at("storage_hosts");
@@ -58,12 +62,12 @@ namespace wrench {
           for (auto &resource : compute_resources) {
             std::string type = getPropertyValue<std::string>("type", resource);
 
-            if (type == "multicore") {
+            if (type == "bare-metal" || type == "multicore") {
               instantiateBareMetal(resource.at("compute_hosts"));
             } else if (type == "cloud") {
               instantiateCloud(resource.at("service_host"), resource.at("compute_hosts"));
             } else if (type == "batch") {
-              // TODO: to be implemented
+              throw std::invalid_argument("SimulationConfig::loadProperties(): Batch support not yet implemented");
             } else {
               throw std::invalid_argument("SimulationConfig::loadProperties(): Invalid compute service type");
             }
@@ -130,6 +134,14 @@ namespace wrench {
          */
         std::vector<std::string> SimulationConfig::getExecutionHosts() {
           return this->execution_hosts;
+        }
+
+        /**
+         * @brief Tell whether the energy scheme (if provided) is pairwise
+         * @return whether the energy scheme (if provided) is pairwise
+         */
+        bool SimulationConfig::isEnergySchemePairwise() {
+          return this->energy_scheme_pairwise;
         }
 
         /**

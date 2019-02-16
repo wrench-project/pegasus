@@ -153,37 +153,53 @@ namespace wrench {
             throw std::invalid_argument("Simulation::getEnergyConsumed() requires a valid hostname");
           }
 
-          double consumption = S4U_Simulation::getMinPowerAvailable(hostname);
+          double consumption = S4U_Simulation::getMinPowerConsumption(hostname);
           int task_index = 0;
+          std::string task_name;
+          double task_factor = 1;
 
           for (auto task : tasks) {
+            double task_consumption = 0;
+            task_name = task->getID();
+
             // power related to cpu usage
             // dynamic power per socket
             double dynamic_power =
-                    (S4U_Simulation::getMaxPowerPossible(hostname) - S4U_Simulation::getMinPowerAvailable(hostname)) *
+                    (S4U_Simulation::getMaxPowerConsumption(hostname) -
+                     S4U_Simulation::getMinPowerConsumption(hostname)) *
                     (task->getAverageCPU() / 100) / 2;
 
-            if ((this->pairwise && task_index > 0 && task_index < 2) ||
-                (not this->pairwise && std::fmod(task_index, (tasks.size() / 2.0)) == 0)) {
-              consumption += 0.667 * dynamic_power / 6;
+            if (this->pairwise && task_index < 2) {
+              task_consumption = dynamic_power / 6;
 
-            } else if (task_index == 0 || (this->pairwise && task_index >= 2)) {
-              consumption += dynamic_power / 6;
+            } else if (this->pairwise && task_index >= 2) {
+              task_consumption = task_factor * dynamic_power / 6;
+              task_factor *= 0.88;
+
+            } else if (not this->pairwise && std::fmod(task_index, 6) == 0) {
+              task_consumption = dynamic_power / 6;
+              task_factor = 1;
 
             } else {
-              consumption += -0.4 * (task_index + 1) + dynamic_power / 6;
+              task_consumption = task_factor * dynamic_power / 6;
+              task_factor *= 0.9;
             }
 
             // power related to IO usage
-            unsigned long total_io = (task->getBytesRead() + task->getBytesWritten()) / 100000000;
-            consumption += this->pairwise ? 0.486 * total_io : 0.082 * total_io;
+            task_consumption += task_consumption * (this->pairwise ? 0.486 : 0.213);
 
+            // IOWait factor
+//            task_consumption *= 1.31;
+
+            consumption += task_consumption;
             task_index++;
           }
 
           if (record_as_time_stamp) {
-            this->simulation->getOutput().addTimestamp<SimulationTimestampEnergyConsumption>(
-                    new SimulationTimestampEnergyConsumption(hostname, consumption));
+            if (tasks.size() == S4U_Simulation::getHostNumCores(hostname)) {
+              this->simulation->getOutput().addTimestamp<SimulationTimestampEnergyConsumption>(
+                      new SimulationTimestampEnergyConsumption(task_name.substr(0, task_name.find("_")), consumption));
+            }
           }
 
           return consumption;

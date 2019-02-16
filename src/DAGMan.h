@@ -39,7 +39,7 @@ namespace wrench {
 
             std::string getTaskIDType(const std::string &taskID);
 
-            std::shared_ptr<PowerMeter> createPowerMeter(const std::vector<std::string> &hostnames,
+            std::shared_ptr<PowerMeter> createPowerMeter(const std::vector<std::string> &hostname_list,
                                                          double measurement_period);
 
             /***********************/
