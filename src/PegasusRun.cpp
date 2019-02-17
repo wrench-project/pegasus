@@ -83,7 +83,8 @@ int main(int argc, char **argv) {
   auto dagman = (wrench::pegasus::DAGMan *) simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
                                                                                        {htcondor_service},
                                                                                        config.getStorageServices(),
-                                                                                       file_registry_service));
+                                                                                       file_registry_service,
+                                                                                       config.getEnergyScheme()));
   dagman->addWorkflow(&workflow);
   dagman->setExecutionHosts(config.getExecutionHosts());
 
@@ -196,12 +197,12 @@ int main(int argc, char **argv) {
 
   for (auto it : average_task_power) {
 //    if (it.first == "map") {
-      std::cerr << wrench::S4U_Simulation::getHostNumCores("taurus-worker.lyon.grid5000.fr") << "," <<
-                "pairwise" << "," <<
-                it.first << "," <<
-                it.second.first / it.second.second << "," <<
-                "wrench-pegasus" <<
-                std::endl;
+    std::cerr << wrench::S4U_Simulation::getHostNumCores("taurus-worker.lyon.grid5000.fr") << "," <<
+              "pairwise" << "," <<
+              it.first << "," <<
+              it.second.first / it.second.second << "," <<
+              "wrench-pegasus" <<
+              std::endl;
 //      break;
 //    }
   }

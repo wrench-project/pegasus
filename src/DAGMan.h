@@ -26,7 +26,8 @@ namespace wrench {
             DAGMan(const std::string &hostname,
                    const std::set<HTCondorService *> &htcondor_services,
                    const std::set<StorageService *> &storage_services,
-                   FileRegistryService *file_registry_service);
+                   FileRegistryService *file_registry_service,
+                   std::string energy_scheme = "");
 
             void setExecutionHosts(const std::vector<std::string> &execution_hosts);
 
@@ -69,6 +70,8 @@ namespace wrench {
             std::shared_ptr<DAGManMonitor> dagman_monitor;
             /** @brief List of execution hosts */
             std::vector<std::string> execution_hosts;
+            /** @brief Energy scheme (if provided) */
+            std::string energy_scheme;
         };
     }
 }

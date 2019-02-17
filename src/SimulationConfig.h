@@ -35,7 +35,7 @@ namespace wrench {
 
             std::vector<std::string> getExecutionHosts();
 
-            bool isEnergySchemePairwise();
+            std::string getEnergyScheme();
 
         private:
             void instantiateBareMetal(std::vector<std::string> hosts);
@@ -71,7 +71,7 @@ namespace wrench {
             std::set<StorageService *> storage_services;
             std::vector<std::string> execution_hosts;
             HTCondorService *htcondor_service;
-            bool energy_scheme_pairwise = false;
+            std::string energy_scheme;
         };
 
     }

@@ -41,10 +41,7 @@ namespace wrench {
 
           this->submit_hostname = getPropertyValue<std::string>("submit_host", json_data);
           this->file_registry_hostname = getPropertyValue<std::string>("file_registry_host", json_data);
-          std::string energy_scheme = getPropertyValue<std::string>("energy_scheme", json_data, false);
-          if (!energy_scheme.empty() && energy_scheme == "pairwise") {
-            this->energy_scheme_pairwise = true;
-          }
+          this->energy_scheme = getPropertyValue<std::string>("energy_scheme", json_data, false);
 
           // storage resources
           std::vector<nlohmann::json> storage_resources = json_data.at("storage_hosts");
@@ -137,11 +134,11 @@ namespace wrench {
         }
 
         /**
-         * @brief Tell whether the energy scheme (if provided) is pairwise
-         * @return whether the energy scheme (if provided) is pairwise
+         * @brief Get the energy scheme (if provided)
+         * @return the energy scheme (if provided) or blank string
          */
-        bool SimulationConfig::isEnergySchemePairwise() {
-          return this->energy_scheme_pairwise;
+        std::string SimulationConfig::getEnergyScheme() {
+          return this->energy_scheme;
         }
 
         /**

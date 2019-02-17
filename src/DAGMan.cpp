@@ -27,12 +27,14 @@ namespace wrench {
         DAGMan::DAGMan(const std::string &hostname,
                        const std::set<HTCondorService *> &htcondor_services,
                        const std::set<StorageService *> &storage_services,
-                       FileRegistryService *file_registry_service) :
+                       FileRegistryService *file_registry_service,
+                       std::string energy_scheme) :
                 WMS(std::unique_ptr<StandardJobScheduler>(
                         new DAGManScheduler(file_registry_service, storage_services)),
                     nullptr,
                     (std::set<ComputeService *> &) htcondor_services,
-                    storage_services, {}, file_registry_service, hostname, "dagman") {
+                    storage_services, {}, file_registry_service, hostname, "dagman"),
+                energy_scheme(energy_scheme) {
 
           // DAGMan performs BFS search by default
           this->running_tasks_level = std::make_pair(0, 0);
@@ -80,8 +82,10 @@ namespace wrench {
           this->dagman_monitor->simulation = this->simulation;
           this->dagman_monitor->start(dagman_monitor, true);
 
-          // create the energy meter
-          auto power_meter = this->createPowerMeter(this->execution_hosts, 1);
+          if (not this->energy_scheme.empty()) {
+            // create the energy meter
+            auto power_meter = this->createPowerMeter(this->execution_hosts, 1);
+          }
 
           // Create a job manager
           this->job_manager = this->createJobManager();
@@ -270,7 +274,8 @@ namespace wrench {
         std::shared_ptr<PowerMeter> DAGMan::createPowerMeter(const std::vector<std::string> &hostname_list,
                                                              double measurement_period) {
 
-          auto power_meter_raw_ptr = new PowerMeter(this, hostname_list, measurement_period, true);
+          auto power_meter_raw_ptr = new PowerMeter(this, hostname_list, measurement_period,
+                                                    this->energy_scheme == "pairwise");
           std::shared_ptr<PowerMeter> power_meter = std::shared_ptr<PowerMeter>(power_meter_raw_ptr);
           power_meter->simulation = this->simulation;
           power_meter->start(power_meter, true); // Always daemonize
