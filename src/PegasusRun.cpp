@@ -158,33 +158,34 @@ int main(int argc, char **argv) {
     level_stats.insert(std::make_pair(t->getTask()->getID(), t->getTask()->getTopLevel()));
   }
 
-//  for (const auto &task : start_stats) {
-//    auto completion_time = (*completion_stats.find(task.first)).second;
-//    double duration = completion_time - (*scheduled_stats.find(task.first)).second;
-//    unsigned long level = (*level_stats.find(task.first)).second;
-//
-//    std::string task_name = task.first.substr(0, task.first.find("_"));
-//    if (task_name == "clean") {
-//      task_name = "clean_up";
-//    } else if (task_name == "stage") {
-//      task_name = task.first.substr(0, task.first.find("_", task.first.find("_") + 1));
-//    } else if (task_name == "create") {
-//      task_name = "create_dir";
-//    }
-//
-//    std::cerr << "wrench," <<
-//              task.first << "," <<
-//              task.second << "," <<
-//              completion_time << "," <<
-//              completion_time - task.second << "," <<
-//              duration << "," <<
-//              level << "," <<
-//              task_name <<
-//              std::endl;
-//  }
+  std::cerr << "=== WRENCH-Pegasus: Task Execution Summary" << std::endl;
+  for (const auto &task : start_stats) {
+    auto completion_time = (*completion_stats.find(task.first)).second;
+    double duration = completion_time - (*scheduled_stats.find(task.first)).second;
+    unsigned long level = (*level_stats.find(task.first)).second;
+
+    std::string task_name = task.first.substr(0, task.first.find("_"));
+    if (task_name == "clean") {
+      task_name = "clean_up";
+    } else if (task_name == "stage") {
+      task_name = task.first.substr(0, task.first.find("_", task.first.find("_") + 1));
+    } else if (task_name == "create") {
+      task_name = "create_dir";
+    }
+
+    std::cerr << "wrench," <<
+              task.first << "," <<
+              task.second << "," <<
+              completion_time << "," <<
+              completion_time - task.second << "," <<
+              duration << "," <<
+              level << "," <<
+              task_name <<
+              std::endl;
+  }
 
   if (not config.getEnergyScheme().empty()) {
-
+    std::cerr << "=== WRENCH-Pegasus: Energy Profile Summary" << std::endl;
     auto power_trace = simulation.getOutput().getTrace<wrench::SimulationTimestampEnergyConsumption>();
     std::map<std::string, std::pair<double, unsigned long>> average_task_power;
     for (auto measurement : power_trace) {
