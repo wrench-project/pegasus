@@ -183,28 +183,28 @@ int main(int argc, char **argv) {
 //              std::endl;
 //  }
 
-  auto power_trace = simulation.getOutput().getTrace<wrench::SimulationTimestampEnergyConsumption>();
-  std::map<std::string, std::pair<double, unsigned long>> average_task_power;
-  for (auto measurement : power_trace) {
-    if (average_task_power.find(measurement->getContent()->getHostname()) == average_task_power.end()) {
-      average_task_power.insert(std::make_pair(measurement->getContent()->getHostname(),
-                                               std::make_pair(measurement->getContent()->getConsumption(), 1)));
-    } else {
-      average_task_power[measurement->getContent()->getHostname()].first += measurement->getContent()->getConsumption();
-      average_task_power[measurement->getContent()->getHostname()].second++;
-    }
-  }
+  if (not config.getEnergyScheme().empty()) {
 
-  for (auto it : average_task_power) {
-//    if (it.first == "map") {
-    std::cerr << wrench::S4U_Simulation::getHostNumCores("taurus-worker.lyon.grid5000.fr") << "," <<
-              "pairwise" << "," <<
-              it.first << "," <<
-              it.second.first / it.second.second << "," <<
-              "wrench-pegasus" <<
-              std::endl;
-//      break;
-//    }
+    auto power_trace = simulation.getOutput().getTrace<wrench::SimulationTimestampEnergyConsumption>();
+    std::map<std::string, std::pair<double, unsigned long>> average_task_power;
+    for (auto measurement : power_trace) {
+      if (average_task_power.find(measurement->getContent()->getHostname()) == average_task_power.end()) {
+        average_task_power.insert(std::make_pair(measurement->getContent()->getHostname(),
+                                                 std::make_pair(measurement->getContent()->getConsumption(), 1)));
+      } else {
+        average_task_power[measurement->getContent()->getHostname()].first += measurement->getContent()->getConsumption();
+        average_task_power[measurement->getContent()->getHostname()].second++;
+      }
+    }
+
+    for (auto it : average_task_power) {
+      std::cerr << wrench::S4U_Simulation::getHostNumCores("taurus-worker.lyon.grid5000.fr") << "," <<
+                config.getEnergyScheme() << "," <<
+                it.first << "," <<
+                it.second.first / it.second.second << "," <<
+                "wrench-pegasus" <<
+                std::endl;
+    }
   }
 
   return 0;
