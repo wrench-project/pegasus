@@ -1,6 +1,6 @@
 [![Build Status][travis-badge]][travis-link]
 [![GitHub Release][release-badge]][release-link]
-[![License: LGPL v3][license-badge]](LICENSE.md)
+[![License: LGPL v3][license-badge]](LICENSE)
 
 # WRENCH-Pegasus Implementation
 
@@ -38,6 +38,10 @@ The top part of the architecture figure below depicts the components of our
 simulated Pegasus implementation (each shown in a red box).
 
 <img src="doc/images/wrench-pegasus-architecture.png" width="350" />
+
+
+**WRENCH Research Paper:**
+- H. Casanova, S. Pandey, J. Oeth, R. Tanaka, F. Suter, and R. Ferreira da Silva, “[WRENCH: A Framework for Simulating Workflow Management Systems](http://rafaelsilva.com/wp-content/papercite-data/pdf/casanova-works-2018.pdf),” in 13th Workshop on Workflows in Support of Large-Scale Science (WORKS’18), 2018, p. 74–85.
 
 
 ## Prerequisites
