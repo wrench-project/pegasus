@@ -80,7 +80,7 @@ namespace wrench {
           // starting monitor
           this->dagman_monitor = std::make_shared<DAGManMonitor>(this->hostname, this->getWorkflow());
           this->dagman_monitor->simulation = this->simulation;
-          this->dagman_monitor->start(dagman_monitor, true);
+          this->dagman_monitor->start(dagman_monitor, true, true);
 
           if (not this->energy_scheme.empty()) {
             // create the energy meter
@@ -278,7 +278,7 @@ namespace wrench {
                                                     this->energy_scheme == "pairwise");
           std::shared_ptr<PowerMeter> power_meter = std::shared_ptr<PowerMeter>(power_meter_raw_ptr);
           power_meter->simulation = this->simulation;
-          power_meter->start(power_meter, true); // Always daemonize
+          power_meter->start(power_meter, true, true); // Always daemonize
           return power_meter;
         }
 
