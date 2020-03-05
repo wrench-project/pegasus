@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -213,7 +213,7 @@ namespace wrench {
          */
         bool PowerMeter::processNextMessage(double timeout) {
 
-          std::unique_ptr<SimulationMessage> message = nullptr;
+          std::shared_ptr<SimulationMessage> message = nullptr;
 
           try {
             message = S4U_Mailbox::getMessage(this->mailbox_name, timeout);

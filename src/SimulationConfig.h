@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,11 @@ namespace wrench {
 
             std::string getFileRegistryHostname();
 
-            HTCondorService *getHTCondorService();
+            std::shared_ptr<HTCondorComputeService> getHTCondorService();
 
-            std::set<StorageService *> getStorageServices();
+            std::set<std::shared_ptr<StorageService>> getStorageServices();
 
-            std::map<std::string, StorageService *> getStorageServicesMap();
+            std::map<std::string, std::shared_ptr<StorageService>> getStorageServicesMap();
 
             std::vector<std::string> getExecutionHosts();
 
@@ -68,9 +68,9 @@ namespace wrench {
             std::string submit_hostname;
             std::string file_registry_hostname;
             std::set<ComputeService *> compute_services;
-            std::set<StorageService *> storage_services;
+            std::set<std::shared_ptr<StorageService>> storage_services;
             std::vector<std::string> execution_hosts;
-            HTCondorService *htcondor_service;
+            std::shared_ptr<HTCondorComputeService> htcondor_service;
             std::string energy_scheme;
         };
 

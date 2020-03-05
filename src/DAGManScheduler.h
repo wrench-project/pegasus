@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ namespace wrench {
         class DAGManScheduler : public StandardJobScheduler {
 
         public:
-            DAGManScheduler(FileRegistryService *file_registry_service,
-                           const std::set<StorageService *> &storage_services);
+            DAGManScheduler(std::shared_ptr<FileRegistryService> &file_registry_service,
+                            const std::set<std::shared_ptr<StorageService>> &storage_services);
 
             ~DAGManScheduler();
 
@@ -34,7 +34,7 @@ namespace wrench {
             /** \cond DEVELOPER    */
             /***********************/
 
-            void scheduleTasks(const std::set<wrench::ComputeService *> &compute_services,
+            void scheduleTasks(const std::set<std::shared_ptr<wrench::ComputeService>> &compute_services,
                                const std::vector<wrench::WorkflowTask *> &tasks) override;
 
             void setSimulation(Simulation *simulation);
@@ -47,9 +47,9 @@ namespace wrench {
 
         protected:
             /** @brief The file registry service */
-            FileRegistryService *file_registry_service;
+            std::shared_ptr<FileRegistryService> file_registry_service;
             /** @brief */
-            std::set<StorageService *> storage_services;
+            std::set<std::shared_ptr<StorageService>> storage_services;
             /** @brief */
             Simulation *simulation;
             /** @brief */

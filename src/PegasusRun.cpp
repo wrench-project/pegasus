@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <wrench-dev.h>
+#include <wrench/tools/pegasus/PegasusWorkflowParser.h>
 
 #include "DAGMan.h"
 #include "PegasusSimulationTimestampTypes.h"
@@ -59,64 +60,64 @@ int main(int argc, char **argv) {
     std::cerr << "Invalid workflow file name " << workflow_file << " (should be *.xml or *.json)\n";
     exit(1);
   }
-  wrench::Workflow workflow;
+  wrench::Workflow *workflow;
   if (tokens[tokens.size() - 1] == "xml") {
-    workflow.loadFromDAX(workflow_file, "1f");
+    workflow = wrench::PegasusWorkflowParser::createWorkflowFromDAX(workflow_file, "1f");
   } else if (tokens[tokens.size() - 1] == "json") {
-    workflow.loadFromJSON(workflow_file, "1f");
+    workflow = wrench::PegasusWorkflowParser::createWorkflowFromJSON(workflow_file, "1f");
   } else {
     std::cerr << "Invalid workflow file name " << workflow_file << " (should be *.xml or *.json)\n";
     exit(1);
   }
 
-  WRENCH_INFO("The workflow has %ld tasks", workflow.getNumberOfTasks());
+  WRENCH_INFO("The workflow has %ld tasks", workflow->getNumberOfTasks());
 
   // create the HTCondor services
-  wrench::HTCondorService *htcondor_service = config.getHTCondorService();
+  std::shared_ptr<wrench::HTCondorComputeService> htcondor_service = config.getHTCondorService();
 
   // file registry service
   WRENCH_INFO("Instantiating a FileRegistryService on: %s", config.getFileRegistryHostname().c_str());
-  wrench::FileRegistryService *file_registry_service = simulation.add(
+  std::shared_ptr<wrench::FileRegistryService> file_registry_service = simulation.add(
           new wrench::FileRegistryService(config.getFileRegistryHostname()));
 
   // create the DAGMan wms
-  auto dagman = (wrench::pegasus::DAGMan *) simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
-                                                                                       {htcondor_service},
-                                                                                       config.getStorageServices(),
-                                                                                       file_registry_service,
-                                                                                       config.getEnergyScheme()));
-  dagman->addWorkflow(&workflow);
+  auto dagman = simulation.add(new wrench::pegasus::DAGMan(config.getSubmitHostname(),
+                                                           {htcondor_service},
+                                                           config.getStorageServices(),
+                                                           file_registry_service,
+                                                           config.getEnergyScheme()));
+  dagman->addWorkflow(workflow);
   dagman->setExecutionHosts(config.getExecutionHosts());
 
   // stage input data
   WRENCH_INFO("Staging workflow input files to external Storage Service...");
-  std::map<std::string, wrench::WorkflowFile *> input_files = workflow.getInputFiles();
-  std::map<std::string, wrench::StorageService *> storage_services = config.getStorageServicesMap();
+  std::map<std::string, wrench::WorkflowFile *> input_files = workflow->getInputFiles();
+  std::map<std::string, std::shared_ptr<wrench::StorageService>> storage_services = config.getStorageServicesMap();
 
   int num_transfer_tasks = 0;
 
-  for (auto task : workflow.getTasks()) {
-    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
-      num_transfer_tasks++;
-      for (auto file_transfer : task->getFileTransfers()) {
-        if (not file_transfer.first->isOutput()) {
-          if (file_transfer.second.first == "local") {
-            simulation.stageFile(file_transfer.first, htcondor_service->getLocalStorageService());
-          } else {
-            simulation.stageFile(file_transfer.first, storage_services.at(file_transfer.second.first));
-          }
-        }
-      }
-    }
+  for (auto task : workflow->getTasks()) {
+//    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
+//      num_transfer_tasks++;
+//      for (auto file_transfer : task->getFileTransfers()) {
+//        if (not file_transfer.first->isOutput()) {
+//          if (file_transfer.second.first == "local") {
+//            simulation.stageFile(file_transfer.first, htcondor_service->getLocalStorageService());
+//          } else {
+//            simulation.stageFile(file_transfer.first, storage_services.at(file_transfer.second.first));
+//          }
+//        }
+//      }
+//    }
   }
 
   if (num_transfer_tasks == 0) {
     // handle the XML import case where there are no transfer tasks
     for (auto file : input_files) {
       for (auto storage_service : storage_services) {
-        simulation.stageFiles(input_files, storage_service.second);
+        simulation.stageFile(file.second, storage_service.second);
       }
-      simulation.stageFiles(input_files, htcondor_service->getLocalStorageService());
+      simulation.stageFile(file.second, htcondor_service->getLocalStorageService());
     }
   }
 
@@ -127,8 +128,7 @@ int main(int argc, char **argv) {
   } catch (std::runtime_error &e) {
     std::cerr << "Exception: " << e.what() << std::endl;
     return 0;
-  }
-  WRENCH_INFO("Simulation done!");
+  }WRENCH_INFO("Simulation done!");
 
   // statistics
   std::map<std::string, double> start_stats;

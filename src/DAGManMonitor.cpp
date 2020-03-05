@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,22 +83,19 @@ namespace wrench {
          */
         bool DAGManMonitor::processNextMessage() {
           // Wait for a workflow execution event
-          std::unique_ptr<wrench::WorkflowExecutionEvent> event;
+          std::shared_ptr<wrench::WorkflowExecutionEvent> event;
           try {
             event = this->workflow->waitForNextExecutionEvent();
 
           } catch (wrench::WorkflowExecutionException &e) {
             throw std::runtime_error("Error while getting and execution event: " + e.getCause()->toString());
           }
-          switch (event->type) {
-            case wrench::WorkflowExecutionEvent::STANDARD_JOB_COMPLETION: {
-              StandardJob *job = (dynamic_cast<StandardJobCompletedEvent *>(event.get()))->standard_job;
-              this->processStandardJobCompletion(job);
-              break;
-            }
-            default: {
-              throw std::runtime_error("Unexpected workflow execution event: " + std::to_string((int) (event->type)));
-            }
+          if (auto real_event = std::dynamic_pointer_cast<StandardJobCompletedEvent>(event)) {
+            StandardJob *job = real_event->standard_job;
+            this->processStandardJobCompletion(job);
+
+          } else {
+            throw std::runtime_error("Unexpected workflow execution event: " + event->toString());
           }
           return true;
         }
@@ -113,8 +110,8 @@ namespace wrench {
         void DAGManMonitor::processStandardJobCompletion(StandardJob *job) {
           WRENCH_INFO("A standard job has completed job %s", job->getName().c_str());
           std::string callback_mailbox = job->popCallbackMailbox();
-          for (auto task : job->getTasks()) {
-            WRENCH_INFO("    Task completed: %s (%s)", task->getID().c_str(), callback_mailbox.c_str());
+          for (auto task : job->getTasks()) { WRENCH_INFO("    Task completed: %s (%s)", task->getID().c_str(),
+                                                          callback_mailbox.c_str());
           }
 
           this->completed_jobs.insert(job);

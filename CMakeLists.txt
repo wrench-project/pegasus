@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # build the version number
 set(WRENCH_PEGASUS_VERSION_MAJOR "1")
-set(WRENCH_PEGASUS_VERSION_MINOR "3")
+set(WRENCH_PEGASUS_VERSION_MINOR "5")
 set(WRENCH_PEGASUS_VERSION_PATCH "0")
 set(WRENCH_PEGASUS_VERSION_EXTRA "")
 
@@ -23,7 +23,7 @@ if (NOT ${WRENCH_PEGASUS_VERSION_EXTRA} EQUAL "")
     set(WRENCH_PEGASUS_RELEASE_VERSION "${WRENCH_PEGASUS_RELEASE_VERSION}-${WRENCH_PEGASUS_VERSION_EXTRA}")
 endif ()
 
-include_directories(src/ include/ /usr/local/include /usr/local/include/wrench)
+include_directories(src/ include/ /usr/local/include /usr/local/include/wrench /usr/local/include/wrench/tools/pegasus)
 
 # source files
 set(SOURCE_FILES
@@ -45,13 +45,14 @@ set(SOURCE_FILES
 set(TEST_FILES
         )
 
-# wrench library
+# wrench libraries
 find_library(WRENCH_LIBRARY NAMES wrench)
+find_library(WRENCH_PEGASUS_LIBRARY NAMES wrenchpegasusworkflowparser)
 find_library(SIMGRID_LIBRARY NAMES simgrid)
 find_library(PUGIXML_LIBRARY NAMES pugixml)
 find_library(LEMON_LIBRARY NAMES emon)
 find_library(GTEST_LIBRARY NAMES gtest)
 
 add_executable(wrench-pegasus-run ${SOURCE_FILES})
-target_link_libraries(wrench-pegasus-run ${WRENCH_LIBRARY} ${SIMGRID_LIBRARY} ${PUGIXML_LIBRARY} ${LEMON_LIBRARY})
+target_link_libraries(wrench-pegasus-run ${WRENCH_LIBRARY} ${WRENCH_PEGASUS_LIBRARY} ${SIMGRID_LIBRARY} ${PUGIXML_LIBRARY} ${LEMON_LIBRARY})
 install(TARGETS wrench-pegasus-run DESTINATION bin)

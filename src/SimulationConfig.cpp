@@ -18,7 +18,7 @@ namespace wrench {
 
         /**
          * @brief Load the simulation properties for configuring the simulation. It also creates and configures the
-         *        HTCondorService object.
+         *        HTCondorComputeService object.
          *
          * @param simulation: pointer to simulation object
          * @param filename: File path for the properties file
@@ -46,10 +46,11 @@ namespace wrench {
           // storage resources
           std::vector<nlohmann::json> storage_resources = json_data.at("storage_hosts");
           for (auto &storage : storage_resources) {
-            std::string storage_host = getPropertyValue<std::string>("hostname", storage);
-            WRENCH_INFO("Instantiating a SimpleStorageService on: %s", storage_host.c_str());
+            std::string storage_host = getPropertyValue<std::string>("hostname", storage);WRENCH_INFO(
+                    "Instantiating a SimpleStorageService on: %s", storage_host.c_str());
             auto storage_service = simulation.add(
-                    new SimpleStorageService(storage_host, getPropertyValue<double>("capacity", storage)));
+//                    new SimpleStorageService(storage_host, {"/"}, getPropertyValue<double>("capacity", storage)));
+                    new SimpleStorageService(storage_host, {"/"}));
             storage_service->setNetworkTimeoutValue(30);
             this->storage_services.insert(storage_service);
           }
@@ -70,13 +71,14 @@ namespace wrench {
             }
           }
 
-          // build the HTCondorService
-          this->htcondor_service = (HTCondorService *) simulation.add(
-                  new HTCondorService(this->submit_hostname, "local", std::move(this->compute_services)));
+          // build the HTCondorComputeService
+          this->htcondor_service = simulation.add(
+                  new HTCondorComputeService(this->submit_hostname, "local", std::move(this->compute_services),
+                                             {{ComputeServiceProperty::SUPPORTS_PILOT_JOBS, "false"}}));
 
           // creating local storage service
           auto local_storage_service = simulation.add(
-                  new SimpleStorageService(this->submit_hostname, 1000000000000000.0));
+                  new SimpleStorageService(this->submit_hostname, {"/"}));
           local_storage_service->setNetworkTimeoutValue(30);
           this->htcondor_service->setLocalStorageService(local_storage_service);
         }
@@ -98,10 +100,10 @@ namespace wrench {
         }
 
         /**
-         * @brief Get a pointer to the HTCondorService
-         * @return A pointer to the HTCondorService
+         * @brief Get a pointer to the HTCondorComputeService
+         * @return A pointer to the HTCondorComputeService
          */
-        HTCondorService *SimulationConfig::getHTCondorService() {
+        std::shared_ptr<HTCondorComputeService> SimulationConfig::getHTCondorService() {
           return this->htcondor_service;
         }
 
@@ -109,7 +111,7 @@ namespace wrench {
          * @brief Get a set of pointers to wrench::StorageService available for the simulation
          * @return A set of storage services
          */
-        std::set<StorageService *> SimulationConfig::getStorageServices() {
+        std::set<std::shared_ptr<StorageService>> SimulationConfig::getStorageServices() {
           return this->storage_services;
         }
 
@@ -117,8 +119,8 @@ namespace wrench {
          * @brief Get a map of pointers to wrench::StorageService indexed by hostname
          * @return  A map of storage services
          */
-        std::map<std::string, StorageService *> SimulationConfig::getStorageServicesMap() {
-          std::map<std::string, StorageService *> map;
+        std::map<std::string, std::shared_ptr<StorageService>> SimulationConfig::getStorageServicesMap() {
+          std::map<std::string, std::shared_ptr<StorageService>> map;
           for (auto storage_service : this->storage_services) {
             map.insert(std::make_pair(storage_service->getHostname(), storage_service));
           }
@@ -148,10 +150,10 @@ namespace wrench {
          */
         void SimulationConfig::instantiateBareMetal(std::vector<std::string> hosts) {
 
-          std::map<std::string, std::string> messagepayload_properties_list = {
-                  {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
-                  {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
-                  {BareMetalComputeServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
+          std::map<std::string, double> messagepayload_properties_list = {
+                  {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, 122880000},
+                  {BareMetalComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  1024},
+                  {BareMetalComputeServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           512000000},
           };
 
           for (auto &hostname : hosts) {
@@ -162,7 +164,7 @@ namespace wrench {
                                                             wrench::Simulation::getHostNumCores(hostname),
                                                             wrench::Simulation::getHostMemoryCapacity(hostname))));
             this->compute_services.insert(
-                    new BareMetalComputeService(hostname, compute_resources, 100000000000.0, {},
+                    new BareMetalComputeService(hostname, compute_resources, {"/"}, {},
                                                 messagepayload_properties_list));
           }
         }
@@ -175,15 +177,15 @@ namespace wrench {
          */
         void SimulationConfig::instantiateCloud(std::string service_host, std::vector<std::string> hosts) {
 
-          std::map<std::string, std::string> messagepayload_properties_list = {
-                  {CloudServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, "122880000"},
-                  {CloudServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  "1024"},
-                  {CloudServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           "512000000"},
+          std::map<std::string, double> messagepayload_properties_list = {
+                  {ComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_REQUEST_MESSAGE_PAYLOAD, 122880000},
+                  {ComputeServiceMessagePayload::SUBMIT_STANDARD_JOB_ANSWER_MESSAGE_PAYLOAD,  1024},
+                  {ComputeServiceMessagePayload::STANDARD_JOB_DONE_MESSAGE_PAYLOAD,           512000000},
           };
 
           this->execution_hosts.insert(this->execution_hosts.end(), hosts.begin(), hosts.end());
-          auto cloud_service = new CloudService(service_host, hosts, 100000000000.0, {},
-                                                messagepayload_properties_list);
+          auto cloud_service = new VirtualizedClusterComputeService(service_host, hosts, {"/cloud"}, {},
+                                                                    messagepayload_properties_list);
 
           this->compute_services.insert(cloud_service);
         }

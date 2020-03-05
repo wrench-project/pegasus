@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,14 +25,14 @@ namespace wrench {
          * @param file_registry_service:
          */
         DAGMan::DAGMan(const std::string &hostname,
-                       const std::set<HTCondorService *> &htcondor_services,
-                       const std::set<StorageService *> &storage_services,
-                       FileRegistryService *file_registry_service,
+                       const std::set<std::shared_ptr<HTCondorComputeService>> &htcondor_services,
+                       const std::set<std::shared_ptr<StorageService>> &storage_services,
+                       std::shared_ptr<FileRegistryService> &file_registry_service,
                        std::string energy_scheme) :
                 WMS(std::unique_ptr<StandardJobScheduler>(
                         new DAGManScheduler(file_registry_service, storage_services)),
                     nullptr,
-                    (std::set<ComputeService *> &) htcondor_services,
+                    (std::set<std::shared_ptr<ComputeService>> &) htcondor_services,
                     storage_services, {}, file_registry_service, hostname, "dagman"),
                 energy_scheme(energy_scheme) {
 
@@ -74,8 +74,8 @@ namespace wrench {
           checkDeferredStart();
 
           WRENCH_INFO("Starting DAGMan on host %s listening on mailbox_name %s", S4U_Simulation::getHostName().c_str(),
-                      this->mailbox_name.c_str());
-          WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks", this->getWorkflow()->getNumberOfTasks());
+                      this->mailbox_name.c_str());WRENCH_INFO("DAGMan is about to execute a workflow with %lu tasks",
+                                                              this->getWorkflow()->getNumberOfTasks());
 
           // starting monitor
           this->dagman_monitor = std::make_shared<DAGManMonitor>(this->hostname, this->getWorkflow());
@@ -94,12 +94,11 @@ namespace wrench {
           // scheduler
           auto dagman_scheduler = (DAGManScheduler *) this->getStandardJobScheduler();
           dagman_scheduler->setSimulation(this->simulation);
-          dagman_scheduler->setDataMovementManager(data_movement_manager.get());
+          dagman_scheduler->setDataMovementManager(data_movement_manager);
           dagman_scheduler->setMonitorCallbackMailbox(this->dagman_monitor->getMailbox());
 
           WRENCH_INFO("Sleeping for 3 seconds to ensure ProcessId uniqueness (DAGMan simulated waiting time)");
-          Simulation::sleep(3.0);
-          WRENCH_INFO("Bootstrapping...");
+          Simulation::sleep(3.0);WRENCH_INFO("Bootstrapping...");
 
           while (true) {
             // DAGMan only runs tasks up to the current level
@@ -170,8 +169,8 @@ namespace wrench {
 
                   // create job submitted event
                   this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
-                          new SimulationTimestampJobSubmitted(task));
-                  WRENCH_INFO("Submitted task: %s", task->getID().c_str());
+                          new SimulationTimestampJobSubmitted(task));WRENCH_INFO("Submitted task: %s",
+                                                                                 task->getID().c_str());
 
                 } else {
                   submitted_tasks++;
@@ -186,16 +185,14 @@ namespace wrench {
             // submit tasks
             if (not tasks_to_submit.empty()) {
               // Get the available compute services
-              std::set<ComputeService *> htcondor_services = this->getAvailableComputeServices();
+              auto htcondor_services = this->getAvailableComputeServices<ComputeService>();
 
-              if (htcondor_services.empty()) {
-                WRENCH_INFO("Aborting - No HTCondor services available!");
+              if (htcondor_services.empty()) { WRENCH_INFO("Aborting - No HTCondor services available!");
                 break;
               }
 
               // Submit pilot jobs
-              if (this->getPilotJobScheduler()) {
-                WRENCH_INFO("Scheduling pilot jobs...");
+              if (this->getPilotJobScheduler()) { WRENCH_INFO("Scheduling pilot jobs...");
                 this->getPilotJobScheduler()->schedulePilotJobs(htcondor_services);
               }
 
@@ -208,8 +205,7 @@ namespace wrench {
             Simulation::sleep(0.1);
             for (auto job : this->dagman_monitor->getCompletedJobs()) {
               auto standard_job = (StandardJob *) job;
-              for (auto task : standard_job->getTasks()) {
-                WRENCH_INFO("    Task completed: %s", task->getID().c_str());
+              for (auto task : standard_job->getTasks()) { WRENCH_INFO("    Task completed: %s", task->getID().c_str());
 
                 // update current running task ID type
                 this->current_running_task_type.second -= 1;
@@ -242,10 +238,8 @@ namespace wrench {
           }
 
           WRENCH_INFO("--------------------------------------------------------");
-          if (this->getWorkflow()->isDone()) {
-            WRENCH_INFO("Workflow execution is complete!");
-          } else {
-            WRENCH_INFO("Workflow execution is incomplete!");
+          if (this->getWorkflow()->isDone()) { WRENCH_INFO("Workflow execution is complete!");
+          } else { WRENCH_INFO("Workflow execution is incomplete!");
           }
 
           WRENCH_INFO("DAGMan Daemon started on host %s terminating", S4U_Simulation::getHostName().c_str());
@@ -287,11 +281,11 @@ namespace wrench {
          *
          * @param event: a workflow execution event
          */
-        void DAGMan::processEventStandardJobFailure(std::unique_ptr<StandardJobFailedEvent> event) {
+        void DAGMan::processEventStandardJobFailure(std::shared_ptr<StandardJobFailedEvent> event) {
 
-          auto job = event->standard_job;
-          WRENCH_INFO("Notified that a standard job has failed (all its tasks are back in the ready state)");
-          WRENCH_INFO("CauseType: %s", event->failure_cause->toString().c_str());
+          auto job = event->standard_job;WRENCH_INFO(
+                  "Notified that a standard job has failed (all its tasks are back in the ready state)");WRENCH_INFO(
+                  "CauseType: %s", event->failure_cause->toString().c_str());
           this->job_manager->forgetJob(job);
 
           for (auto task : job->getTasks()) {

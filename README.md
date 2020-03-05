@@ -58,7 +58,7 @@ And, one of the following:
 
 ## Dependencies
 
-- [WRENCH](http://wrench-project.org/) - [version 1.4-dev](https://github.com/wrench-project/wrench)
+- [WRENCH](http://wrench-project.org/) - [version 1.5](https://github.com/wrench-project/wrench)
 
 ## Building From Source
 

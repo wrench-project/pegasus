@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,9 @@ namespace wrench {
 
         public:
             DAGMan(const std::string &hostname,
-                   const std::set<HTCondorService *> &htcondor_services,
-                   const std::set<StorageService *> &storage_services,
-                   FileRegistryService *file_registry_service,
+                   const std::set<std::shared_ptr<HTCondorComputeService>> &htcondor_services,
+                   const std::set<std::shared_ptr<StorageService>> &storage_services,
+                   std::shared_ptr<FileRegistryService> &file_registry_service,
                    std::string energy_scheme = "");
 
             void setExecutionHosts(const std::vector<std::string> &execution_hosts);
@@ -36,7 +36,7 @@ namespace wrench {
             /** \cond DEVELOPER    */
             /***********************/
 
-            void processEventStandardJobFailure(std::unique_ptr<StandardJobFailedEvent>) override;
+            void processEventStandardJobFailure(std::shared_ptr<StandardJobFailedEvent>) override;
 
             std::string getTaskIDType(const std::string &taskID);
 
