@@ -94,40 +94,11 @@ int main(int argc, char **argv) {
     std::map<std::string, wrench::WorkflowFile *> input_files = workflow->getInputFiles();
     std::map<std::string, std::shared_ptr<wrench::StorageService>> storage_services = config.getStorageServicesMap();
 
-//  int num_transfer_tasks = 0;
-//
-//  for (auto task : workflow->getTasks()) {
-//    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
-//      num_transfer_tasks++;
-//      for (auto file_transfer : task->getFileTransfers()) {
-//        if (not file_transfer.first->isOutput()) {
-//          if (file_transfer.second.first == "local") {
-//            simulation.stageFile(file_transfer.first, htcondor_service->getLocalStorageService());
-//          } else {
-//            simulation.stageFile(file_transfer.first, storage_services.at(file_transfer.second.first));
-//          }
-//        }
-//      }
-//    }
-//  }
-//
-//    wrench::WorkflowTask *stagein_task = workflow->addTask("STAGE_IN", 0, 1, 1, 1.0, 0.0);
-
-//  if (num_transfer_tasks == 0) {
-    // handle the XML import case where there are no transfer tasks
     for (auto file : input_files) {
         for (auto storage_service : storage_services) {
             simulation.stageFile(file.second, storage_service.second);
         }
-//      simulation.stageFile(file.second, htcondor_service->getLocalStorageService());
-//        stagein_task->addInputFile(file.second);
     }
-//  }
-
-//    // adding dependency between data stage in task and the first tasks in the workflow
-//    for (auto task : workflow->getReadyTasks()) {
-//        workflow->addControlDependency(stagein_task, task);
-//    }
 
     // simulation execution
     WRENCH_INFO("Launching the Simulation...");

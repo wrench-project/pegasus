@@ -51,94 +51,16 @@ namespace wrench {
             for (auto task : tasks) {
                 WorkflowJob *job = nullptr;
 
-//            if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER) {
-//              // data stage in/out task
-//              std::map<WorkflowFile *, std::shared_ptr<StorageService>> file_locations;
-//              std::set<std::tuple<WorkflowFile *, std::shared_ptr<StorageService>, std::shared_ptr<StorageService>>> pre_file_copies;
-//              std::set<std::tuple<WorkflowFile *, std::shared_ptr<StorageService>, std::shared_ptr<StorageService>>> post_file_copies;
-//
-//              // input files
-//              for (auto input_file : task->getInputFiles()) {
-//                // finding storage service
-//                auto src_dest = (*task->getFileTransfers().find(input_file)).second;
-//
-//                StorageService *src =
-//                        src_dest.first == "local" ? htcondor_service->getLocalStorageService() : nullptr;
-//                StorageService *dest =
-//                        src_dest.second == "local" ? htcondor_service->getLocalStorageService() : nullptr;
-//
-//                for (auto storage_service : this->storage_services) {
-//                  if (!src && storage_service->getHostname() == src_dest.first) {
-//                    src = storage_service;
-//                  } else if (!dest && storage_service->getHostname() == src_dest.second) {
-//                    dest = storage_service;
-//                  }
-//                }
-//
-//                if (src != dest) {
-//                  pre_file_copies.insert(std::make_tuple(input_file, src, dest));
-//                }
-//                file_locations.insert(std::make_pair(input_file, dest));
-//              }
-//
-//              // output files
-//              for (auto output_file : task->getOutputFiles()) {
-//                // finding storage service
-//                auto src_dest = (*task->getFileTransfers().find(output_file)).second;
-//
-//                StorageService *src =
-//                        src_dest.first == "local" ? htcondor_service->getLocalStorageService() : nullptr;
-//                StorageService *dest =
-//                        src_dest.second == "local" ? htcondor_service->getLocalStorageService() : nullptr;
-//
-//                for (auto storage_service : this->storage_services) {
-//                  if (!src && storage_service->getHostname() == src_dest.first) {
-//                    src = storage_service;
-//                  } else if (!dest && storage_service->getHostname() == src_dest.second) {
-//                    dest = storage_service;
-//                  }
-//                }
-//
-//                if (src != dest) {
-//                  post_file_copies.insert(std::make_tuple(output_file, src, dest));
-//                }
-//                file_locations.insert(std::make_pair(output_file, dest));
-//              }
-//
-//              // creating and submitting job
-//              job = (WorkflowJob *) this->getJobManager()->createStandardJob({task},
-//                                                                             file_locations,
-//                                                                             pre_file_copies,
-//                                                                             post_file_copies, {});
-//
-//            } else { // regular compute task
-//
-//              // input/output files
-//              std::map<WorkflowFile *, StorageService *> file_locations;
-//              for (auto f : task->getInputFiles()) {
-//                file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
-//              }
-//              for (auto f : task->getOutputFiles()) {
-//                file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
-//              }
-//
-
                 // check whether files need to be staged in
                 for (auto file : task->getInputFiles()) {
-                    auto file_locations = this->file_registry_service->lookupEntry(file);
-                    bool needs_transfer = true;
-                    for (auto l : file_locations) {
-                        if (l->getStorageService() == htcondor_service->getLocalStorageService()) {
-                            needs_transfer = false;
-                            break;
-                        }
-                    }
-                    if (needs_transfer) {
-                        // Create a data movement manager
-                        this->getDataMovementManager()->doSynchronousFileCopy(file, *file_locations.begin(),
-                                                                              FileLocation::LOCATION(
-                                                                                      htcondor_service->getLocalStorageService(),
-                                                                                      "/"));
+                    std::cerr << "ANALYZING FILE: " << file->getID() << std::endl;
+                    if (not htcondor_service->getLocalStorageService()->lookupFile(
+                            file, FileLocation::LOCATION(htcondor_service->getLocalStorageService(), "/"))) {
+
+                        auto file_locations = this->file_registry_service->lookupEntry(file);
+                        this->getDataMovementManager()->doSynchronousFileCopy(
+                                file, *file_locations.begin(),
+                                FileLocation::LOCATION(htcondor_service->getLocalStorageService(), "/"));
                     }
                 }
 
@@ -158,7 +80,6 @@ namespace wrench {
                 // creating job for execution
                 job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
 
-//            }
                 WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
                 this->getJobManager()->submitJob(job, htcondor_service);
                 // create job scheduled event
