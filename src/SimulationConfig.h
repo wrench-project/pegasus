@@ -13,8 +13,6 @@
 #include <nlohmann/json.hpp>
 #include <wrench-dev.h>
 
-#include "wrench/services/compute/htcondor/HTCondorService.h"
-
 namespace wrench {
     namespace pegasus {
 
