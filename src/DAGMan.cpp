@@ -89,7 +89,7 @@ namespace wrench {
 
           // Create a job manager
           this->job_manager = this->createJobManager();
-          auto data_movement_manager = this->createDataMovementManager();
+          this->data_movement_manager = this->createDataMovementManager();
 
           // scheduler
           auto dagman_scheduler = (DAGManScheduler *) this->getStandardJobScheduler();
@@ -245,6 +245,7 @@ namespace wrench {
           WRENCH_INFO("DAGMan Daemon started on host %s terminating", S4U_Simulation::getHostName().c_str());
 
           this->job_manager.reset();
+          this->data_movement_manager.reset();
 
           return 0;
         }

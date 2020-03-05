@@ -41,15 +41,15 @@ namespace wrench {
         void DAGManScheduler::scheduleTasks(const std::set<std::shared_ptr<ComputeService>> &compute_services,
                                             const std::vector<WorkflowTask *> &tasks) {
 
-          WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
+            WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
 
-          // TODO: select htcondor service based on condor queue name
-          auto htcondor_service = std::dynamic_pointer_cast<HTCondorComputeService>(*compute_services.begin());
+            // TODO: select htcondor service based on condor queue name
+            auto htcondor_service = std::dynamic_pointer_cast<HTCondorComputeService>(*compute_services.begin());
 
-          unsigned long scheduled_tasks = 0;
+            unsigned long scheduled_tasks = 0;
 
-          for (auto task : tasks) {
-            WorkflowJob *job = nullptr;
+            for (auto task : tasks) {
+                WorkflowJob *job = nullptr;
 
 //            if (task->getTaskType() == WorkflowTask::TaskType::TRANSFER) {
 //              // data stage in/out task
@@ -122,34 +122,54 @@ namespace wrench {
 //                file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
 //              }
 //
-            // create job start event
-            this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
-                    new SimulationTimestampJobSubmitted(task));
 
-            // finding the file locations
-            std::map<WorkflowFile *, std::shared_ptr<FileLocation>> file_locations;
-            for (auto f : task->getInputFiles()) {
-              // TODO: make transfer task from IPAC to master storage
-              file_locations[f] = FileLocation::LOCATION(htcondor_service->getLocalStorageService());
-            }
-            for (auto f : task->getOutputFiles()) {
-              file_locations[f] = FileLocation::LOCATION(htcondor_service->getLocalStorageService());
-            }
+                // check whether files need to be staged in
+                for (auto file : task->getInputFiles()) {
+                    auto file_locations = this->file_registry_service->lookupEntry(file);
+                    bool needs_transfer = true;
+                    for (auto l : file_locations) {
+                        if (l->getStorageService() == htcondor_service->getLocalStorageService()) {
+                            needs_transfer = false;
+                            break;
+                        }
+                    }
+                    if (needs_transfer) {
+                        // Create a data movement manager
+                        this->getDataMovementManager()->doSynchronousFileCopy(file, *file_locations.begin(),
+                                                                              FileLocation::LOCATION(
+                                                                                      htcondor_service->getLocalStorageService(),
+                                                                                      "/"));
+                    }
+                }
 
-            // creating job for execution
-            job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
+                // create job start event
+                this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
+                        new SimulationTimestampJobSubmitted(task));
+
+                // finding the file locations
+                std::map<WorkflowFile *, std::shared_ptr<FileLocation>> file_locations;
+                for (auto f : task->getInputFiles()) {
+                    file_locations[f] = FileLocation::LOCATION(htcondor_service->getLocalStorageService());
+                }
+                for (auto f : task->getOutputFiles()) {
+                    file_locations[f] = FileLocation::LOCATION(htcondor_service->getLocalStorageService());
+                }
+
+                // creating job for execution
+                job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
 
 //            }
-            WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
-            this->getJobManager()->submitJob(job, htcondor_service);
-            // create job scheduled event
-            this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
-                    new SimulationTimestampJobScheduled(task));WRENCH_INFO("Scheduled task: %s", task->getID().c_str());
-            scheduled_tasks++;
-          }
+                WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
+                this->getJobManager()->submitJob(job, htcondor_service);
+                // create job scheduled event
+                this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
+                        new SimulationTimestampJobScheduled(task));WRENCH_INFO("Scheduled task: %s",
+                                                                               task->getID().c_str());
+                scheduled_tasks++;
+            }
 
-          WRENCH_INFO("Done with scheduling tasks as standard jobs: %ld tasks scheduled out of %ld", scheduled_tasks,
-                      tasks.size());
+            WRENCH_INFO("Done with scheduling tasks as standard jobs: %ld tasks scheduled out of %ld", scheduled_tasks,
+                        tasks.size());
         }
 
         /**
@@ -158,7 +178,7 @@ namespace wrench {
          * @param simulation: a pointer to the simulation object
          */
         void DAGManScheduler::setSimulation(wrench::Simulation *simulation) {
-          this->simulation = simulation;
+            this->simulation = simulation;
         }
 
         /**
@@ -167,7 +187,7 @@ namespace wrench {
          * @param monitor_callback_mailbox
          */
         void DAGManScheduler::setMonitorCallbackMailbox(std::string monitor_callback_mailbox) {
-          this->monitor_callback_mailbox = monitor_callback_mailbox;
+            this->monitor_callback_mailbox = monitor_callback_mailbox;
         }
 
     }

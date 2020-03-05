@@ -56,6 +56,8 @@ namespace wrench {
 
             /** @brief The job manager */
             std::shared_ptr<JobManager> job_manager;
+            /** @brief The data movement manager */
+            std::shared_ptr<DataMovementManager> data_movement_manager;
             /** @brief Whether the workflow execution should be aborted */
             bool abort = false;
             /** @brief Pair of level and number of running tasks in the level */
