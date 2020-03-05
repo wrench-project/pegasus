@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 
   int num_transfer_tasks = 0;
 
-  for (auto task : workflow->getTasks()) {
+//  for (auto task : workflow->getTasks()) {
 //    if (task->getTaskType() == wrench::WorkflowTask::TaskType::TRANSFER) {
 //      num_transfer_tasks++;
 //      for (auto file_transfer : task->getFileTransfers()) {
@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
 //        }
 //      }
 //    }
-  }
+//  }
 
   if (num_transfer_tasks == 0) {
     // handle the XML import case where there are no transfer tasks
@@ -117,7 +117,7 @@ int main(int argc, char **argv) {
       for (auto storage_service : storage_services) {
         simulation.stageFile(file.second, storage_service.second);
       }
-      simulation.stageFile(file.second, htcondor_service->getLocalStorageService());
+//      simulation.stageFile(file.second, htcondor_service->getLocalStorageService());
     }
   }
 

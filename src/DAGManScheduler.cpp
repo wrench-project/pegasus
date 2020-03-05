@@ -44,7 +44,7 @@ namespace wrench {
           WRENCH_INFO("There are %ld ready tasks to schedule", tasks.size());
 
           // TODO: select htcondor service based on condor queue name
-          auto htcondor_service = *compute_services.begin();
+          auto htcondor_service = std::dynamic_pointer_cast<HTCondorComputeService>(*compute_services.begin());
 
           unsigned long scheduled_tasks = 0;
 
@@ -122,19 +122,30 @@ namespace wrench {
 //                file_locations.insert(std::make_pair(f, htcondor_service->getLocalStorageService()));
 //              }
 //
-//              // create job start event
-//              this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
-//                      new SimulationTimestampJobSubmitted(task));
-//
-//              // creating job for execution
-//              job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
-//
-//            }WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
-//            this->getJobManager()->submitJob(job, htcondor_service);
-//            // create job scheduled event
-//            this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
-//                    new SimulationTimestampJobScheduled(task));WRENCH_INFO("Scheduled task: %s", task->getID().c_str());
-//            scheduled_tasks++;
+            // create job start event
+            this->simulation->getOutput().addTimestamp<SimulationTimestampJobSubmitted>(
+                    new SimulationTimestampJobSubmitted(task));
+
+            // finding the file locations
+            std::map<WorkflowFile *, std::shared_ptr<FileLocation>> file_locations;
+            for (auto f : task->getInputFiles()) {
+              // TODO: make transfer task from IPAC to master storage
+              file_locations[f] = FileLocation::LOCATION(htcondor_service->getLocalStorageService());
+            }
+            for (auto f : task->getOutputFiles()) {
+              file_locations[f] = FileLocation::LOCATION(htcondor_service->getLocalStorageService());
+            }
+
+            // creating job for execution
+            job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
+
+//            }
+            WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
+            this->getJobManager()->submitJob(job, htcondor_service);
+            // create job scheduled event
+            this->simulation->getOutput().addTimestamp<SimulationTimestampJobScheduled>(
+                    new SimulationTimestampJobScheduled(task));WRENCH_INFO("Scheduled task: %s", task->getID().c_str());
+            scheduled_tasks++;
           }
 
           WRENCH_INFO("Done with scheduling tasks as standard jobs: %ld tasks scheduled out of %ld", scheduled_tasks,
