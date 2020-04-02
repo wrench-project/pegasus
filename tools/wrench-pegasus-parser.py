@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2018. The WRENCH Team.
+# Copyright (c) 2018-2020. The WRENCH Team.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -241,6 +241,8 @@ def _parse_dag(workflow, pegasus_dir, ignore_auxiliary):
                     job['parents'] = []
                     job['files'] = []
                     workflow['jobs'].append(job)
+                else:
+                    _parse_meta_file({'name': job_name}, pegasus_dir)
 
                 # Parsing job stdout file
                 if job:
@@ -379,7 +381,12 @@ def _parse_job_output(workflow, job, pegasus_dir):
                     }
             # Append machine to the list of machines
             # Check if machine is already present in the list
-            if machine not in machines:
+            has_machine = False
+            for m in machines:
+                if m['nodeName'] == machine['nodeName']:
+                    has_machine = True
+                    break
+            if not has_machine:
                 machines.append(machine)
 
         job['runtime'] = runtime
@@ -419,15 +426,7 @@ def _parse_job_output(workflow, job, pegasus_dir):
         os.remove(output_file)
 
     # parsing meta file
-    meta_list = _fetch_all_files(pegasus_dir, "meta", job['name'])
-    if not meta_list:
-        logger.warning('Job %s has no meta record (skipping meta analysis).' % job['name'])
-    else:
-        with open(meta_list[0]) as metadata:
-            m = json.load(metadata)
-            for f in m:
-                if f['_id'] not in files_map:
-                    files_map[f['_id']] = f['_attributes']['size']
+    _parse_meta_file(job, pegasus_dir)
 
     # parsing .in file for stage in/out jobs
     # if job['name'].startswith(('stage_in_', 'stage_out_')):
@@ -459,6 +458,23 @@ def _parse_job_output(workflow, job, pegasus_dir):
             for line in f:
                 if line.startswith('priority'):
                     job['priority'] = int(line.split()[2])
+
+
+def _parse_meta_file(job, pegasus_dir):
+    """
+        Parse the Pegasus meta file (generated from pegasus-integrity)
+        :param job: job object
+        :param pegasus_dir: pegasus workflow submit dir
+        """
+    meta_list = _fetch_all_files(pegasus_dir, "meta", job['name'])
+    if not meta_list:
+        logger.warning('Job %s has no meta record (skipping meta analysis).' % job['name'])
+    else:
+        with open(meta_list[0]) as metadata:
+            m = json.load(metadata)
+            for f in m:
+                if f['_id'] not in files_map:
+                    files_map[f['_id']] = f['_attributes']['size']
 
 
 def main():
