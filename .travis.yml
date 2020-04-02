@@ -8,7 +8,7 @@ addons:
       - docker-ce
 
 env:
-  - DIST=1.5
+  - DIST=unstable
 
 services:
   - docker
