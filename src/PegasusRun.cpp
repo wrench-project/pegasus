@@ -19,7 +19,6 @@
 XBT_LOG_NEW_DEFAULT_CATEGORY(PegasusRun, "Log category for PegasusRun");
 
 int main(int argc, char **argv) {
-
     // create and initialize the simulation
     wrench::Simulation simulation;
     simulation.init(&argc, argv);
@@ -91,12 +90,11 @@ int main(int argc, char **argv) {
 
     // stage input data
     WRENCH_INFO("Staging workflow input files to external Storage Service...");
-    std::map<std::string, wrench::WorkflowFile *> input_files = workflow->getInputFiles();
     std::map<std::string, std::shared_ptr<wrench::StorageService>> storage_services = config.getStorageServicesMap();
 
-    for (auto file : input_files) {
+    for (auto file : workflow->getInputFiles()) {
         for (auto storage_service : storage_services) {
-            simulation.stageFile(file.second, storage_service.second);
+            simulation.stageFile(file, storage_service.second);
         }
     }
 

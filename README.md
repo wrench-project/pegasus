@@ -41,7 +41,10 @@ simulated Pegasus implementation (each shown in a red box).
 
 
 **WRENCH Research Paper:**
-- H. Casanova, S. Pandey, J. Oeth, R. Tanaka, F. Suter, and R. Ferreira da Silva, “[WRENCH: A Framework for Simulating Workflow Management Systems](http://rafaelsilva.com/wp-content/papercite-data/pdf/casanova-works-2018.pdf),” in 13th Workshop on Workflows in Support of Large-Scale Science (WORKS’18), 2018, p. 74–85.
+- H. Casanova, S. Pandey, J. Oeth, R. Tanaka, F. Suter, and R. Ferreira da Silva, 
+  "[WRENCH: A Framework for Simulating Workflow Management Systems](https://rafaelsilva.com/files/publications/casanova-works-2018.pdf)," 
+  in 13th Workshop on Workflows in Support of Large-Scale Science (WORKS’18), 2018, 
+  p. 74–85. DOI: [10.1109/WORKS.2018.00013](http://dx.doi.org/10.1109/WORKS.2018.00013)
 
 
 ## Prerequisites
@@ -58,7 +61,7 @@ And, one of the following:
 
 ## Dependencies
 
-- [WRENCH](http://wrench-project.org/) - [version 1.5 or later](https://github.com/wrench-project/wrench)
+- [WRENCH](http://wrench-project.org/) - [version 1.6](https://github.com/wrench-project/wrench)
 
 ## Building From Source
 
@@ -84,4 +87,3 @@ WRENCH-Pegasus' [Github Issues Track](https://github.com/wrench-project/pegasus/
 [license-badge]:            https://img.shields.io/badge/License-LGPL%20v3-blue.svg
 [release-badge]:            https://img.shields.io/github/release/wrench-project/pegasus/all.svg
 [release-link]:             https://github.com/wrench-project/pegasus/releases
-

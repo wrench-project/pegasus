@@ -17,7 +17,6 @@ namespace wrench {
     namespace pegasus {
 
         class SimulationConfig {
-
         public:
             void loadProperties(wrench::Simulation &simulation, const std::string &filename);
 
@@ -53,14 +52,14 @@ namespace wrench {
              */
             template<class T>
             T getPropertyValue(const std::string &keyName, const nlohmann::json &jsonData, const bool required = true) {
-              if (jsonData.find(keyName) == jsonData.end()) {
-                if (required) {
-                  throw std::invalid_argument("SimulationConfig::loadProperties(): Unable to find " + keyName);
-                } else {
-                  return T();
+                if (jsonData.find(keyName) == jsonData.end()) {
+                    if (required) {
+                        throw std::invalid_argument("SimulationConfig::loadProperties(): Unable to find " + keyName);
+                    } else {
+                        return T();
+                    }
                 }
-              }
-              return jsonData.at(keyName);
+                return jsonData.at(keyName);
             }
 
             std::string submit_hostname;

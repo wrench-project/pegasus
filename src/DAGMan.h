@@ -21,7 +21,6 @@ namespace wrench {
          *  @brief An implementation of the DAGMan meta-scheduler for HTCondor services
          */
         class DAGMan : public WMS {
-
         public:
             DAGMan(const std::string &hostname,
                    const std::set<std::shared_ptr<HTCondorComputeService>> &htcondor_services,

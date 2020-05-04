@@ -2,8 +2,22 @@
 <!DOCTYPE platform SYSTEM "http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd">
 <platform version="4.1">
     <zone id="AS0" routing="Full">
-        <host id="master" speed="1f" core="4"/>
-        <host id="ipac" speed="1f" core="1"/>
+        <host id="master" speed="1f" core="4">
+            <disk id="hard_drive" read_bw="100MBps" write_bw="100MBps">
+                <prop id="size" value="5000GiB"/>
+                <prop id="mount" value="/"/>
+            </disk>
+            <disk id="hard_drive" read_bw="100MBps" write_bw="100MBps">
+                <prop id="size" value="5000GiB"/>
+                <prop id="mount" value="/cloud"/>
+            </disk>
+        </host>
+        <host id="ipac" speed="1f" core="1">
+            <disk id="hard_drive" read_bw="100MBps" write_bw="100MBps">
+                <prop id="size" value="5000GiB"/>
+                <prop id="mount" value="/"/>
+            </disk>
+        </host>
         <host id="worker1" speed="1f" core="4"/>
         <host id="worker2" speed="1f" core="4"/>
         <host id="worker3" speed="1f" core="4"/>

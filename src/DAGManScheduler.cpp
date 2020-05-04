@@ -53,7 +53,6 @@ namespace wrench {
 
                 // check whether files need to be staged in
                 for (auto file : task->getInputFiles()) {
-                    std::cerr << "ANALYZING FILE: " << file->getID() << std::endl;
                     if (not htcondor_service->getLocalStorageService()->lookupFile(
                             file, FileLocation::LOCATION(htcondor_service->getLocalStorageService(), "/"))) {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2018. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@ namespace wrench {
     namespace pegasus {
 
         class SimulationTimestampJobSubmitted {
-
         public:
             SimulationTimestampJobSubmitted(WorkflowTask *task);
 
@@ -33,7 +32,6 @@ namespace wrench {
         };
 
         class SimulationTimestampJobScheduled {
-
         public:
             SimulationTimestampJobScheduled(WorkflowTask *task);
 
@@ -47,7 +45,6 @@ namespace wrench {
         };
 
         class SimulationTimestampJobCompletion {
-
         public:
             SimulationTimestampJobCompletion(WorkflowTask *task);
 

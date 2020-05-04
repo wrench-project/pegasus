@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2019. The WRENCH Team.
+ * Copyright (c) 2017-2020. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ namespace wrench {
             };
 
             double computePowerMeasurements(const std::string &hostname,
-                                          std::set<WorkflowTask *> tasks,
-                                          bool record_as_time_stamp);
+                                            std::set<WorkflowTask *> tasks,
+                                            bool record_as_time_stamp);
 
             bool processNextMessage(double timeout);
 
