@@ -188,7 +188,7 @@ def _parse_dax(workflow, pegasus_dir):
             for f in j.findall('{http://pegasus.isi.edu/schema/DAX}uses'):
                 file = collections.OrderedDict()
                 file['link'] = f.get('link')
-                file['name'] = f.get('name') if not f.get('name') == None else f.get('file')
+                file['name'] = f.get('name') if not f.get('name') is None else f.get('file')
                 file['size'] = 0
                 job['files'].append(file)
 
