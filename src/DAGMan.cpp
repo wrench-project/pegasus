@@ -35,7 +35,6 @@ namespace wrench {
                     (std::set<std::shared_ptr<ComputeService>> &) htcondor_services,
                     storage_services, {}, file_registry_service, hostname, "dagman"),
                 energy_scheme(energy_scheme) {
-
             // DAGMan performs BFS search by default
             this->running_tasks_level = std::make_pair(0, 0);
         }
@@ -136,7 +135,6 @@ namespace wrench {
 
                     if (this->current_running_task_type.first.empty() ||
                         this->current_running_task_type.first == task_id_type) {
-
                         // by default DAGMan only runs a single register job at once
                         if (task->getID().find("register_local") == 0) {
                             if (running_register_tasks > 0) {
@@ -148,7 +146,6 @@ namespace wrench {
                         }
 
                         if (this->scheduled_tasks.find(task) == this->scheduled_tasks.end()) {
-
                             // update current running task type
                             if (this->current_running_task_type.first.empty()) {
                                 this->current_running_task_type = std::make_pair(task_id_type, 1);

@@ -1,6 +1,7 @@
 [![Build Status][travis-badge]][travis-link]
 [![GitHub Release][release-badge]][release-link]
 [![License: LGPL v3][license-badge]](LICENSE)
+[![CodeFactor][codefactor-badge]][codefactor-link]
 
 # WRENCH-Pegasus Implementation
 
@@ -82,8 +83,10 @@ The main channel to reach the WRENCH-Pegasus team is via the support email:
 WRENCH-Pegasus' [Github Issues Track](https://github.com/wrench-project/pegasus/issues).
 
 
-[travis-badge]:             https://travis-ci.org/wrench-project/pegasus.svg?branch=master
-[travis-link]:              https://travis-ci.org/wrench-project/pegasus
-[license-badge]:            https://img.shields.io/badge/License-LGPL%20v3-blue.svg
-[release-badge]:            https://img.shields.io/github/release/wrench-project/pegasus/all.svg
-[release-link]:             https://github.com/wrench-project/pegasus/releases
+[travis-badge]:       https://travis-ci.org/wrench-project/pegasus.svg?branch=master
+[travis-link]:        https://travis-ci.org/wrench-project/pegasus
+[license-badge]:      https://img.shields.io/badge/License-LGPL%20v3-blue.svg
+[release-badge]:      https://img.shields.io/github/release/wrench-project/pegasus/all.svg
+[release-link]:       https://github.com/wrench-project/pegasus/releases
+[codefactor-badge]:   https://www.codefactor.io/repository/github/wrench-project/pegasus/badge
+[codefactor-link]:    https://www.codefactor.io/repository/github/wrench-project/pegasus
