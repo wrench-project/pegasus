@@ -42,11 +42,11 @@ simulated Pegasus implementation (each shown in a red box).
 
 
 **WRENCH Research Paper:**
-- H. Casanova, S. Pandey, J. Oeth, R. Tanaka, F. Suter, and R. Ferreira da Silva, 
-  "[WRENCH: A Framework for Simulating Workflow Management Systems](https://rafaelsilva.com/files/publications/casanova-works-2018.pdf)," 
-  in 13th Workshop on Workflows in Support of Large-Scale Science (WORKS’18), 2018, 
-  p. 74–85. DOI: [10.1109/WORKS.2018.00013](http://dx.doi.org/10.1109/WORKS.2018.00013)
-
+- H. Casanova, R. Ferreira da Silva, R. Tanaka, S. Pandey, G. Jethwani, W. Koch, S.
+  Albrecht, J. Oeth, and F. Suter, [Developing Accurate and Scalable Simulators of
+  Production Workflow Management Systems with 
+  WRENCH](https://rafaelsilva.com/files/publications/casanova2020fgcs.pdf), 
+  Future Generation Computer Systems, 2020. 
 
 ## Prerequisites
 
