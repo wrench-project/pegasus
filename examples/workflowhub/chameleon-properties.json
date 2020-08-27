@@ -1,0 +1,22 @@
+{
+  "submit_host": "master",
+  "file_registry_host": "master",
+  "storage_hosts": [
+    {
+      "hostname": "data",
+      "capacity": 1000000000000000000.0
+    }
+  ],
+  "compute_services": [
+    {
+      "type": "cloud",
+      "service_host": "master",
+      "compute_hosts": [
+        "worker1",
+        "worker2",
+        "worker3",
+        "worker4"
+      ]
+    }
+  ]
+}
