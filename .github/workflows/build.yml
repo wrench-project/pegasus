@@ -22,7 +22,7 @@ jobs:
         run: |
           docker pull wrenchproject/wrench:${DIST};
           docker run -d -t --name=wrench wrenchproject/wrench:${DIST} bash;
-          docker exec -it wrench git clone https://github.com/wrench-project/pegasus;
-          docker exec -it wrench mkdir pegasus/build;
-          docker exec -w /home/wrench/pegasus/build -it wrench cmake -DENABLE_BATSCHED=${BATSCHED} -DCMAKE_VERBOSE_MAKEFILE=ON ..;
-          docker exec -w /home/wrench/pegasus/build -it wrench make all;
+          docker exec wrench git clone https://github.com/wrench-project/pegasus;
+          docker exec wrench mkdir pegasus/build;
+          docker exec -w /home/wrench/pegasus/build wrench cmake -DENABLE_BATSCHED=${BATSCHED} -DCMAKE_VERBOSE_MAKEFILE=ON ..;
+          docker exec -w /home/wrench/pegasus/build wrench make all;
