@@ -4,7 +4,7 @@
   "storage_hosts": [
     {
       "hostname": "data",
-      "capacity": 1000000000000000000.0
+      "capacity": 10000000000000000000000000000000.0
     }
   ],
   "compute_services": [

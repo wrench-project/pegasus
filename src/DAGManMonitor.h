@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2020. The WRENCH Team.
+ * Copyright (c) 2017-2021. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,16 +26,16 @@ namespace wrench {
 
             const std::string getMailbox();
 
-            std::set<WorkflowJob *> getCompletedJobs();
+            std::set<std::shared_ptr<StandardJob>> getCompletedJobs();
 
         private:
             int main() override;
 
             bool processNextMessage();
 
-            void processStandardJobCompletion(StandardJob *job);
+            void processStandardJobCompletion(std::shared_ptr<StandardJob> job);
 
-            std::set<WorkflowJob *> completed_jobs;
+            std::set<std::shared_ptr<StandardJob>> completed_jobs;
 
             Workflow *workflow;
         };

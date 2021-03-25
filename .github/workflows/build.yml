@@ -1,0 +1,28 @@
+name: Build
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure Docker
+        run: |
+          sudo apt-get update
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+      - name: Source Build and Test
+        env:
+          DIST: unstable
+        run: |
+          docker pull wrenchproject/wrench:${DIST};
+          docker run -d -t --name=wrench wrenchproject/wrench:${DIST} bash;
+          docker exec -it wrench git clone https://github.com/wrench-project/pegasus;
+          docker exec -it wrench mkdir pegasus/build;
+          docker exec -w /home/wrench/pegasus/build -it wrench cmake -DENABLE_BATSCHED=${BATSCHED} -DCMAKE_VERBOSE_MAKEFILE=ON ..;
+          docker exec -w /home/wrench/pegasus/build -it wrench make all;

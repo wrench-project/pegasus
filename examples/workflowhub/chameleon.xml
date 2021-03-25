@@ -4,17 +4,17 @@
     <zone id="AS0" routing="Full">
         <host id="master" speed="1f" core="4">
             <disk id="hard_drive" read_bw="100MBps" write_bw="100MBps">
-                <prop id="size" value="5000GiB"/>
+                <prop id="size" value="500000000000GiB"/>
                 <prop id="mount" value="/"/>
             </disk>
             <disk id="hard_drive" read_bw="100MBps" write_bw="100MBps">
-                <prop id="size" value="5000GiB"/>
+                <prop id="size" value="500000000000GiB"/>
                 <prop id="mount" value="/cloud"/>
             </disk>
         </host>
         <host id="data" speed="1f" core="1">
             <disk id="hard_drive" read_bw="100MBps" write_bw="100MBps">
-                <prop id="size" value="5000GiB"/>
+                <prop id="size" value="5000000000000GiB"/>
                 <prop id="mount" value="/"/>
             </disk>
         </host>

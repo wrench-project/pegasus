@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2020. The WRENCH Team.
+ * Copyright (c) 2017-2021. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,8 +201,7 @@ namespace wrench {
 
                 // simulate timespan between DAGMan status pull for HTCondor
                 Simulation::sleep(0.1);
-                for (auto job : this->dagman_monitor->getCompletedJobs()) {
-                    auto standard_job = (StandardJob *) job;
+                for (auto standard_job : this->dagman_monitor->getCompletedJobs()) {
                     for (auto task : standard_job->getTasks()) { WRENCH_INFO("    Task completed: %s",
                                                                              task->getID().c_str());
 
@@ -288,7 +287,7 @@ namespace wrench {
 
             WRENCH_INFO("CauseType: %s", event->failure_cause->toString().c_str());
 
-            this->job_manager->forgetJob(job);
+//            this->job_manager->forgetJob(job);
 
             for (auto task : job->getTasks()) {
                 this->scheduled_tasks.erase(task);

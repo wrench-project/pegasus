@@ -54,15 +54,15 @@ WRENCH-Pegasus is fully developed in C++. The code follows the C++11 standard, a
 compilers tend to fail the compilation process. Therefore, we strongly recommend
 users to satisfy the following requirements:
 
-- **CMake** - version 3.2.3 or higher
+- **CMake** - version 3.5 or higher
   
 And, one of the following:
-- **g++** - version 5.0 or higher
-- **clang** - version 3.6 or higher
+- **g++** - version 5.4 or higher
+- **clang** - version 3.8 or higher
 
 ## Dependencies
 
-- [WRENCH](http://wrench-project.org/) - [version 1.6](https://github.com/wrench-project/wrench)
+- [WRENCH](http://wrench-project.org/) - [version 1.8](https://github.com/wrench-project/wrench)
 
 ## Building From Source
 

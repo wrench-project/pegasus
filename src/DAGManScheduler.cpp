@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017-2020. The WRENCH Team.
+ * Copyright (c) 2017-2021. The WRENCH Team.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ namespace wrench {
             unsigned long scheduled_tasks = 0;
 
             for (auto task : tasks) {
-                WorkflowJob *job = nullptr;
+                std::shared_ptr<StandardJob> job = nullptr;
 
                 // check whether files need to be staged in
                 for (auto file : task->getInputFiles()) {
@@ -77,7 +77,7 @@ namespace wrench {
                 }
 
                 // creating job for execution
-                job = (WorkflowJob *) this->getJobManager()->createStandardJob(task, file_locations);
+                job = this->getJobManager()->createStandardJob(task, file_locations);
 
                 WRENCH_INFO("Scheduling task: %s", task->getID().c_str());
                 this->getJobManager()->submitJob(job, htcondor_service);
